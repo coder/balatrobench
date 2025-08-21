@@ -44,7 +44,8 @@ npx serve .
 ```
 ├── index.html              # Main page (Official Benchmark)
 ├── community.html          # Community submissions page
-├── submit.html            # Submission guidelines
+├── submit.html            # Redirects to CONTRIBUTING.md
+├── CONTRIBUTING.md         # Detailed submission guidelines
 ├── js/
 │   └── app.js             # JavaScript for data loading
 ├── data/

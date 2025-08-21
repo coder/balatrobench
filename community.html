@@ -17,8 +17,9 @@
                 <div class="flex items-center space-x-6">
                     <h1 class="text-xl font-bold text-blue-400">BalatroBench</h1>
                     <div class="hidden md:flex space-x-4">
-                        <a href="index.html" class="text-gray-300 hover:text-white">Official Benchmark</a>
+                        <a href="index.html" class="text-gray-300 hover:text-white">Leaderboard</a>
                         <a href="community.html" class="text-blue-400 hover:text-blue-300">Community</a>
+                        <a href="about.html" class="text-gray-300 hover:text-white">About</a>
                     </div>
                 </div>
             </div>
@@ -44,7 +45,7 @@
 
         <!-- Submit Strategy Button -->
         <div class="flex justify-center mt-12 mb-8">
-            <a href="submit.html" class="inline-block bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8 py-4 rounded-lg font-medium transition-all duration-200 shadow-lg text-lg">
+            <a href="https://github.com/S1M0N38/balatrobench/blob/main/CONTRIBUTING.md" target="_blank" class="inline-block bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8 py-4 rounded-lg font-medium transition-all duration-200 shadow-lg text-lg">
                 <i class="fas fa-plus mr-2"></i>Submit Your Strategy
             </a>
         </div>
@@ -59,31 +60,37 @@
                     <div class="grid md:grid-cols-3 gap-6 text-sm">
                         <div class="text-center">
                             <div class="bg-blue-500 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
-                                <i class="fas fa-edit text-xl"></i>
+                                <i class="fas fa-code-branch text-xl"></i>
                             </div>
-                            <h4 class="font-semibold text-white mb-2">1. Prepare Your Prompt</h4>
+                            <h4 class="font-semibold text-white mb-2">1. Fork & Clone</h4>
                             <p class="text-gray-300">
-                                Create a custom system prompt with your unique strategy approach.
+                                Fork the repository and clone it to your local machine.
                             </p>
                         </div>
                         <div class="text-center">
                             <div class="bg-purple-500 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
-                                <i class="fas fa-play text-xl"></i>
+                                <i class="fas fa-file-alt text-xl"></i>
                             </div>
-                            <h4 class="font-semibold text-white mb-2">2. Run Benchmark</h4>
+                            <h4 class="font-semibold text-white mb-2">2. Create JSON</h4>
                             <p class="text-gray-300">
-                                Test your prompt against our standard seed set using our API.
+                                Add your strategy as a JSON file in the data/strategies/ folder.
                             </p>
                         </div>
                         <div class="text-center">
                             <div class="bg-green-500 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
-                                <i class="fas fa-upload text-xl"></i>
+                                <i class="fas fa-pull-request text-xl"></i>
                             </div>
-                            <h4 class="font-semibold text-white mb-2">3. Submit Results</h4>
+                            <h4 class="font-semibold text-white mb-2">3. Submit PR</h4>
                             <p class="text-gray-300">
-                                Upload your results with a description of your strategy.
+                                Create a pull request with your strategy data.
                             </p>
                         </div>
+                    </div>
+                    <div class="text-center mt-6">
+                        <a href="https://github.com/S1M0N38/balatrobench/blob/main/CONTRIBUTING.md" target="_blank" class="text-blue-400 hover:text-blue-300 transition-colors">
+                            <i class="fas fa-external-link-alt mr-1"></i>
+                            View detailed submission guidelines
+                        </a>
                     </div>
                 </div>
             </div>

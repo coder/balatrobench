@@ -6,8 +6,11 @@
     <title>Submit Strategy - BalatroBench</title>
     <meta name="description" content="Submit your custom strategy to the BalatroBench community leaderboard.">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        // Redirect to CONTRIBUTING.md on GitHub
+        window.location.href = "https://github.com/S1M0N38/balatrobench/blob/main/CONTRIBUTING.md";
+    </script>
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
     <!-- Navigation -->
@@ -17,217 +20,31 @@
                 <div class="flex items-center space-x-6">
                     <h1 class="text-xl font-bold text-blue-400">BalatroBench</h1>
                     <div class="hidden md:flex space-x-4">
-                        <a href="index.html" class="text-gray-300 hover:text-white">Official Benchmark</a>
+                        <a href="index.html" class="text-gray-300 hover:text-white">Leaderboard</a>
                         <a href="community.html" class="text-gray-300 hover:text-white">Community</a>
-                        <a href="submit.html" class="text-blue-400 hover:text-blue-300">Submit</a>
+                        <a href="about.html" class="text-gray-300 hover:text-white">About</a>
                     </div>
                 </div>
             </div>
         </div>
     </nav>
 
-    <div class="container mx-auto px-4 py-8 max-w-4xl">
-        <!-- Hero Section -->
-        <div class="mb-8">
-            <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-4">
-                Submit Your Strategy
-            </h1>
-            <p class="text-gray-300 text-lg">
-                Share your custom strategy with the community by submitting a pull request to our GitHub repository.
+    <div class="container mx-auto px-4 py-8 max-w-4xl text-center">
+        <div class="bg-gray-800 rounded-lg border border-gray-700 p-8">
+            <i class="fas fa-external-link-alt text-4xl text-blue-400 mb-4"></i>
+            <h1 class="text-3xl font-bold text-white mb-4">Redirecting to Contribution Guidelines</h1>
+            <p class="text-gray-300 text-lg mb-6">
+                You're being redirected to our comprehensive contribution guidelines on GitHub.
             </p>
-        </div>
-
-        <!-- Quick Guide -->
-        <div class="bg-gray-800 rounded-lg border border-gray-700 p-6 mb-8">
-            <h2 class="text-2xl font-bold text-white mb-4">Quick Submission Guide</h2>
-            <div class="grid md:grid-cols-3 gap-6">
-                <div class="text-center">
-                    <div class="bg-blue-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-code-branch text-2xl"></i>
-                    </div>
-                    <h3 class="font-bold text-white mb-2">1. Fork & Clone</h3>
-                    <p class="text-gray-300 text-sm">
-                        Fork the repository and clone it to your local machine
-                    </p>
-                </div>
-                <div class="text-center">
-                    <div class="bg-purple-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-file-alt text-2xl"></i>
-                    </div>
-                    <h3 class="font-bold text-white mb-2">2. Create JSON</h3>
-                    <p class="text-gray-300 text-sm">
-                        Add your strategy as a JSON file in the data/strategies/ folder
-                    </p>
-                </div>
-                <div class="text-center">
-                    <div class="bg-green-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-pull-request text-2xl"></i>
-                    </div>
-                    <h3 class="font-bold text-white mb-2">3. Submit PR</h3>
-                    <p class="text-gray-300 text-sm">
-                        Create a pull request with your strategy data
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Detailed Instructions -->
-        <div class="space-y-8">
-            <!-- Step 1 -->
-            <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
-                <h3 class="text-xl font-bold text-white mb-4">
-                    <span class="bg-blue-500 w-8 h-8 rounded-full inline-flex items-center justify-center mr-3 text-sm">1</span>
-                    Fork the Repository
-                </h3>
-                <div class="ml-11 space-y-4">
-                    <p class="text-gray-300">
-                        Start by forking the BalatroBench repository on GitHub:
-                    </p>
-                    <div class="bg-gray-900 rounded border border-gray-600 p-4">
-                        <code class="text-green-400">
-                            git clone https://github.com/YOUR_USERNAME/balatrobench-site.git<br>
-                            cd balatrobench-site
-                        </code>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Step 2 -->
-            <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
-                <h3 class="text-xl font-bold text-white mb-4">
-                    <span class="bg-purple-500 w-8 h-8 rounded-full inline-flex items-center justify-center mr-3 text-sm">2</span>
-                    Create Your Strategy File
-                </h3>
-                <div class="ml-11 space-y-4">
-                    <p class="text-gray-300">
-                        Create a new JSON file in the <code class="bg-gray-700 px-2 py-1 rounded">data/strategies/</code> folder:
-                    </p>
-                    <div class="bg-gray-900 rounded border border-gray-600 p-4">
-                        <code class="text-yellow-400 text-sm">
-                            // data/strategies/your-strategy-name.json<br>
-                            {<br>
-                            &nbsp;&nbsp;"title": "Your Strategy Name",<br>
-                            &nbsp;&nbsp;"author": "YourUsername",<br>
-                            &nbsp;&nbsp;"model": "GPT-4o / Claude-3.5-Sonnet / etc",<br>
-                            &nbsp;&nbsp;"score": "8.5",<br>
-                            &nbsp;&nbsp;"winRate": "75%",<br>
-                            &nbsp;&nbsp;"avgTokens": "15000",<br>
-                            &nbsp;&nbsp;"date": "2024-01-20",<br>
-                            &nbsp;&nbsp;"description": "Brief description of your strategy",<br>
-                            &nbsp;&nbsp;"prompt": "Your full system prompt here...",<br>
-                            &nbsp;&nbsp;"methodology": "Explanation of your approach",<br>
-                            &nbsp;&nbsp;"results": {<br>
-                            &nbsp;&nbsp;&nbsp;&nbsp;"seeds": [1, 2, 3, ...],<br>
-                            &nbsp;&nbsp;&nbsp;&nbsp;"scores": [8.2, 8.8, 8.1, ...]<br>
-                            &nbsp;&nbsp;}<br>
-                            }
-                        </code>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Step 3 -->
-            <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
-                <h3 class="text-xl font-bold text-white mb-4">
-                    <span class="bg-green-500 w-8 h-8 rounded-full inline-flex items-center justify-center mr-3 text-sm">3</span>
-                    Submit Pull Request
-                </h3>
-                <div class="ml-11 space-y-4">
-                    <p class="text-gray-300">
-                        Commit your changes and create a pull request:
-                    </p>
-                    <div class="bg-gray-900 rounded border border-gray-600 p-4">
-                        <code class="text-green-400">
-                            git add data/strategies/your-strategy-name.json<br>
-                            git commit -m "Add [Your Strategy Name] community submission"<br>
-                            git push origin main
-                        </code>
-                    </div>
-                    <p class="text-gray-300">
-                        Then create a pull request on GitHub with the title: 
-                        <strong>"Community Submission: [Your Strategy Name]"</strong>
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Requirements -->
-        <div class="bg-amber-900/20 border border-amber-700 rounded-lg p-6 mt-8">
-            <h3 class="text-xl font-bold text-amber-400 mb-4">
-                <i class="fas fa-exclamation-triangle mr-2"></i>
-                Submission Requirements
-            </h3>
-            <ul class="space-y-2 text-amber-200">
-                <li><i class="fas fa-check text-green-400 mr-2"></i> Must include valid benchmark results on standard seeds</li>
-                <li><i class="fas fa-check text-green-400 mr-2"></i> Strategy description must be clear and detailed</li>
-                <li><i class="fas fa-check text-green-400 mr-2"></i> JSON file must follow the required schema</li>
-                <li><i class="fas fa-check text-green-400 mr-2"></i> Results must be reproducible</li>
-                <li><i class="fas fa-check text-green-400 mr-2"></i> No offensive or inappropriate content</li>
-            </ul>
-        </div>
-
-        <!-- Example Template -->
-        <div class="bg-gray-800 rounded-lg border border-gray-700 p-6 mt-8">
-            <h3 class="text-xl font-bold text-white mb-4">
-                <i class="fas fa-download mr-2"></i>
-                Download Template
-            </h3>
-            <p class="text-gray-300 mb-4">
-                Use this template to get started with your submission:
+            <p class="text-gray-400 mb-6">
+                If you're not redirected automatically, click the link below:
             </p>
-            <button onclick="downloadTemplate()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
-                <i class="fas fa-download mr-2"></i>
-                Download strategy-template.json
-            </button>
-        </div>
-
-        <!-- Contact -->
-        <div class="bg-gray-800 rounded-lg border border-gray-700 p-6 mt-8">
-            <h3 class="text-xl font-bold text-white mb-4">
-                <i class="fas fa-question-circle mr-2"></i>
-                Need Help?
-            </h3>
-            <p class="text-gray-300">
-                If you have questions about the submission process, please:
-            </p>
-            <ul class="mt-3 space-y-2 text-gray-300">
-                <li><i class="fas fa-github mr-2"></i> Open an issue on our GitHub repository</li>
-                <li><i class="fas fa-comments mr-2"></i> Join our Discord community</li>
-                <li><i class="fas fa-envelope mr-2"></i> Email us at community@balatrobench.dev</li>
-            </ul>
+            <a href="https://github.com/S1M0N38/balatrobench/blob/main/CONTRIBUTING.md" 
+               class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                <i class="fas fa-book mr-2"></i>
+                View CONTRIBUTING.md
+            </a>
         </div>
     </div>
-
-    <script>
-        function downloadTemplate() {
-            const template = {
-                title: "Your Strategy Name",
-                author: "YourUsername", 
-                model: "Model Name (e.g., GPT-4o)",
-                score: "0.0",
-                winRate: "0%",
-                avgTokens: "0",
-                date: new Date().toISOString().split('T')[0],
-                description: "Brief description of your strategy approach",
-                prompt: "Your full system prompt here...",
-                methodology: "Detailed explanation of your methodology",
-                results: {
-                    seeds: [],
-                    scores: [],
-                    notes: "Any additional notes about the results"
-                }
-            };
-
-            const dataStr = JSON.stringify(template, null, 2);
-            const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
-            
-            const exportFileDefaultName = 'strategy-template.json';
-            
-            const linkElement = document.createElement('a');
-            linkElement.setAttribute('href', dataUri);
-            linkElement.setAttribute('download', exportFileDefaultName);
-            linkElement.click();
-        }
-    </script>
 </body>
 </html>
