@@ -5,7 +5,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import OfficialBenchmark from "./pages/OfficialBenchmark";
 import Community from "./pages/Community";
-import Analytics from "./pages/Analytics";
 import SubmitRun from "./pages/SubmitRun";
 import NotFound from "./pages/NotFound";
 
@@ -20,7 +19,6 @@ const App = () => (
         <Routes>
           <Route path="/" element={<OfficialBenchmark />} />
           <Route path="/community" element={<Community />} />
-          <Route path="/analytics" element={<Analytics />} />
           <Route path="/submit" element={<SubmitRun />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

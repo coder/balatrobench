@@ -34,13 +34,6 @@ const Navigation = () => {
           >
             <Link to="/community">Community</Link>
           </Button>
-          <Button 
-            variant="ghost" 
-            className={`hover:bg-muted/50 ${isActive('/analytics') ? 'bg-muted/50' : ''}`}
-            asChild
-          >
-            <Link to="/analytics">Analytics</Link>
-          </Button>
         </div>
 
         <div className="flex items-center space-x-2">
