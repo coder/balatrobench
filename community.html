@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Leaderboard - BalatroBench</title>
+    <meta name="description" content="Community-submitted strategies and results for the BalatroBench platform.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-gray-800 border-b border-gray-700">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-6">
+                    <h1 class="text-xl font-bold text-blue-400">BalatroBench</h1>
+                    <div class="hidden md:flex space-x-4">
+                        <a href="index.html" class="text-gray-300 hover:text-white">Official Benchmark</a>
+                        <a href="community.html" class="text-blue-400 hover:text-blue-300">Community</a>
+                        <a href="submit.html" class="text-gray-300 hover:text-white">Submit</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8">
+        <!-- Hero Section -->
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-4">
+                Community Leaderboard
+            </h1>
+            <p class="text-gray-300 text-lg max-w-3xl mb-6">
+                Explore custom strategies and prompts submitted by the community. 
+                Submit your own approach and see how it performs!
+            </p>
+            <a href="submit.html" class="inline-block bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 shadow-lg">
+                Submit Your Strategy
+            </a>
+        </div>
+
+        <!-- Community Submissions -->
+        <div id="community-submissions" class="grid gap-6">
+            <!-- Data will be loaded here by JavaScript -->
+        </div>
+
+        <!-- How to Submit Section -->
+        <div class="mt-12">
+            <div class="bg-gray-800 rounded-lg border border-gray-700 shadow-lg">
+                <div class="p-6 border-b border-gray-700">
+                    <h2 class="text-2xl font-bold text-white">How to Submit</h2>
+                </div>
+                <div class="p-6">
+                    <div class="grid md:grid-cols-3 gap-6 text-sm">
+                        <div class="text-center">
+                            <div class="bg-blue-500 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
+                                <i class="fas fa-edit text-xl"></i>
+                            </div>
+                            <h4 class="font-semibold text-white mb-2">1. Prepare Your Prompt</h4>
+                            <p class="text-gray-300">
+                                Create a custom system prompt with your unique strategy approach.
+                            </p>
+                        </div>
+                        <div class="text-center">
+                            <div class="bg-purple-500 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
+                                <i class="fas fa-play text-xl"></i>
+                            </div>
+                            <h4 class="font-semibold text-white mb-2">2. Run Benchmark</h4>
+                            <p class="text-gray-300">
+                                Test your prompt against our standard seed set using our API.
+                            </p>
+                        </div>
+                        <div class="text-center">
+                            <div class="bg-green-500 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
+                                <i class="fas fa-upload text-xl"></i>
+                            </div>
+                            <h4 class="font-semibold text-white mb-2">3. Submit Results</h4>
+                            <p class="text-gray-300">
+                                Upload your results with a description of your strategy.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load community submissions
+        async function loadCommunitySubmissions() {
+            try {
+                const response = await fetch('data/strategies/');
+                // For now, we'll use static data since we can't easily list directory contents
+                const submissions = [
+                    {
+                        title: "Aggressive Joker Synergy Strategy",
+                        author: "AIResearcher23",
+                        model: "GPT-4o",
+                        score: "9.2",
+                        votes: 47,
+                        date: "2024-01-15",
+                        description: "Focus on multiplicative jokers early game for maximum score potential"
+                    },
+                    {
+                        title: "Conservative Money Management",
+                        author: "BalatroBot",
+                        model: "Claude-3.5-Sonnet",
+                        score: "8.8",
+                        votes: 32,
+                        date: "2024-01-12",
+                        description: "Prioritize money generation over risky plays for consistent performance"
+                    },
+                    {
+                        title: "High Card Meta Exploitation",
+                        author: "CardCounter",
+                        model: "Gemini-Pro",
+                        score: "8.1",
+                        votes: 28,
+                        date: "2024-01-10",
+                        description: "Exploit high card hands with specific joker combinations"
+                    }
+                ];
+
+                const container = document.getElementById('community-submissions');
+                container.innerHTML = submissions.map(submission => `
+                    <div class="bg-gray-800 rounded-lg border border-gray-700 shadow-lg hover:shadow-xl transition-all duration-300">
+                        <div class="p-6">
+                            <div class="flex items-start justify-between mb-4">
+                                <div>
+                                    <h3 class="text-xl font-bold text-white mb-2">${submission.title}</h3>
+                                    <div class="flex items-center gap-4 text-sm text-gray-400">
+                                        <span>by ${submission.author}</span>
+                                        <span class="bg-gray-700 px-2 py-1 rounded text-xs">${submission.model}</span>
+                                        <span>${submission.date}</span>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                                        ${submission.score} Ante
+                                    </div>
+                                    <div class="text-sm text-gray-400">
+                                        ${submission.votes} votes
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-gray-300 mb-4">${submission.description}</p>
+                            <div class="flex items-center gap-2">
+                                <button class="border border-gray-600 text-gray-300 hover:border-gray-500 hover:text-white px-3 py-1 rounded text-sm transition-colors">
+                                    View Details
+                                </button>
+                                <button class="text-gray-400 hover:text-green-400 px-3 py-1 text-sm transition-colors">
+                                    <i class="fas fa-arrow-up"></i> Upvote
+                                </button>
+                                <button class="text-gray-400 hover:text-blue-400 px-3 py-1 text-sm transition-colors">
+                                    Try Strategy
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading community submissions:', error);
+            }
+        }
+
+        // Load data when page loads
+        document.addEventListener('DOMContentLoaded', loadCommunitySubmissions);
+    </script>
+</body>
+</html>

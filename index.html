@@ -1,24 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BalatroBench - Community LLM Benchmark Platform</title>
-    <meta name="description" content="Community-driven platform for benchmarking Large Language Models' strategic performance in Balatro through custom strategies and tool-calling." />
-    <meta name="author" content="BalatroBench Community" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BalatroBench - LLM Benchmark Platform</title>
+    <meta name="description" content="Community-driven platform for benchmarking Large Language Models' strategic performance in Balatro through custom strategies and tool-calling.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-gray-800 border-b border-gray-700">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-6">
+                    <h1 class="text-xl font-bold text-blue-400">BalatroBench</h1>
+                    <div class="hidden md:flex space-x-4">
+                        <a href="index.html" class="text-blue-400 hover:text-blue-300">Official Benchmark</a>
+                        <a href="community.html" class="text-gray-300 hover:text-white">Community</a>
+                        <a href="submit.html" class="text-gray-300 hover:text-white">Submit</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-    <meta property="og:title" content="BalatroBench - Community LLM Benchmark" />
-    <meta property="og:description" content="The premier benchmark for evaluating AI models in strategic card game play." />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <div class="container mx-auto px-4 py-8">
+        <!-- Hero Section -->
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold text-white mb-4">
+                BalatroBench
+            </h1>
+            <p class="text-gray-300 text-lg max-w-3xl">
+                Community-driven benchmark platform for evaluating Large Language Models' strategic performance in Balatro through intelligent tool-calling and decision-making.
+            </p>
+        </div>
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@lovable_dev" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-  </head>
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                <div class="text-sm text-gray-400 mb-1">Benchmark Version</div>
+                <div class="text-2xl font-bold text-blue-400">v2.1.3</div>
+                <div class="text-sm text-gray-400">Latest stable</div>
+            </div>
+            <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                <div class="text-sm text-gray-400 mb-1">Total Runs</div>
+                <div class="text-2xl font-bold text-white" id="total-runs">1,247</div>
+                <div class="text-sm text-green-400">
+                    <i class="fas fa-arrow-up"></i> 23 across all models
+                </div>
+            </div>
+            <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                <div class="text-sm text-gray-400 mb-1">Seeds Used</div>
+                <div class="text-2xl font-bold text-white">100</div>
+                <div class="text-sm text-gray-400">For reproducibility</div>
+            </div>
+            <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                <div class="text-sm text-gray-400 mb-1">Avg Runtime</div>
+                <div class="text-2xl font-bold text-purple-400">12.3 min</div>
+                <div class="text-sm text-green-400">
+                    <i class="fas fa-arrow-down"></i> 0.8 per benchmark run
+                </div>
+            </div>
+        </div>
 
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+        <!-- Leaderboard -->
+        <div class="bg-gray-800 rounded-lg border border-gray-700 mb-8">
+            <div class="p-6 border-b border-gray-700">
+                <h2 class="text-2xl font-bold text-white">Official Leaderboard</h2>
+                <p class="text-gray-400 mt-2">Latest benchmark results across different LLM models</p>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-700">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-300">Rank</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-300">Model</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-300">Avg Ante</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-300">Win Rate</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-300">Tokens/Run</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-300">Updated</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body" class="divide-y divide-gray-700">
+                        <!-- Data will be loaded here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Methodology -->
+        <div class="bg-gray-800 rounded-lg p-8 border border-gray-700">
+            <h2 class="text-2xl font-bold mb-4">Methodology</h2>
+            <div class="grid md:grid-cols-2 gap-6 text-gray-300">
+                <div>
+                    <h3 class="font-semibold text-white mb-2">Game Parameters</h3>
+                    <ul class="space-y-1 text-sm">
+                        <li>• Balatro v1.0.1n</li>
+                        <li>• 100 consistent seeds</li>
+                        <li>• Standard deck configuration</li>
+                        <li>• No modifications or cheats</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-white mb-2">Evaluation Criteria</h3>
+                    <ul class="space-y-1 text-sm">
+                        <li>• Average ante reached</li>
+                        <li>• Win rate across seeds</li>
+                        <li>• Token efficiency</li>
+                        <li>• Decision quality scoring</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
 </html>

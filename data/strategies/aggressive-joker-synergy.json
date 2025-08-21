@@ -1,0 +1,19 @@
+{
+  "title": "Aggressive Joker Synergy Strategy",
+  "author": "AIResearcher23",
+  "model": "GPT-4o",
+  "score": "9.2",
+  "winRate": "82%",
+  "avgTokens": "15400",
+  "date": "2024-01-15",
+  "description": "Focus on multiplicative jokers early game for maximum score potential through strategic synergy building",
+  "prompt": "You are an expert Balatro player focused on aggressive multiplicative joker strategies. Prioritize:\n1. Early acquisition of multiplicative jokers (Joker, Supernova, etc.)\n2. Building synergies between jokers that multiply each other\n3. Taking calculated risks for high-reward plays\n4. Managing economy to support aggressive joker purchases\n5. Recognizing when to pivot strategy based on available jokers",
+  "methodology": "This strategy emphasizes early game risk-taking to establish powerful joker combinations. The AI focuses on identifying multiplicative synergies and building around them, accepting higher variance for higher potential scores.",
+  "results": {
+    "seeds": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    "scores": [9.8, 8.5, 10.2, 9.1, 8.9, 9.6, 9.0, 9.4, 8.7, 9.8],
+    "notes": "Strategy performs exceptionally well when multiplicative jokers appear early, but can struggle with bad RNG"
+  },
+  "votes": 47,
+  "tags": ["aggressive", "multiplicative", "high-risk", "synergy"]
+}
