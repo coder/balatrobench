@@ -77,14 +77,14 @@ const getRankBadgeVariant = (rank: number) => {
 
 const Leaderboard = () => {
   return (
-    <Card className="bg-gradient-card border-border/20 shadow-elevation">
-      <div className="p-6 border-b border-border/20">
+    <Card className="bg-card border shadow-sm">
+      <div className="p-6 border-b border-border">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-foreground">Official Leaderboard</h2>
-            <p className="text-muted-foreground">Top performing models in Balatro gameplay</p>
+            <h2 className="text-2xl font-bold text-foreground">Community Leaderboard</h2>
+            <p className="text-muted-foreground">Top performing models in Balatro benchmarks</p>
           </div>
-          <Button variant="outline" className="border-border/40">
+          <Button variant="outline">
             View All Results
           </Button>
         </div>
@@ -93,7 +93,7 @@ const Leaderboard = () => {
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>
-            <TableRow className="border-border/20 hover:bg-muted/30">
+            <TableRow className="border-b hover:bg-muted/50">
               <TableHead className="text-muted-foreground">Rank</TableHead>
               <TableHead className="text-muted-foreground">Model</TableHead>
               <TableHead className="text-center text-muted-foreground">Avg Ante</TableHead>
@@ -108,7 +108,7 @@ const Leaderboard = () => {
             {mockData.map((entry) => (
               <TableRow 
                 key={entry.rank} 
-                className="border-border/20 hover:bg-muted/20 transition-colors"
+                className="border-b hover:bg-muted/30 transition-colors"
               >
                 <TableCell>
                   <Badge variant={getRankBadgeVariant(entry.rank)} className="w-8 h-8 rounded-full flex items-center justify-center">
@@ -122,19 +122,19 @@ const Leaderboard = () => {
                   </div>
                 </TableCell>
                 <TableCell className="text-center">
-                  <span className="font-mono text-primary font-bold">{entry.avgAnte}</span>
+                  <span className="font-mono text-accent font-bold">{entry.avgAnte}</span>
                 </TableCell>
                 <TableCell className="text-center">
-                  <span className="font-mono text-success font-bold">{entry.winRate}%</span>
+                  <span className="font-mono text-accent font-bold">{entry.winRate}%</span>
                 </TableCell>
                 <TableCell className="text-center">
                   <span className="font-mono text-accent font-bold">{entry.avgScore.toLocaleString()}</span>
                 </TableCell>
                 <TableCell className="text-center">
-                  <span className="font-mono text-secondary font-bold">{entry.tokenEfficiency}</span>
+                  <span className="font-mono text-accent font-bold">{entry.tokenEfficiency}</span>
                 </TableCell>
                 <TableCell className="text-center">
-                  <span className="font-mono text-warning font-bold">${entry.costPerGame}</span>
+                  <span className="font-mono text-accent font-bold">${entry.costPerGame}</span>
                 </TableCell>
                 <TableCell className="text-center text-xs text-muted-foreground">
                   {entry.lastUpdated}

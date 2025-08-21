@@ -8,13 +8,13 @@ const Navigation = () => {
   const isActive = (path: string) => location.pathname === path;
   
   return (
-    <Card className="bg-gradient-card border-border/20 shadow-card mb-8">
+    <Card className="bg-card border-border shadow-card mb-8">
       <nav className="flex items-center justify-between px-6 py-4">
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center shadow-glow-primary">
+        <div className="flex items-center space-x-3">
+          <div className="w-8 h-8 bg-primary rounded flex items-center justify-center">
             <span className="text-primary-foreground font-bold text-sm">B</span>
           </div>
-          <h1 className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+          <h1 className="text-2xl font-bold text-foreground">
             BalatroBench
           </h1>
         </div>
@@ -38,7 +38,7 @@ const Navigation = () => {
 
         <div className="flex items-center space-x-2">
           <Button 
-            className="bg-gradient-primary hover:shadow-glow-primary"
+            className="bg-primary hover:bg-primary/90"
             asChild
           >
             <Link to="/submit">Submit Run</Link>

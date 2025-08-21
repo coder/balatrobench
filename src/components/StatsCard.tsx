@@ -47,8 +47,7 @@ const StatsCard = ({
 
   return (
     <Card className={cn(
-      "bg-gradient-card shadow-card hover:shadow-elevation transition-all duration-300",
-      getVariantStyles(),
+      "bg-card border shadow-sm hover:shadow-md transition-all duration-200",
       className
     )}>
       <div className="p-6">
@@ -60,7 +59,7 @@ const StatsCard = ({
             </Badge>
           )}
         </div>
-        <div className="text-2xl font-bold text-foreground mb-1">{value}</div>
+        <div className="text-2xl font-bold text-accent mb-1">{value}</div>
         {subtitle && (
           <p className="text-xs text-muted-foreground">{subtitle}</p>
         )}

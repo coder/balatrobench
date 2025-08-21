@@ -8,12 +8,12 @@ import { Upload } from "lucide-react";
 
 const SubmitRun = () => {
   return (
-    <div className="min-h-screen bg-gradient-background">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         <Navigation />
         
         <div className="mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent mb-4">
+          <h1 className="text-4xl font-bold text-foreground mb-4">
             Submit Custom Run
           </h1>
           <p className="text-muted-foreground text-lg max-w-3xl">
@@ -23,7 +23,7 @@ const SubmitRun = () => {
 
         <div className="grid lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
-            <Card className="bg-gradient-card border-border/20 shadow-card">
+            <Card className="bg-card border shadow-sm">
               <CardHeader>
                 <CardTitle>Custom Benchmark Run</CardTitle>
                 <CardDescription>
@@ -33,7 +33,7 @@ const SubmitRun = () => {
               <CardContent className="space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="strategy-file">Strategy File (STRATEGY.md)</Label>
-                  <div className="border-2 border-dashed border-border rounded-lg p-6 text-center hover:border-primary/50 transition-colors cursor-pointer">
+                  <div className="border-2 border-dashed border-border rounded-lg p-6 text-center hover:border-accent/50 transition-colors cursor-pointer">
                     <Upload className="mx-auto h-8 w-8 text-muted-foreground mb-2" />
                     <p className="text-sm text-muted-foreground">
                       Click to upload or drag and drop your STRATEGY.md file
@@ -86,7 +86,7 @@ const SubmitRun = () => {
                   </Label>
                 </div>
 
-                <Button className="w-full bg-gradient-primary hover:shadow-glow-primary">
+                <Button className="w-full bg-primary hover:bg-primary/90">
                   Start Benchmark Run
                 </Button>
               </CardContent>

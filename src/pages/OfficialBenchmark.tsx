@@ -4,12 +4,12 @@ import StatsCard from "@/components/StatsCard";
 
 const OfficialBenchmark = () => {
   return (
-    <div className="min-h-screen bg-gradient-background">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         <Navigation />
         
         <div className="mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent mb-4">
+          <h1 className="text-4xl font-bold text-foreground mb-4">
             BalatroBench
           </h1>
           <p className="text-muted-foreground text-lg max-w-3xl">
@@ -48,7 +48,7 @@ const OfficialBenchmark = () => {
 
         <Leaderboard />
 
-        <div className="mt-12 bg-gradient-card rounded-xl p-8 border border-border/20">
+        <div className="mt-12 bg-card rounded-lg p-8 border border-border">
           <h2 className="text-2xl font-bold mb-4">Methodology</h2>
           <div className="grid md:grid-cols-2 gap-6 text-muted-foreground">
             <div>

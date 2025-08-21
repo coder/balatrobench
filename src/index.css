@@ -2,94 +2,75 @@
 @tailwind components;
 @tailwind utilities;
 
-/* BalatroLLM Design System - Neon cyberpunk aesthetic with professional data visualization
-All colors MUST be HSL.
-*/
+/* BalatroBench - Super minimal black and white design system */
 
 @layer base {
   :root {
-    /* Core backgrounds - Deep space blues */
-    --background: 222 84% 5%;
-    --foreground: 210 40% 98%;
+    /* Light mode - Clean minimal design */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 5%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 5%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 5%;
+    --primary: 0 0% 5%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 97%;
+    --secondary-foreground: 0 0% 5%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 40%;
+    --accent: 220 100% 50%; /* Blue accent for numbers */
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 90%;
+    --input: 0 0% 96%;
+    --ring: 220 100% 50%;
+    --radius: 0.375rem;
 
-    /* Card system - Subtle elevation with glow potential */
-    --card: 222 47% 11%;
-    --card-foreground: 210 40% 95%;
-
-    /* Interactive elements */
-    --popover: 222 47% 11%;
-    --popover-foreground: 210 40% 95%;
-
-    /* Brand colors - Balatro inspired */
-    --primary: 270 100% 80%;
-    --primary-foreground: 222 84% 5%;
-
-    /* Secondary - Neon green accent */
-    --secondary: 150 100% 50%;
-    --secondary-foreground: 222 84% 5%;
-
-    /* Muted elements */
-    --muted: 222 47% 15%;
-    --muted-foreground: 210 20% 65%;
-
-    /* Accent - Neon pink/magenta */
-    --accent: 320 100% 70%;
-    --accent-foreground: 222 84% 5%;
-
-    /* Status colors */
-    --destructive: 0 100% 60%;
-    --destructive-foreground: 210 40% 98%;
-
-    --success: 150 100% 50%;
-    --success-foreground: 222 84% 5%;
-
-    --warning: 45 100% 60%;
-    --warning-foreground: 222 84% 5%;
-
-    /* Borders and inputs */
-    --border: 222 47% 20%;
-    --input: 222 47% 15%;
-    --ring: 270 100% 80%;
-
-    --radius: 0.75rem;
-
-    /* Custom gradients for BalatroLLM */
-    --gradient-primary: linear-gradient(135deg, hsl(270 100% 80%), hsl(320 100% 70%));
-    --gradient-secondary: linear-gradient(135deg, hsl(150 100% 50%), hsl(180 100% 50%));
-    --gradient-background: linear-gradient(135deg, hsl(222 84% 5%), hsl(222 47% 11%));
-    --gradient-card: linear-gradient(135deg, hsl(222 47% 11%), hsl(222 47% 15%));
-    
-    /* Glow effects */
-    --glow-primary: 0 0 20px hsl(270 100% 80% / 0.3);
-    --glow-secondary: 0 0 20px hsl(150 100% 50% / 0.3);
-    --glow-accent: 0 0 20px hsl(320 100% 70% / 0.3);
-    
-    /* Enhanced shadows */
-    --shadow-card: 0 8px 32px hsl(222 84% 5% / 0.8);
-    --shadow-elevation: 0 16px 48px hsl(222 84% 5% / 0.9);
-    
-    /* Transitions */
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-glow: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
+    /* Sidebar */
     --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
+    --sidebar-foreground: 0 0% 5%;
+    --sidebar-primary: 0 0% 5%;
     --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 0 0% 96%;
+    --sidebar-accent-foreground: 0 0% 5%;
+    --sidebar-border: 0 0% 90%;
+    --sidebar-ring: 220 100% 50%;
   }
 
-  /* Remove conflicting dark mode - BalatroLLM uses dark theme by default */
+  .dark {
+    /* Dark mode - Clean minimal design */
+    --background: 0 0% 5%;
+    --foreground: 0 0% 95%;
+    --card: 0 0% 8%;
+    --card-foreground: 0 0% 95%;
+    --popover: 0 0% 5%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 0 0% 95%;
+    --primary-foreground: 0 0% 5%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 95%;
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 60%;
+    --accent: 220 100% 60%; /* Blue accent for numbers */
+    --accent-foreground: 0 0% 5%;
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 15%;
+    --input: 0 0% 12%;
+    --ring: 220 100% 60%;
+
+    /* Sidebar */
+    --sidebar-background: 0 0% 8%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: 0 0% 95%;
+    --sidebar-primary-foreground: 0 0% 5%;
+    --sidebar-accent: 0 0% 12%;
+    --sidebar-accent-foreground: 0 0% 95%;
+    --sidebar-border: 0 0% 15%;
+    --sidebar-ring: 220 100% 60%;
+  }
 }
 
 @layer base {
