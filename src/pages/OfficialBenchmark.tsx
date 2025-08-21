@@ -10,11 +10,10 @@ const OfficialBenchmark = () => {
         
         <div className="mb-8">
           <h1 className="text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent mb-4">
-            Official Benchmark
+            BalatroBench
           </h1>
           <p className="text-muted-foreground text-lg max-w-3xl">
-            Standardized evaluation of LLM performance in Balatro using consistent prompts, 
-            seeds, and game parameters for fair model comparisons.
+            Community-driven benchmark platform for evaluating Large Language Models' strategic performance in Balatro through intelligent tool-calling and decision-making.
           </p>
         </div>
 

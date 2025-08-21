@@ -23,7 +23,7 @@ const NotFound = () => {
           href="/" 
           className="inline-flex items-center px-6 py-3 bg-gradient-primary text-primary-foreground rounded-lg hover:shadow-glow-primary transition-all duration-300"
         >
-          Return to Dashboard
+          Return to BalatroBench
         </a>
       </div>
     </div>

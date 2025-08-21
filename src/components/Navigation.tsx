@@ -15,7 +15,7 @@ const Navigation = () => {
             <span className="text-primary-foreground font-bold text-sm">B</span>
           </div>
           <h1 className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-            BalatroLLM
+            BalatroBench
           </h1>
         </div>
         
@@ -25,14 +25,7 @@ const Navigation = () => {
             className={`hover:bg-muted/50 ${isActive('/') ? 'bg-muted/50' : ''}`}
             asChild
           >
-            <Link to="/">Dashboard</Link>
-          </Button>
-          <Button 
-            variant="ghost" 
-            className={`hover:bg-muted/50 ${isActive('/benchmark') ? 'bg-muted/50' : ''}`}
-            asChild
-          >
-            <Link to="/benchmark">Official Benchmark</Link>
+            <Link to="/">Benchmark</Link>
           </Button>
           <Button 
             variant="ghost" 
@@ -51,13 +44,6 @@ const Navigation = () => {
         </div>
 
         <div className="flex items-center space-x-2">
-          <Button 
-            variant="outline" 
-            className="border-border/40 hover:shadow-glow-primary"
-            asChild
-          >
-            <Link to="/api">API Access</Link>
-          </Button>
           <Button 
             className="bg-gradient-primary hover:shadow-glow-primary"
             asChild
