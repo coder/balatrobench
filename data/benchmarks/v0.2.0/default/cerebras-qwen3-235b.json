@@ -2,36 +2,40 @@
   "version": "0.2.0",
   "model": "cerebras-qwen3-235b",
   "strategy": "default",
+  "name": "Unknown Name",
+  "description": "Unknown Description",
+  "author": "BalatroBench",
+  "tags": [],
   "summary": {
     "performance_score": 36.25,
     "efficiency_rating": "C",
-    "total_runs": 3,
-    "completed_runs": 3,
+    "total_runs": 10,
+    "completed_runs": 10,
     "completion_rate": 1.0
   },
   "performance_metrics": {
     "win_rate": 0.0,
     "avg_final_ante": 2,
-    "avg_final_money": 3,
-    "avg_peak_money": 8,
-    "avg_duration_seconds": 86.3
+    "avg_final_money": 4.2,
+    "avg_peak_money": 8.8,
+    "avg_duration_seconds": 89.7
   },
   "llm_metrics": {
     "avg_success_rate": 1.0,
-    "avg_response_time": 3.273,
-    "avg_total_tokens": 56314.7,
-    "avg_tokens_per_request": 3924.3,
+    "avg_response_time": 3.527,
+    "avg_total_tokens": 61916,
+    "avg_tokens_per_request": 4269.0,
     "avg_parsing_error_rate": 0,
     "avg_timeout_error_rate": 0
   },
   "consistency_metrics": {
-    "std_final_ante": 1.0,
-    "std_final_money": 1.0,
-    "std_duration": 58.8
+    "std_final_ante": 0.82,
+    "std_final_money": 3.0,
+    "std_duration": 51.4
   },
   "efficiency_metrics": {
-    "tokens_per_ante": 28157.3,
-    "seconds_per_ante": 43.2,
+    "tokens_per_ante": 30958.0,
+    "seconds_per_ante": 44.9,
     "money_efficiency": 0.0001
   },
   "strategy_metrics": {
@@ -41,6 +45,66 @@
     "avg_blinds_skipped": 0
   },
   "individual_runs": [
+    {
+      "seed": "OOOO155",
+      "deck": "191219",
+      "stake": 1,
+      "completed": true,
+      "won": false,
+      "final_ante": 2,
+      "final_money": 9,
+      "peak_money": 13,
+      "duration_seconds": 105.277586,
+      "total_tokens": 78363,
+      "success_rate": 1.0,
+      "parsing_errors": 0,
+      "timeout_errors": 0
+    },
+    {
+      "seed": "OOOO155",
+      "deck": "192401",
+      "stake": 1,
+      "completed": true,
+      "won": false,
+      "final_ante": 1,
+      "final_money": 4,
+      "peak_money": 4,
+      "duration_seconds": 21.156743,
+      "total_tokens": 11658,
+      "success_rate": 1.0,
+      "parsing_errors": 0,
+      "timeout_errors": 0
+    },
+    {
+      "seed": "OOOO155",
+      "deck": "190948",
+      "stake": 1,
+      "completed": true,
+      "won": false,
+      "final_ante": 3,
+      "final_money": 3,
+      "peak_money": 10,
+      "duration_seconds": 147.984448,
+      "total_tokens": 101204,
+      "success_rate": 1.0,
+      "parsing_errors": 0,
+      "timeout_errors": 0
+    },
+    {
+      "seed": "OOOO155",
+      "deck": "192049",
+      "stake": 1,
+      "completed": true,
+      "won": false,
+      "final_ante": 2,
+      "final_money": 10,
+      "peak_money": 10,
+      "duration_seconds": 90.471366,
+      "total_tokens": 64557,
+      "success_rate": 1.0,
+      "parsing_errors": 0,
+      "timeout_errors": 0
+    },
     {
       "seed": "OOOO155",
       "deck": "133954",
@@ -73,6 +137,21 @@
     },
     {
       "seed": "OOOO155",
+      "deck": "191813",
+      "stake": 1,
+      "completed": true,
+      "won": false,
+      "final_ante": 3,
+      "final_money": 2,
+      "peak_money": 13,
+      "duration_seconds": 153.143146,
+      "total_tokens": 116164,
+      "success_rate": 1.0,
+      "parsing_errors": 0,
+      "timeout_errors": 0
+    },
+    {
+      "seed": "OOOO155",
       "deck": "145835",
       "stake": 1,
       "completed": true,
@@ -82,6 +161,36 @@
       "peak_money": 10,
       "duration_seconds": 135.556282,
       "total_tokens": 88701,
+      "success_rate": 1.0,
+      "parsing_errors": 0,
+      "timeout_errors": 0
+    },
+    {
+      "seed": "OOOO155",
+      "deck": "191748",
+      "stake": 1,
+      "completed": true,
+      "won": false,
+      "final_ante": 1,
+      "final_money": 4,
+      "peak_money": 4,
+      "duration_seconds": 23.157315,
+      "total_tokens": 12775,
+      "success_rate": 1.0,
+      "parsing_errors": 0,
+      "timeout_errors": 0
+    },
+    {
+      "seed": "OOOO155",
+      "deck": "192221",
+      "stake": 1,
+      "completed": true,
+      "won": false,
+      "final_ante": 2,
+      "final_money": 1,
+      "peak_money": 10,
+      "duration_seconds": 97.20288,
+      "total_tokens": 65495,
       "success_rate": 1.0,
       "parsing_errors": 0,
       "timeout_errors": 0

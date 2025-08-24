@@ -1,18 +1,18 @@
 {
-  "generated_at": "2025-08-24T16:17:41.184008",
+  "generated_at": "2025-08-24T19:29:04.319155",
   "version": "0.2.0",
   "strategy": "default",
   "total_entries": 2,
-  "total_runs_analyzed": 5,
+  "total_runs_analyzed": 21,
   "entries": [
     {
       "rank": 1,
       "model": "cerebras-gpt-oss-120b",
-      "performance_score": 42.5,
+      "performance_score": 42.05,
       "win_rate": 0.0,
-      "avg_final_ante": 4,
-      "avg_duration_seconds": 133.4,
-      "total_runs": 2,
+      "avg_final_ante": 3.91,
+      "avg_duration_seconds": 118.7,
+      "total_runs": 11,
       "completion_rate": 1.0,
       "efficiency_rating": "C"
     },
@@ -22,8 +22,8 @@
       "performance_score": 36.25,
       "win_rate": 0.0,
       "avg_final_ante": 2,
-      "avg_duration_seconds": 86.3,
-      "total_runs": 3,
+      "avg_duration_seconds": 89.7,
+      "total_runs": 10,
       "completion_rate": 1.0,
       "efficiency_rating": "C"
     }

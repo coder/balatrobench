@@ -199,40 +199,37 @@ function renderLeaderboard(entries, metadata) {
     
     tbody.innerHTML = entries.map((entry, index) => `
         <tr class="hover:bg-gray-700 transition-colors cursor-pointer" onclick="toggleStats(${index})">
-            <td class="px-6 py-4">
-                <div class="flex items-center">
-                    <span class="text-lg font-bold ${getRankColor(entry.rank)}">#${entry.rank}</span>
+            <td class="px-1 py-2 text-center">
+                <span class="text-sm sm:text-xs lg:text-sm font-bold ${getRankColor(entry.rank)}">#${entry.rank}</span>
+            </td>
+            <td class="px-1 py-2">
+                <div class="overflow-hidden min-w-0">
+                    <div class="font-medium text-white text-sm sm:text-xs lg:text-sm truncate" title="${entry.model}">${entry.model}</div>
+                    <div class="text-xs sm:text-xs lg:text-sm text-gray-400 hidden sm:block">${entry.total_runs} runs</div>
                 </div>
             </td>
-            <td class="px-6 py-4">
-                <div>
-                    <div class="font-medium text-white">${entry.model}</div>
-                    <div class="text-sm text-gray-400">${entry.total_runs} runs</div>
-                </div>
+            <td class="px-1 py-2">
+                <div class="text-sm sm:text-xs lg:text-sm font-bold text-white">${entry.avg_final_ante}</div>
+                <div class="text-xs sm:text-xs lg:text-sm text-gray-400 hidden sm:block">${entry.performance_score.toFixed(1)}</div>
             </td>
-            <td class="px-6 py-4">
-                <div class="text-lg font-bold text-white">${entry.avg_final_ante}</div>
-                <div class="text-sm text-gray-400">Score: ${entry.performance_score.toFixed(1)}</div>
+            <td class="px-1 py-2">
+                <div class="font-medium text-white text-sm sm:text-xs lg:text-sm">${(entry.win_rate * 100).toFixed(0)}%</div>
+                <div class="text-xs sm:text-xs lg:text-sm text-gray-400 hidden sm:block">${(entry.completion_rate * 100).toFixed(0)}%</div>
             </td>
-            <td class="px-6 py-4">
-                <div class="font-medium text-white">${(entry.win_rate * 100).toFixed(1)}%</div>
-                <div class="text-sm text-gray-400">Completion: ${(entry.completion_rate * 100).toFixed(1)}%</div>
+            <td class="px-1 py-2 hidden sm:table-cell">
+                <div class="font-medium text-white text-sm sm:text-xs lg:text-sm">${entry.detailedData ? (entry.detailedData.llm_metrics.avg_total_tokens / 1000).toFixed(0) + 'k' : 'N/A'}</div>
+                <div class="text-xs sm:text-xs lg:text-sm text-gray-400">${entry.detailedData ? (entry.detailedData.llm_metrics.avg_tokens_per_request / 1000).toFixed(1) + 'k/req' : ''}</div>
             </td>
-            <td class="px-6 py-4">
-                <div class="font-medium text-white">${entry.detailedData ? entry.detailedData.llm_metrics.avg_total_tokens.toLocaleString() : 'N/A'}</div>
-                <div class="text-sm text-gray-400">${entry.detailedData ? entry.detailedData.llm_metrics.avg_tokens_per_request.toLocaleString() + '/req' : ''}</div>
+            <td class="px-1 py-2 hidden lg:table-cell">
+                <div class="font-medium text-white text-sm sm:text-xs lg:text-sm">${entry.efficiency_rating}</div>
+                <div class="text-xs sm:text-xs lg:text-sm text-gray-400">${entry.detailedData ? (entry.detailedData.efficiency_metrics.tokens_per_ante / 1000).toFixed(0) + 'k/ante' : ''}</div>
             </td>
-            <td class="px-6 py-4">
-                <div class="font-medium text-white">${entry.efficiency_rating}</div>
-                <div class="text-sm text-gray-400">${entry.detailedData ? (entry.detailedData.efficiency_metrics.tokens_per_ante / 1000).toFixed(1) + 'k/ante' : ''}</div>
-            </td>
-            <td class="px-6 py-4">
-                <div class="text-white">${entry.performance_score.toFixed(1)}</div>
-                <div class="text-sm text-gray-400">v${metadata.version}</div>
+            <td class="px-1 py-2">
+                <div class="text-white text-sm sm:text-xs lg:text-sm">${entry.performance_score.toFixed(1)}</div>
             </td>
         </tr>
         <tr id="stats-row-${index}" class="hidden">
-            <td colspan="7" class="px-6 py-4 bg-gray-800">
+            <td colspan="7" class="px-1 py-4 bg-gray-800">
                 ${renderDetailedStats(entry, index)}
             </td>
         </tr>
@@ -251,121 +248,132 @@ function renderDetailedStats(entry, index) {
     const data = entry.detailedData;
     
     return `
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
-            <div>
-                <h4 class="font-semibold text-white mb-3">Performance Metrics</h4>
-                <div class="space-y-2 text-gray-300">
-                    <div class="flex justify-between">
-                        <span>Avg Final Ante:</span>
-                        <span class="text-white">${data.performance_metrics.avg_final_ante}</span>
+        <div class="px-2 sm:px-4 w-full overflow-hidden">
+            <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 sm:gap-4 text-sm sm:text-sm lg:text-sm w-full">
+            <div class="bg-gray-700 rounded-lg p-3 sm:p-4 min-w-0">
+                <h4 class="font-semibold text-white mb-1.5 sm:mb-2 text-sm sm:text-base lg:text-base">Performance Metrics</h4>
+                <div class="space-y-1.5 sm:space-y-2 text-gray-300 text-sm sm:text-sm lg:text-sm">
+                    <div class="flex justify-between items-center min-w-0">
+                        <span class="truncate mr-2">Avg Final Ante:</span>
+                        <span class="text-white font-medium flex-shrink-0">${data.performance_metrics.avg_final_ante}</span>
                     </div>
-                    <div class="flex justify-between">
-                        <span>Avg Final Money:</span>
-                        <span class="text-white">$${data.performance_metrics.avg_final_money}</span>
+                    <div class="flex justify-between items-center min-w-0">
+                        <span class="truncate mr-2">Avg Final Money:</span>
+                        <span class="text-white font-medium flex-shrink-0">$${data.performance_metrics.avg_final_money}</span>
                     </div>
-                    <div class="flex justify-between">
-                        <span>Avg Peak Money:</span>
-                        <span class="text-white">$${data.performance_metrics.avg_peak_money}</span>
+                    <div class="flex justify-between items-center min-w-0">
+                        <span class="truncate mr-2">Avg Peak Money:</span>
+                        <span class="text-white font-medium flex-shrink-0">$${data.performance_metrics.avg_peak_money}</span>
                     </div>
-                    <div class="flex justify-between">
-                        <span>Avg Duration:</span>
-                        <span class="text-white">${(data.performance_metrics.avg_duration_seconds / 60).toFixed(1)}m</span>
+                    <div class="flex justify-between items-center min-w-0">
+                        <span class="truncate mr-2">Avg Duration:</span>
+                        <span class="text-white font-medium flex-shrink-0">${(data.performance_metrics.avg_duration_seconds / 60).toFixed(1)}m</span>
                     </div>
-                    <div class="flex justify-between">
-                        <span>Performance Score:</span>
-                        <span class="text-white">${data.summary.performance_score.toFixed(1)}</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div>
-                <h4 class="font-semibold text-white mb-3">LLM Metrics</h4>
-                <div class="space-y-2 text-gray-300">
-                    <div class="flex justify-between">
-                        <span>Success Rate:</span>
-                        <span class="text-white">${(data.llm_metrics.avg_success_rate * 100).toFixed(1)}%</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span>Avg Response Time:</span>
-                        <span class="text-white">${data.llm_metrics.avg_response_time.toFixed(2)}s</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span>Total Tokens:</span>
-                        <span class="text-white">${data.llm_metrics.avg_total_tokens.toLocaleString()}</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span>Tokens/Request:</span>
-                        <span class="text-white">${data.llm_metrics.avg_tokens_per_request.toLocaleString()}</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span>Parsing Errors:</span>
-                        <span class="text-white">${(data.llm_metrics.avg_parsing_error_rate * 100).toFixed(1)}%</span>
+                    <div class="flex justify-between items-center min-w-0">
+                        <span class="truncate mr-2">Performance Score:</span>
+                        <span class="text-white font-medium flex-shrink-0">${data.summary.performance_score.toFixed(1)}</span>
                     </div>
                 </div>
             </div>
             
-            <div>
-                <h4 class="font-semibold text-white mb-3">Strategy Metrics</h4>
-                <div class="space-y-2 text-gray-300">
-                    <div class="flex justify-between">
-                        <span>Shop Purchases:</span>
-                        <span class="text-white">${data.strategy_metrics.avg_shop_purchases.toFixed(1)}</span>
+            <div class="bg-gray-700 rounded-lg p-3 sm:p-4 min-w-0">
+                <h4 class="font-semibold text-white mb-1.5 sm:mb-2 text-sm sm:text-base lg:text-base">LLM Metrics</h4>
+                <div class="space-y-1.5 sm:space-y-2 text-gray-300 text-sm sm:text-sm lg:text-sm">
+                    <div class="flex justify-between items-center min-w-0">
+                        <span class="truncate mr-2">Success Rate:</span>
+                        <span class="text-white font-medium flex-shrink-0">${(data.llm_metrics.avg_success_rate * 100).toFixed(1)}%</span>
                     </div>
-                    <div class="flex justify-between">
-                        <span>Jokers Acquired:</span>
-                        <span class="text-white">${data.strategy_metrics.avg_jokers_acquired.toFixed(1)}</span>
+                    <div class="flex justify-between items-center min-w-0">
+                        <span class="truncate mr-2">Avg Response Time:</span>
+                        <span class="text-white font-medium flex-shrink-0">${data.llm_metrics.avg_response_time.toFixed(2)}s</span>
                     </div>
-                    <div class="flex justify-between">
-                        <span>Consumables Used:</span>
-                        <span class="text-white">${data.strategy_metrics.avg_consumables_used.toFixed(1)}</span>
+                    <div class="flex justify-between items-center min-w-0">
+                        <span class="truncate mr-2">Total Tokens:</span>
+                        <span class="text-white font-medium flex-shrink-0">${(data.llm_metrics.avg_total_tokens / 1000).toFixed(0)}k</span>
                     </div>
-                    <div class="flex justify-between">
-                        <span>Blinds Skipped:</span>
-                        <span class="text-white">${data.strategy_metrics.avg_blinds_skipped.toFixed(1)}</span>
+                    <div class="flex justify-between items-center min-w-0">
+                        <span class="truncate mr-2">Tokens/Request:</span>
+                        <span class="text-white font-medium flex-shrink-0">${(data.llm_metrics.avg_tokens_per_request / 1000).toFixed(1)}k</span>
                     </div>
-                    <div class="flex justify-between">
-                        <span>Efficiency Rating:</span>
-                        <span class="text-white">${data.summary.efficiency_rating}</span>
+                    <div class="flex justify-between items-center min-w-0">
+                        <span class="truncate mr-2">Parsing Errors:</span>
+                        <span class="text-white font-medium flex-shrink-0">${(data.llm_metrics.avg_parsing_error_rate * 100).toFixed(1)}%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-gray-700 rounded-lg p-3 sm:p-4 sm:col-span-2 lg:col-span-1 min-w-0">
+                <h4 class="font-semibold text-white mb-1.5 sm:mb-2 text-sm sm:text-base lg:text-base">Strategy Metrics</h4>
+                <div class="space-y-1.5 sm:space-y-2 text-gray-300 text-sm sm:text-sm lg:text-sm">
+                    <div class="flex justify-between items-center min-w-0">
+                        <span class="truncate mr-2">Shop Purchases:</span>
+                        <span class="text-white font-medium flex-shrink-0">${data.strategy_metrics.avg_shop_purchases.toFixed(1)}</span>
+                    </div>
+                    <div class="flex justify-between items-center min-w-0">
+                        <span class="truncate mr-2">Jokers Acquired:</span>
+                        <span class="text-white font-medium flex-shrink-0">${data.strategy_metrics.avg_jokers_acquired.toFixed(1)}</span>
+                    </div>
+                    <div class="flex justify-between items-center min-w-0">
+                        <span class="truncate mr-2">Consumables Used:</span>
+                        <span class="text-white font-medium flex-shrink-0">${data.strategy_metrics.avg_consumables_used.toFixed(1)}</span>
+                    </div>
+                    <div class="flex justify-between items-center min-w-0">
+                        <span class="truncate mr-2">Blinds Skipped:</span>
+                        <span class="text-white font-medium flex-shrink-0">${data.strategy_metrics.avg_blinds_skipped.toFixed(1)}</span>
+                    </div>
+                    <div class="flex justify-between items-center min-w-0">
+                        <span class="truncate mr-2">Efficiency Rating:</span>
+                        <span class="text-white font-medium flex-shrink-0">${data.summary.efficiency_rating}</span>
                     </div>
                 </div>
             </div>
         </div>
         
-        <div class="mt-6">
-            <h4 class="font-semibold text-white mb-3">Individual Runs</h4>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 max-h-64 overflow-y-auto">
+        <div class="mt-4 sm:mt-6">
+            <h4 class="font-semibold text-white mb-2 sm:mb-3 text-base sm:text-base lg:text-lg">Individual Runs</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-3 max-h-48 sm:max-h-64 overflow-y-auto">
                 ${data.individual_runs.map((run, runIndex) => `
-                    <div class="bg-gray-700 rounded p-3">
-                        <div class="flex justify-between items-start mb-2">
-                            <div class="text-sm">
+                    <div class="rounded p-2 sm:p-3 ${run.won ? 'bg-green-900/30 border-l-4 border-green-500' : 'bg-red-900/30 border-l-4 border-red-500'} min-w-0">
+                        <div class="flex justify-between items-start mb-1.5 sm:mb-2 min-w-0">
+                            <div class="text-sm sm:text-sm lg:text-sm min-w-0 flex-1">
                                 <div class="text-white font-medium">Run ${runIndex + 1}</div>
-                                <div class="text-gray-400">Seed: ${run.seed} | Deck: ${run.deck}</div>
+                                <div class="text-gray-300 text-xs sm:text-sm truncate" title="Seed: ${run.seed} | Deck: ${run.deck}">
+                                    ${run.seed} | ${run.deck}
+                                </div>
                             </div>
-                            <div class="text-right">
-                                <div class="text-white">Ante ${run.final_ante} ${run.won ? '✅' : '❌'}</div>
-                                <div class="text-gray-400 text-sm">${(run.duration_seconds / 60).toFixed(1)}m</div>
+                            <div class="text-right ml-2 flex-shrink-0">
+                                <div class="text-white text-sm sm:text-sm lg:text-sm font-medium">
+                                    Ante ${run.final_ante} ${run.won ? 'Win' : 'Loss'}
+                                </div>
+                                <div class="text-gray-300 text-xs sm:text-sm">${(run.duration_seconds / 60).toFixed(1)}m</div>
                             </div>
                         </div>
-                        <div class="text-xs text-gray-400 grid grid-cols-2 gap-2">
-                            <div>Money: $${run.final_money} (Peak: $${run.peak_money})</div>
-                            <div>Tokens: ${run.total_tokens.toLocaleString()}</div>
-                            <div>Success Rate: ${(run.success_rate * 100).toFixed(0)}%</div>
-                            <div>Errors: ${run.parsing_errors + run.timeout_errors}</div>
+                        <div class="text-xs sm:text-sm text-gray-300 space-y-1">
+                            <div class="truncate" title="Money: $${run.final_money} (Peak: $${run.peak_money})">
+                                Money: $${run.final_money} (Peak: $${run.peak_money})
+                            </div>
+                            <div class="truncate" title="Tokens: ${run.total_tokens.toLocaleString()}">
+                                Tokens: ${(run.total_tokens / 1000).toFixed(0)}k
+                            </div>
+                            <div class="truncate" title="Success Rate: ${(run.success_rate * 100).toFixed(0)}%">
+                                Success: ${(run.success_rate * 100).toFixed(0)}%
+                            </div>
+                            <div class="truncate" title="Errors: ${run.parsing_errors + run.timeout_errors}">
+                                Errors: ${run.parsing_errors + run.timeout_errors}
+                            </div>
                         </div>
                     </div>
                 `).join('')}
             </div>
+        </div>
         </div>
     `;
 }
 
 // Update stats cards with aggregated data
 function updateStatsCards(entries, metadata) {
-    // Update version
-    const versionElement = document.querySelector('.text-blue-400');
-    if (versionElement && versionElement.textContent.startsWith('v')) {
-        versionElement.textContent = `v${metadata.version}`;
-    }
+    // Update version - removed to prevent unwanted title changes
+    // The version is already displayed in the selector dropdown
     
     // Update total runs
     const totalRuns = metadata.total_runs_analyzed;
@@ -405,7 +413,7 @@ function updateStatsCards(entries, metadata) {
 function showError(message) {
     const tbody = document.getElementById('leaderboard-body');
     if (tbody) {
-        tbody.innerHTML = `<tr><td colspan="7" class="px-6 py-4 text-center text-gray-400">${message}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" class="px-1 py-4 text-center text-gray-400 text-base sm:text-sm lg:text-base">${message}</td></tr>`;
     }
 }
 

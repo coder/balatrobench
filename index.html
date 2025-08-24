@@ -8,19 +8,41 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Ensure no horizontal scrolling on mobile */
+        html, body {
+            max-width: 100vw;
+            overflow-x: hidden;
+        }
+        
+        /* Improve table responsiveness */
+        .table-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        /* Ensure text doesn't break out of containers */
+        * {
+            word-wrap: break-word;
+            max-width: 100%;
+        }
+        
+        /* Fix any potential flex issues */
+        .flex {
+            min-width: 0;
+        }
+    </style>
 </head>
-<body class="bg-gray-900 text-white min-h-screen">
+<body class="bg-gray-900 text-white min-h-screen overflow-x-hidden">
     <!-- Navigation -->
     <nav class="bg-gray-800 border-b border-gray-700">
         <div class="container mx-auto px-4 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center justify-between w-full">
-                    <h1 class="text-xl font-bold text-blue-400">BalatroBench</h1>
-                    <div class="flex space-x-8">
-                        <a href="index.html" class="text-blue-400 hover:text-blue-300 transition-colors">Leaderboard</a>
-                        <a href="community.html" class="text-gray-300 hover:text-white transition-colors">Community</a>
-                        <a href="about.html" class="text-gray-300 hover:text-white transition-colors">About</a>
-                    </div>
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <h1 class="text-xl font-bold text-blue-400">BalatroBench</h1>
+                <div class="flex flex-col sm:flex-row gap-4 sm:gap-8 w-full sm:w-auto">
+                    <a href="index.html" class="text-blue-400 hover:text-blue-300 transition-colors py-2 sm:py-0">Leaderboard</a>
+                    <a href="community.html" class="text-gray-300 hover:text-white transition-colors py-2 sm:py-0">Community</a>
+                    <a href="about.html" class="text-gray-300 hover:text-white transition-colors py-2 sm:py-0">About</a>
                 </div>
             </div>
         </div>
@@ -28,79 +50,52 @@
 
     <div class="container mx-auto px-4 py-8">
         <!-- Hero Section -->
-        <div class="mb-8">
-            <h1 class="text-4xl font-bold text-white mb-4">
+        <div class="mb-6 sm:mb-8">
+            <h1 class="text-2xl sm:text-4xl font-bold text-white mb-4">
                 BalatroBench
             </h1>
-            <p class="text-gray-300 text-lg max-w-3xl">
+            <p class="text-gray-300 text-base sm:text-lg max-w-3xl leading-relaxed">
                 Community-driven benchmark platform for evaluating Large Language Models' strategic performance in Balatro through intelligent tool-calling and decision-making.
             </p>
         </div>
 
-        <!-- Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
-                <div class="text-sm text-gray-400 mb-1">Benchmark Version</div>
-                <div class="text-2xl font-bold text-blue-400">v0.2.0</div>
-                <div class="text-sm text-gray-400">Current</div>
-            </div>
-            <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
-                <div class="text-sm text-gray-400 mb-1">Total Runs</div>
-                <div class="text-2xl font-bold text-white" id="total-runs">1,247</div>
-                <div class="text-sm text-green-400">
-                    <i class="fas fa-arrow-up"></i> 23 across all models
-                </div>
-            </div>
-            <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
-                <div class="text-sm text-gray-400 mb-1">Seeds Used</div>
-                <div class="text-2xl font-bold text-white" id="unique-seeds">100</div>
-                <div class="text-sm text-gray-400">For reproducibility</div>
-            </div>
-            <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
-                <div class="text-sm text-gray-400 mb-1">Avg Runtime</div>
-                <div class="text-2xl font-bold text-purple-400">12.3 min</div>
-                <div class="text-sm text-green-400">
-                    <i class="fas fa-arrow-down"></i> 0.8 per benchmark run
-                </div>
-            </div>
-        </div>
+
 
         <!-- Leaderboard -->
-        <div class="bg-gray-800 rounded-lg border border-gray-700 mb-8">
-            <div class="p-6 border-b border-gray-700">
-                <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+        <div class="bg-gray-800 rounded-lg border border-gray-700 mb-6 sm:mb-8">
+            <div class="p-4 sm:p-6 border-b border-gray-700">
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                     <div>
-                        <h2 class="text-2xl font-bold text-white">Official Leaderboard</h2>
-                        <p class="text-gray-400 mt-2">Latest benchmark results across different LLM models</p>
+                        <h2 class="text-xl sm:text-2xl font-bold text-white">Official Leaderboard</h2>
+                        <p class="text-gray-400 mt-2 text-sm sm:text-base">Latest benchmark results across different LLM models</p>
                     </div>
-                    <div class="flex flex-col sm:flex-row gap-4 mt-4 md:mt-0">
+                    <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
                         <div class="flex flex-col">
                             <label class="text-sm text-gray-400 mb-1">Version</label>
-                            <select id="version-selector" class="bg-gray-700 border border-gray-600 text-white rounded px-3 py-2 text-sm focus:outline-none focus:border-blue-400">
+                            <select id="version-selector" class="bg-gray-700 border border-gray-600 text-white rounded px-3 py-2 text-sm focus:outline-none focus:border-blue-400 min-w-0">
                                 <option value="">Loading...</option>
                             </select>
                         </div>
                         <div class="flex flex-col">
                             <label class="text-sm text-gray-400 mb-1">Strategy</label>
-                            <select id="strategy-selector" class="bg-gray-700 border border-gray-600 text-white rounded px-3 py-2 text-sm focus:outline-none focus:border-blue-400">
+                            <select id="strategy-selector" class="bg-gray-700 border border-gray-600 text-white rounded px-3 py-2 text-sm focus:outline-none focus:border-blue-400 min-w-0">
                                 <option value="">Loading...</option>
                             </select>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="overflow-x-auto">
-                <table class="w-full">
+            <div class="w-full overflow-x-auto table-container">
+                <table class="w-full table-auto">
                     <thead class="bg-gray-700">
                         <tr>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-300">Rank</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-300">Model</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-300">Avg Final Ante</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-300">Win Rate</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-300">Avg Tokens</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-300">Efficiency</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-300">Score</th>
-
+                            <th class="px-1 py-2 text-center text-sm sm:text-xs lg:text-sm font-medium text-gray-300 w-12">Rank</th>
+                            <th class="px-1 py-2 text-left text-sm sm:text-xs lg:text-sm font-medium text-gray-300 min-w-0 flex-1">Model</th>
+                            <th class="px-1 py-2 text-left text-sm sm:text-xs lg:text-sm font-medium text-gray-300 w-12 sm:w-16">Ante</th>
+                            <th class="px-1 py-2 text-left text-sm sm:text-xs lg:text-sm font-medium text-gray-300 w-12 sm:w-16">Win %</th>
+                            <th class="px-1 py-2 text-left text-sm sm:text-xs lg:text-sm font-medium text-gray-300 w-16 hidden sm:table-cell">Tokens</th>
+                            <th class="px-1 py-2 text-left text-sm sm:text-xs lg:text-sm font-medium text-gray-300 w-20 hidden lg:table-cell">Efficiency</th>
+                            <th class="px-1 py-2 text-left text-sm sm:text-xs lg:text-sm font-medium text-gray-300 w-12 sm:w-16">Score</th>
                         </tr>
                     </thead>
                     <tbody id="leaderboard-body" class="divide-y divide-gray-700">
@@ -111,12 +106,12 @@
         </div>
 
         <!-- Methodology -->
-        <div class="bg-gray-800 rounded-lg p-8 border border-gray-700">
-            <h2 class="text-2xl font-bold mb-4">Methodology</h2>
-            <div class="grid md:grid-cols-2 gap-6 text-gray-300">
+        <div class="bg-gray-800 rounded-lg p-4 sm:p-6 lg:p-8 border border-gray-700">
+            <h2 class="text-xl sm:text-2xl font-bold mb-4">Methodology</h2>
+            <div class="grid sm:grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 text-gray-300">
                 <div>
-                    <h3 class="font-semibold text-white mb-2">Game Parameters</h3>
-                    <ul class="space-y-1 text-sm">
+                    <h3 class="font-semibold text-white mb-2 text-base sm:text-lg">Game Parameters</h3>
+                    <ul class="space-y-1 text-sm sm:text-base">
                         <li>• Balatro v1.0.1n</li>
                         <li>• 100 consistent seeds</li>
                         <li>• Standard deck configuration</li>
@@ -124,8 +119,8 @@
                     </ul>
                 </div>
                 <div>
-                    <h3 class="font-semibold text-white mb-2">Evaluation Criteria</h3>
-                    <ul class="space-y-1 text-sm">
+                    <h3 class="font-semibold text-white mb-2 text-base sm:text-lg">Evaluation Criteria</h3>
+                    <ul class="space-y-1 text-sm sm:text-base">
                         <li>• Average ante reached</li>
                         <li>• Win rate across seeds</li>
                         <li>• Token efficiency</li>

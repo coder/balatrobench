@@ -8,19 +8,35 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Ensure no horizontal scrolling on mobile */
+        html, body {
+            max-width: 100vw;
+            overflow-x: hidden;
+        }
+        
+        /* Ensure text doesn't break out of containers */
+        * {
+            word-wrap: break-word;
+            max-width: 100%;
+        }
+        
+        /* Fix any potential flex issues */
+        .flex {
+            min-width: 0;
+        }
+    </style>
 </head>
-<body class="bg-gray-900 text-white min-h-screen">
+<body class="bg-gray-900 text-white min-h-screen overflow-x-hidden">
     <!-- Navigation -->
     <nav class="bg-gray-800 border-b border-gray-700">
         <div class="container mx-auto px-4 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center justify-between w-full">
-                    <h1 class="text-xl font-bold text-blue-400">BalatroBench</h1>
-                    <div class="flex space-x-8">
-                        <a href="index.html" class="text-gray-300 hover:text-white transition-colors">Leaderboard</a>
-                        <a href="community.html" class="text-blue-400 hover:text-blue-300 transition-colors">Community</a>
-                        <a href="about.html" class="text-gray-300 hover:text-white transition-colors">About</a>
-                    </div>
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <h1 class="text-xl font-bold text-blue-400">BalatroBench</h1>
+                <div class="flex flex-col sm:flex-row gap-4 sm:gap-8 w-full sm:w-auto">
+                    <a href="index.html" class="text-gray-300 hover:text-white transition-colors py-2 sm:py-0">Leaderboard</a>
+                    <a href="community.html" class="text-blue-400 hover:text-blue-300 transition-colors py-2 sm:py-0">Community</a>
+                    <a href="about.html" class="text-gray-300 hover:text-white transition-colors py-2 sm:py-0">About</a>
                 </div>
             </div>
         </div>
@@ -101,40 +117,42 @@
         // Load community submissions
         async function loadCommunitySubmissions() {
             try {
-                const response = await fetch('data/strategies/');
-                // For now, we'll use static data since we can't easily list directory contents
-                const submissions = [
-                    {
-                        title: "Aggressive Joker Synergy Strategy",
-                        author: "AIResearcher23",
-                        model: "GPT-4o",
-                        score: "9.2",
-                        votes: 47,
-                        date: "2024-01-15",
-                        description: "Focus on multiplicative jokers early game for maximum score potential"
-                    },
-                    {
-                        title: "Conservative Money Management",
-                        author: "BalatroBot",
-                        model: "Claude-3.5-Sonnet",
-                        score: "8.8",
-                        votes: 32,
-                        date: "2024-01-12",
-                        description: "Prioritize money generation over risky plays for consistent performance"
-                    },
-                    {
-                        title: "High Card Meta Exploitation",
-                        author: "CardCounter",
-                        model: "Gemini-Pro",
-                        score: "8.1",
-                        votes: 28,
-                        date: "2024-01-10",
-                        description: "Exploit high card hands with specific joker combinations"
+                // Fetch official leaderboard data
+                const officialResponse = await fetch('data/benchmarks/v0.2.0/default/leaderboard.json');
+                const officialData = await officialResponse.json();
+                const officialSubmissions = officialData.entries.map(entry => ({
+                    title: entry.model,
+                    author: 'Official Benchmark',
+                    model: entry.model,
+                    score: entry.performance_score.toFixed(1),
+                    votes: entry.total_runs,
+                    date: officialData.generated_at,
+                    description: `Official benchmark run with ${entry.total_runs} runs. Reached ante ${entry.avg_final_ante} on average.`
+                }));
+
+                // Fetch community submissions
+                // In a real application, you would dynamically list files in the directory.
+                // For this static site, we list them manually.
+                const communityFiles = ['data/strategies/default/community-submission-1.json'];
+                const communitySubmissions = [];
+                for (const file of communityFiles) {
+                    try {
+                        const response = await fetch(file);
+                        if (response.ok) {
+                            const submission = await response.json();
+                            communitySubmissions.push(submission);
+                        }
+                    } catch (error) {
+                        console.warn(`Could not load community submission: ${file}`, error);
                     }
-                ];
+                }
+
+                // Combine and sort
+                const allSubmissions = [...officialSubmissions, ...communitySubmissions];
+                allSubmissions.sort((a, b) => parseFloat(b.score) - parseFloat(a.score));
 
                 const container = document.getElementById('community-submissions');
-                container.innerHTML = submissions.map(submission => `
+                container.innerHTML = allSubmissions.map(submission => `
                     <div class="bg-gray-800 rounded-lg border border-gray-700 shadow-lg hover:shadow-xl transition-all duration-300">
                         <div class="p-6">
                             <div class="flex items-start justify-between mb-4">
@@ -143,7 +161,7 @@
                                     <div class="flex items-center gap-4 text-sm text-gray-400">
                                         <span>by ${submission.author}</span>
                                         <span class="bg-gray-700 px-2 py-1 rounded text-xs">${submission.model}</span>
-                                        <span>${submission.date}</span>
+                                        <span>${new Date(submission.date).toLocaleDateString()}</span>
                                     </div>
                                 </div>
                                 <div class="text-right">
@@ -172,6 +190,8 @@
                 `).join('');
             } catch (error) {
                 console.error('Error loading community submissions:', error);
+                const container = document.getElementById('community-submissions');
+                container.innerHTML = '<p class="text-red-500">Error loading submissions. Please check the data files.</p>';
             }
         }
 
