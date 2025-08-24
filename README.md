@@ -15,7 +15,7 @@ This is a **static website** that works with any web server or GitHub Pages. No 
 1. Clone the repository:
 ```bash
 git clone <YOUR_GIT_URL>
-cd balatrobench-site
+cd balatrobench
 ```
 
 2. Serve the files locally:
@@ -37,22 +37,36 @@ npx serve .
 2. Go to repository Settings > Pages
 3. Set source to "Deploy from a branch" 
 4. Select `main` branch and `/ (root)` folder
-5. Your site will be available at `https://yourusername.github.io/balatrobench-site`
+5. Your site will be available at `https://yourusername.github.io/balatrobench`
 
 ## 📁 Project Structure
 
 ```
 ├── index.html              # Main page (Official Benchmark)
 ├── community.html          # Community submissions page
+├── about.html             # About page with detailed information
 ├── submit.html            # Redirects to CONTRIBUTING.md
 ├── CONTRIBUTING.md         # Detailed submission guidelines
 ├── js/
-│   └── app.js             # JavaScript for data loading
+│   └── app.js             # JavaScript for data loading and UI
+├── scripts/
+│   ├── process-benchmarks.js  # Benchmark data processor
+│   └── analyze-benchmarks.js  # Benchmark analysis tool
 ├── data/
-│   ├── leaderboard.json   # Official benchmark results
-│   └── strategies/        # Community submissions
-│       ├── strategy1.json
-│       └── strategy2.json
+│   ├── benchmarks/        # Raw benchmark data by version
+│   │   └── v0.2.0/
+│   │       └── default/
+│   │           ├── leaderboard.json      # Processed leaderboard
+│   │           ├── cerebras-*.json       # Individual benchmark runs
+│   │           └── ...
+│   ├── strategies/        # Strategy templates and tools
+│   │   └── default/
+│   │       ├── TOOLS.json               # Available game tools
+│   │       ├── STRATEGY.md.jinja        # Strategy template
+│   │       ├── MEMORY.md.jinja          # Memory template
+│   │       └── GAMESTATE.md.jinja       # Game state template
+│   └── leaderboard.json   # Main leaderboard (auto-generated)
+├── public/                # Static assets
 └── README.md
 ```
 
@@ -61,45 +75,42 @@ npx serve .
 The official leaderboard tracks performance across standardized seeds and configurations:
 
 - **Balatro Version**: v1.0.1n
-- **Seeds**: 100 consistent seeds for reproducibility  
-- **Metrics**: Average ante reached, win rate, token efficiency
-- **Models**: GPT-4o, Claude-3.5-Sonnet, Gemini-Pro, and more
+- **Framework**: BalatroLLM v0.2.0+
+- **Strategy**: Template-based strategic prompting system
+- **Seeds**: Consistent seeds for reproducibility  
+- **Metrics**: Average ante reached, win rate, token efficiency, completion rate
+- **Models**: Cerebras GPT-OSS-120B, Cerebras Qwen3-235B, and more
 
 ## 👥 Community Contributions
 
-### Submitting Your Strategy
+### Submitting Your Results
+
+There are two ways to contribute:
+
+#### Option 1: Submit Raw Benchmark Data (Recommended)
+
+1. **Run benchmarks** using the BalatroLLM framework
+2. **Add your results** to `data/benchmarks/v{version}/{strategy}/`
+   - Include the complete `{model}_benchmark.json` files
+   - These contain full game progression, LLM interactions, and tool calls
+3. **Process the data** using `node scripts/process-benchmarks.js`
+4. **Submit a Pull Request** with both raw data and updated leaderboard
+
+#### Option 2: Submit Strategy Documentation
 
 1. **Fork this repository**
-2. **Create a strategy file** in `data/strategies/` following this format:
+2. **Create strategy templates** in `data/strategies/{your-strategy}/`
+   - Copy the structure from `data/strategies/default/`
+   - Customize the Jinja2 templates for your approach
+3. **Document your methodology** with clear explanations
+4. **Submit a Pull Request** with title: "Strategy Contribution: [Your Strategy Name]"
 
-```json
-{
-  "title": "Your Strategy Name",
-  "author": "YourUsername",
-  "model": "GPT-4o",
-  "score": "8.5",
-  "winRate": "75%",
-  "avgTokens": "15000", 
-  "date": "2024-01-20",
-  "description": "Brief description of your approach",
-  "prompt": "Your full system prompt...",
-  "methodology": "Detailed explanation...",
-  "results": {
-    "seeds": [1, 2, 3],
-    "scores": [8.2, 8.8, 8.1]
-  },
-  "tags": ["tag1", "tag2"]
-}
-```
+### Submission Requirements
 
-3. **Submit a Pull Request** with title: "Community Submission: [Your Strategy Name]"
-
-### Strategy Requirements
-
-- ✅ Valid benchmark results on standard seeds
+- ✅ Valid benchmark results from BalatroLLM v0.2.0+
+- ✅ Complete game progression data (not just summary statistics)
 - ✅ Clear strategy description and methodology  
-- ✅ Reproducible results
-- ✅ Follows JSON schema format
+- ✅ Reproducible results with seed consistency
 - ✅ No offensive or inappropriate content
 
 ## 🛠️ Technologies Used
@@ -107,21 +118,45 @@ The official leaderboard tracks performance across standardized seeds and config
 - **HTML5** - Semantic markup
 - **Tailwind CSS** - Styling (via CDN)
 - **Vanilla JavaScript** - Dynamic content loading
+- **Node.js** - Benchmark processing scripts
+- **Jinja2 Templates** - Strategy prompt templating
 - **Font Awesome** - Icons (via CDN)
-- **JSON** - Data storage
+- **JSON** - Data storage and interchange
 
 ## 📊 Data Management
 
-All data is stored in JSON files for simplicity:
+BalatroBench uses a sophisticated data management system:
 
-- `data/leaderboard.json` - Official benchmark results
-- `data/strategies/*.json` - Community submissions
+### Raw Benchmark Data
+- `data/benchmarks/v{version}/{strategy}/` - Versioned benchmark results
+- Individual files: `{model}_benchmark.json` - Complete run data with game progression, LLM interactions, and tool calls
+- Structured by version and strategy for historical tracking
 
-This approach allows for:
-- Version control of all data
-- Easy community contributions via PRs
+### Processed Data
+- `data/leaderboard.json` - Auto-generated leaderboard from all benchmark data
+- Aggregated statistics: performance scores, win rates, token efficiency
+- Generated by `scripts/process-benchmarks.js`
+
+### Strategy System
+- `data/strategies/default/` - Template-based strategy system
+- Jinja2 templates for consistent prompting across models
+- Tool definitions and game state templates
+
+### Processing Pipeline
+```bash
+# Process raw benchmark data into leaderboard
+node scripts/process-benchmarks.js
+
+# Alternative analysis tool
+node scripts/analyze-benchmarks.js
+```
+
+This approach provides:
+- Version control of all data and results
+- Automated leaderboard generation
+- Historical benchmark tracking
+- Reproducible evaluation methodology
 - No database setup required
-- GitHub Pages compatibility
 
 ## 🤝 Contributing
 
@@ -133,20 +168,60 @@ We welcome contributions! You can:
 
 ## 📈 Adding New Official Results
 
-To update the official leaderboard:
+To add new benchmark results:
 
-1. Edit `data/leaderboard.json`
-2. Follow the existing schema
-3. Submit a pull request
+### Adding Raw Benchmark Data
 
-## 🔧 Customization
+1. **Add benchmark files** to `data/benchmarks/v{version}/{strategy}/`
+   - Use format: `{model}_benchmark.json`
+   - Include complete run data from BalatroLLM framework
 
-Want to customize the site?
+2. **Process the data** to update leaderboards:
+   ```bash
+   node scripts/process-benchmarks.js
+   ```
+
+3. **Submit a pull request** with both raw data and updated leaderboard
+
+### Data Processing Tools
+
+The project includes two processing scripts:
+
+- **`process-benchmarks.js`** - Primary tool for generating leaderboards from benchmark data
+- **`analyze-benchmarks.js`** - Alternative analysis tool with different aggregation methods
+
+Both scripts automatically scan the `data/benchmarks/` directory and process all available benchmark files.
+
+## 🔧 Development & Customization
+
+### Local Development Setup
+
+```bash
+# Clone the repository
+git clone <YOUR_GIT_URL>
+cd balatrobench
+
+# Install Node.js dependencies (for processing scripts)
+# No package.json yet - scripts use built-in Node.js modules
+
+# Serve the website locally
+python -m http.server 8000
+# or: npx serve .
+```
+
+### Customization Options
 
 - **Styling**: Modify Tailwind classes in HTML files
-- **Functionality**: Edit `js/app.js` 
-- **Data**: Add/modify JSON files in `data/`
+- **Functionality**: Edit `js/app.js` for frontend behavior
+- **Data Processing**: Customize `scripts/process-benchmarks.js`
+- **Strategy Templates**: Add new templates in `data/strategies/`
 - **Pages**: Create new HTML files following the existing pattern
+
+### Processing Scripts
+
+- **Process benchmarks**: `node scripts/process-benchmarks.js`
+- **Alternative analysis**: `node scripts/analyze-benchmarks.js`
+- Both scripts output to `data/leaderboard.json`
 
 ## 📜 License
 
