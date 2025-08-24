@@ -1,0 +1,75 @@
+{
+  "version": "0.2.0",
+  "model": "cerebras-gpt-oss-120b",
+  "strategy": "default",
+  "summary": {
+    "performance_score": 42.5,
+    "efficiency_rating": "C",
+    "total_runs": 2,
+    "completed_runs": 2,
+    "completion_rate": 1.0
+  },
+  "performance_metrics": {
+    "win_rate": 0.0,
+    "avg_final_ante": 4,
+    "avg_final_money": 7.5,
+    "avg_peak_money": 12,
+    "avg_duration_seconds": 133.4
+  },
+  "llm_metrics": {
+    "avg_success_rate": 1.0,
+    "avg_response_time": 0.487,
+    "avg_total_tokens": 89548.5,
+    "avg_tokens_per_request": 2615.8,
+    "avg_parsing_error_rate": 0,
+    "avg_timeout_error_rate": 0
+  },
+  "consistency_metrics": {
+    "std_final_ante": 2.83,
+    "std_final_money": 9.2,
+    "std_duration": 105.7
+  },
+  "efficiency_metrics": {
+    "tokens_per_ante": 22387.1,
+    "seconds_per_ante": 33.4,
+    "money_efficiency": 0.0001
+  },
+  "strategy_metrics": {
+    "avg_shop_purchases": 0,
+    "avg_jokers_acquired": 0,
+    "avg_consumables_used": 0,
+    "avg_blinds_skipped": 0
+  },
+  "individual_runs": [
+    {
+      "seed": "OOOO155",
+      "deck": "153455",
+      "stake": 1,
+      "completed": true,
+      "won": false,
+      "final_ante": 2,
+      "final_money": 1,
+      "peak_money": 10,
+      "duration_seconds": 58.726095,
+      "total_tokens": 38756,
+      "success_rate": 1.0,
+      "parsing_errors": 0,
+      "timeout_errors": 0
+    },
+    {
+      "seed": "OOOO155",
+      "deck": "133544",
+      "stake": 1,
+      "completed": true,
+      "won": false,
+      "final_ante": 6,
+      "final_money": 14,
+      "peak_money": 14,
+      "duration_seconds": 208.171838,
+      "total_tokens": 140341,
+      "success_rate": 1.0,
+      "parsing_errors": 0,
+      "timeout_errors": 0
+    }
+  ]
+}

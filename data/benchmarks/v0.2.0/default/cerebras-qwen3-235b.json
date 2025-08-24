@@ -1,0 +1,90 @@
+{
+  "version": "0.2.0",
+  "model": "cerebras-qwen3-235b",
+  "strategy": "default",
+  "summary": {
+    "performance_score": 36.25,
+    "efficiency_rating": "C",
+    "total_runs": 3,
+    "completed_runs": 3,
+    "completion_rate": 1.0
+  },
+  "performance_metrics": {
+    "win_rate": 0.0,
+    "avg_final_ante": 2,
+    "avg_final_money": 3,
+    "avg_peak_money": 8,
+    "avg_duration_seconds": 86.3
+  },
+  "llm_metrics": {
+    "avg_success_rate": 1.0,
+    "avg_response_time": 3.273,
+    "avg_total_tokens": 56314.7,
+    "avg_tokens_per_request": 3924.3,
+    "avg_parsing_error_rate": 0,
+    "avg_timeout_error_rate": 0
+  },
+  "consistency_metrics": {
+    "std_final_ante": 1.0,
+    "std_final_money": 1.0,
+    "std_duration": 58.8
+  },
+  "efficiency_metrics": {
+    "tokens_per_ante": 28157.3,
+    "seconds_per_ante": 43.2,
+    "money_efficiency": 0.0001
+  },
+  "strategy_metrics": {
+    "avg_shop_purchases": 0,
+    "avg_jokers_acquired": 0,
+    "avg_consumables_used": 0,
+    "avg_blinds_skipped": 0
+  },
+  "individual_runs": [
+    {
+      "seed": "OOOO155",
+      "deck": "133954",
+      "stake": 1,
+      "completed": true,
+      "won": false,
+      "final_ante": 2,
+      "final_money": 2,
+      "peak_money": 10,
+      "duration_seconds": 102.130813,
+      "total_tokens": 70178,
+      "success_rate": 1.0,
+      "parsing_errors": 0,
+      "timeout_errors": 0
+    },
+    {
+      "seed": "OOOO155",
+      "deck": "154521",
+      "stake": 1,
+      "completed": true,
+      "won": false,
+      "final_ante": 1,
+      "final_money": 4,
+      "peak_money": 4,
+      "duration_seconds": 21.255006,
+      "total_tokens": 10065,
+      "success_rate": 1.0,
+      "parsing_errors": 0,
+      "timeout_errors": 0
+    },
+    {
+      "seed": "OOOO155",
+      "deck": "145835",
+      "stake": 1,
+      "completed": true,
+      "won": false,
+      "final_ante": 3,
+      "final_money": 3,
+      "peak_money": 10,
+      "duration_seconds": 135.556282,
+      "total_tokens": 88701,
+      "success_rate": 1.0,
+      "parsing_errors": 0,
+      "timeout_errors": 0
+    }
+  ]
+}
