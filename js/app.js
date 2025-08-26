@@ -1,10 +1,8 @@
 // Main application JavaScript for BalatroBench
 
 // Global state
-let currentVersion = 'v0.2.0';
-let currentStrategy = 'default';
-let availableVersions = [];
-let availableStrategies = [];
+const currentVersion = 'v0.3.0';
+const currentStrategy = 'default';
 
 // Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
@@ -29,16 +27,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Initialize leaderboard with dynamic version/strategy discovery
+// Initialize leaderboard
 async function initializeLeaderboard() {
     try {
-        // Discover available versions and strategies
-        await discoverVersionsAndStrategies();
-        
-        // Setup selectors
-        setupSelectors();
-        
-        // Load initial leaderboard
+        // Load leaderboard directly
         await loadLeaderboard();
         
     } catch (error) {
@@ -47,114 +39,6 @@ async function initializeLeaderboard() {
     }
 }
 
-// Discover available versions and strategies by attempting to fetch data
-async function discoverVersionsAndStrategies() {
-    const potentialVersions = ['v0.2.0', 'v0.1.0', 'v0.3.0']; // Common versions to try
-    const potentialStrategies = ['default', 'aggressive', 'conservative']; // Common strategies to try
-    
-    availableVersions = [];
-    availableStrategies = [];
-    
-    // Try to find available versions
-    for (const version of potentialVersions) {
-        try {
-            const response = await fetch(`data/benchmarks/${version}/default/leaderboard.json`);
-            if (response.ok) {
-                availableVersions.push(version);
-            }
-        } catch (error) {
-            // Version doesn't exist, continue
-        }
-    }
-    
-    // If no versions found, fallback to current
-    if (availableVersions.length === 0) {
-        availableVersions = ['v0.2.0'];
-    }
-    
-    // Sort versions (latest first)
-    availableVersions.sort((a, b) => b.localeCompare(a));
-    currentVersion = availableVersions[0];
-    
-    // Try to find available strategies for the current version
-    for (const strategy of potentialStrategies) {
-        try {
-            const response = await fetch(`data/benchmarks/${currentVersion}/${strategy}/leaderboard.json`);
-            if (response.ok) {
-                availableStrategies.push(strategy);
-            }
-        } catch (error) {
-            // Strategy doesn't exist, continue
-        }
-    }
-    
-    // If no strategies found, fallback to default
-    if (availableStrategies.length === 0) {
-        availableStrategies = ['default'];
-    }
-    
-    currentStrategy = availableStrategies.includes('default') ? 'default' : availableStrategies[0];
-}
-
-// Setup version and strategy selectors
-function setupSelectors() {
-    const versionSelector = document.getElementById('version-selector');
-    const strategySelector = document.getElementById('strategy-selector');
-    
-    if (versionSelector) {
-        versionSelector.innerHTML = availableVersions.map(version => 
-            `<option value="${version}" ${version === currentVersion ? 'selected' : ''}>${version}</option>`
-        ).join('');
-        
-        versionSelector.addEventListener('change', async function() {
-            currentVersion = this.value;
-            await updateStrategiesForVersion();
-            await loadLeaderboard();
-        });
-    }
-    
-    if (strategySelector) {
-        strategySelector.innerHTML = availableStrategies.map(strategy => 
-            `<option value="${strategy}" ${strategy === currentStrategy ? 'selected' : ''}>${strategy}</option>`
-        ).join('');
-        
-        strategySelector.addEventListener('change', async function() {
-            currentStrategy = this.value;
-            await loadLeaderboard();
-        });
-    }
-}
-
-// Update available strategies when version changes
-async function updateStrategiesForVersion() {
-    const potentialStrategies = ['default', 'aggressive', 'conservative'];
-    const newAvailableStrategies = [];
-    
-    for (const strategy of potentialStrategies) {
-        try {
-            const response = await fetch(`data/benchmarks/${currentVersion}/${strategy}/leaderboard.json`);
-            if (response.ok) {
-                newAvailableStrategies.push(strategy);
-            }
-        } catch (error) {
-            // Strategy doesn't exist for this version
-        }
-    }
-    
-    if (newAvailableStrategies.length === 0) {
-        newAvailableStrategies.push('default');
-    }
-    
-    availableStrategies = newAvailableStrategies;
-    currentStrategy = availableStrategies.includes('default') ? 'default' : availableStrategies[0];
-    
-    const strategySelector = document.getElementById('strategy-selector');
-    if (strategySelector) {
-        strategySelector.innerHTML = availableStrategies.map(strategy => 
-            `<option value="${strategy}" ${strategy === currentStrategy ? 'selected' : ''}>${strategy}</option>`
-        ).join('');
-    }
-}
 
 // Load and display leaderboard data
 async function loadLeaderboard() {
@@ -197,46 +81,157 @@ function renderLeaderboard(entries, metadata) {
     const tbody = document.getElementById('leaderboard-body');
     if (!tbody) return;
     
-    tbody.innerHTML = entries.map((entry, index) => `
+    tbody.innerHTML = entries.map((entry, index) => {
+        const modelParts = entry.model.split('/');
+        const provider = modelParts[0] || '';
+        const modelName = modelParts.slice(1).join('/') || entry.model;
+        
+        return `
         <tr class="hover:bg-gray-700 transition-colors cursor-pointer" onclick="toggleStats(${index})">
-            <td class="px-1 py-2 text-center">
-                <span class="text-sm sm:text-xs lg:text-sm font-bold ${getRankColor(entry.rank)}">#${entry.rank}</span>
+            <td class="px-2 py-3 text-center">
+                <span class="text-xs sm:text-sm font-bold ${getRankColor(entry.rank)}">#${entry.rank}</span>
             </td>
-            <td class="px-1 py-2">
-                <div class="overflow-hidden min-w-0">
-                    <div class="font-medium text-white text-sm sm:text-xs lg:text-sm truncate" title="${entry.model}">${entry.model}</div>
-                    <div class="text-xs sm:text-xs lg:text-sm text-gray-400 hidden sm:block">${entry.total_runs} runs</div>
+            <td class="px-2 py-3 min-w-32 max-w-48">
+                <div class="overflow-hidden">
+                    <div class="font-medium text-white text-xs sm:text-sm break-words" title="${modelName}">${modelName}</div>
+                    <div class="text-xs text-gray-400 mt-0.5">
+                        <span class="md:hidden">${entry.avg_final_ante} ante • ${(entry.win_rate * 100).toFixed(0)}% win</span>
+                        <span class="hidden md:inline">${entry.total_runs} runs</span>
+                    </div>
                 </div>
             </td>
-            <td class="px-1 py-2">
-                <div class="text-sm sm:text-xs lg:text-sm font-bold text-white">${entry.avg_final_ante}</div>
-                <div class="text-xs sm:text-xs lg:text-sm text-gray-400 hidden sm:block">${entry.performance_score.toFixed(1)}</div>
+            <td class="px-2 py-3">
+                <div class="text-xs sm:text-sm font-medium text-gray-300 capitalize">${provider}</div>
             </td>
-            <td class="px-1 py-2">
-                <div class="font-medium text-white text-sm sm:text-xs lg:text-sm">${(entry.win_rate * 100).toFixed(0)}%</div>
-                <div class="text-xs sm:text-xs lg:text-sm text-gray-400 hidden sm:block">${(entry.completion_rate * 100).toFixed(0)}%</div>
+            <td class="px-2 py-3">
+                <div class="text-xs sm:text-sm font-bold text-white">${entry.detailedData ? entry.detailedData.llm_metrics.avg_final_round || 'N/A' : 'N/A'}</div>
+                <div class="text-xs text-gray-400">final round</div>
             </td>
-            <td class="px-1 py-2 hidden sm:table-cell">
-                <div class="font-medium text-white text-sm sm:text-xs lg:text-sm">${entry.detailedData ? (entry.detailedData.llm_metrics.avg_total_tokens / 1000).toFixed(0) + 'k' : 'N/A'}</div>
-                <div class="text-xs sm:text-xs lg:text-sm text-gray-400">${entry.detailedData ? (entry.detailedData.llm_metrics.avg_tokens_per_request / 1000).toFixed(1) + 'k/req' : ''}</div>
+            <td class="px-2 py-3 hidden md:table-cell">
+                <div class="text-xs sm:text-sm font-bold text-white">${entry.avg_final_ante}</div>
+                <div class="text-xs text-gray-400">${entry.performance_score.toFixed(1)}</div>
             </td>
-            <td class="px-1 py-2 hidden lg:table-cell">
-                <div class="font-medium text-white text-sm sm:text-xs lg:text-sm">${entry.efficiency_rating}</div>
-                <div class="text-xs sm:text-xs lg:text-sm text-gray-400">${entry.detailedData ? (entry.detailedData.efficiency_metrics.tokens_per_ante / 1000).toFixed(0) + 'k/ante' : ''}</div>
+            <td class="px-2 py-3 hidden md:table-cell">
+                <div class="font-medium text-white text-xs sm:text-sm">${(entry.win_rate * 100).toFixed(0)}%</div>
+                <div class="text-xs text-gray-400">${(entry.completion_rate * 100).toFixed(0)}% comp</div>
             </td>
-            <td class="px-1 py-2">
-                <div class="text-white text-sm sm:text-xs lg:text-sm">${entry.performance_score.toFixed(1)}</div>
+            <td class="px-2 py-3 hidden lg:table-cell">
+                <div class="font-medium text-white text-xs sm:text-sm">${entry.detailedData ? entry.detailedData.llm_metrics.avg_tool_calls || 'N/A' : 'N/A'}</div>
+                <div class="text-xs text-gray-400">calls</div>
+            </td>
+            <td class="px-2 py-3 hidden lg:table-cell">
+                <div class="font-medium text-white text-xs sm:text-sm">${entry.detailedData ? entry.detailedData.llm_metrics.avg_tool_call_errors || 'N/A' : 'N/A'}</div>
+                <div class="text-xs text-gray-400">errors</div>
+            </td>
+            <td class="px-2 py-3 hidden xl:table-cell">
+                <div class="font-medium text-white text-xs sm:text-sm">${entry.detailedData ? (entry.detailedData.llm_metrics.avg_total_tokens / 1000).toFixed(0) + 'k' : 'N/A'}</div>
+                <div class="text-xs text-gray-400">total</div>
+            </td>
+            <td class="px-2 py-3 hidden xl:table-cell">
+                <div class="font-medium text-white text-xs sm:text-sm">${entry.detailedData ? (entry.detailedData.llm_metrics.avg_input_tokens / 1000).toFixed(0) + 'k' : 'N/A'}</div>
+                <div class="text-xs text-gray-400">input</div>
+            </td>
+            <td class="px-2 py-3 hidden xl:table-cell">
+                <div class="font-medium text-white text-xs sm:text-sm">${entry.detailedData ? (entry.detailedData.llm_metrics.avg_output_tokens / 1000).toFixed(0) + 'k' : 'N/A'}</div>
+                <div class="text-xs text-gray-400">output</div>
+            </td>
+            <td class="px-2 py-3 hidden lg:table-cell">
+                <div class="font-medium text-white text-xs sm:text-sm">${entry.detailedData ? entry.detailedData.llm_metrics.avg_response_time.toFixed(1) + 's' : 'N/A'}</div>
+                <div class="text-xs text-gray-400">avg time</div>
+            </td>
+            <td class="px-2 py-3">
+                <div class="text-white text-xs sm:text-sm font-semibold">${entry.detailedData ? '$' + (entry.detailedData.llm_metrics.avg_cost || 0).toFixed(3) : 'N/A'}</div>
+                <div class="text-xs text-gray-400 lg:hidden">${entry.detailedData ? (entry.detailedData.llm_metrics.avg_total_tokens / 1000).toFixed(0) + 'k tok' : ''}</div>
             </td>
         </tr>
         <tr id="stats-row-${index}" class="hidden">
-            <td colspan="7" class="px-1 py-4 bg-gray-800">
+            <td colspan="13" class="px-2 py-4 bg-gray-800">
                 ${renderDetailedStats(entry, index)}
             </td>
         </tr>
-    `).join('');
+        `;
+    }).join('');
     
     // Update stats cards
     updateStatsCards(entries, metadata);
+}
+
+// Render individual runs as a table with clickable rows for stats/config toggle
+function renderIndividualRunsTable(runs, modelIndex) {
+    return `
+        <table class="min-w-full bg-gray-700 rounded-lg overflow-hidden">
+            <thead>
+                <tr class="bg-gray-600 text-left text-xs sm:text-sm">
+                    <th class="px-2 py-2">Run</th>
+                    <th class="px-2 py-2">Seed/Deck</th>
+                    <th class="px-2 py-2">Result</th>
+                    <th class="px-2 py-2">Money</th>
+                    <th class="px-2 py-2">Tokens</th>
+                    <th class="px-2 py-2">Success</th>
+                    <th class="px-2 py-2">Errors</th>
+                    <th class="px-2 py-2">Duration</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${runs.map((run, runIndex) => `
+                    <tr class="hover:bg-gray-600 cursor-pointer" onclick="toggleRunDetails(${modelIndex}, ${runIndex})">
+                        <td class="px-2 py-2 text-sm">Run ${runIndex + 1}</td>
+                        <td class="px-2 py-2 text-sm">
+                            <div class="text-xs sm:text-sm truncate" title="Seed: ${run.seed} | Deck: ${run.deck}">
+                                ${run.seed}<br><span class="text-gray-400">${run.deck}</span>
+                            </div>
+                        </td>
+                        <td class="px-2 py-2 text-sm">
+                            <span class="${run.won ? 'text-green-400' : 'text-red-400'}">
+                                Ante ${run.final_ante} ${run.won ? 'Win' : 'Loss'}
+                            </span>
+                            <div class="text-xs text-gray-400">${run.completed ? 'Complete' : 'Incomplete'}</div>
+                        </td>
+                        <td class="px-2 py-2 text-sm">
+                            $${run.final_money}<br>
+                            <span class="text-xs text-gray-400">(Peak: $${run.peak_money})</span>
+                        </td>
+                        <td class="px-2 py-2 text-sm">${(run.total_tokens / 1000).toFixed(0)}k</td>
+                        <td class="px-2 py-2 text-sm">${(run.success_rate * 100).toFixed(0)}%</td>
+                        <td class="px-2 py-2 text-sm">${run.parsing_errors + run.timeout_errors}</td>
+                        <td class="px-2 py-2 text-sm">${(run.duration_seconds / 60).toFixed(1)}m</td>
+                    </tr>
+                    <tr id="run-details-${modelIndex}-${runIndex}" class="hidden bg-gray-800">
+                        <td colspan="8" class="px-4 py-3">
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                                <div class="bg-gray-700 rounded-lg p-3 sm:p-4 min-w-0">
+                                    <h4 class="font-semibold text-white mb-1.5 sm:mb-2 text-sm sm:text-base lg:text-base">Configuration</h4>
+                                    <div class="space-y-1.5 sm:space-y-2 text-gray-300 text-sm sm:text-sm lg:text-sm">
+                                        ${run.config ? Object.entries(run.config).map(([key, value]) => `
+                                            <div class="flex justify-between items-center min-w-0">
+                                                <span class="truncate mr-2 capitalize">${key.replace(/_/g, ' ')}:</span>
+                                                <span class="text-white font-medium flex-shrink-0">${typeof value === 'object' ? JSON.stringify(value) : value}</span>
+                                            </div>
+                                        `).join('') : '<div class="text-gray-400">No configuration available</div>'}
+                                    </div>
+                                </div>
+                                <div class="bg-gray-700 rounded-lg p-3 sm:p-4 min-w-0">
+                                    <h4 class="font-semibold text-white mb-1.5 sm:mb-2 text-sm sm:text-base lg:text-base">Statistics</h4>
+                                    <div class="space-y-1.5 sm:space-y-2 text-gray-300 text-sm sm:text-sm lg:text-sm">
+                                        ${run.stats ? Object.entries(run.stats).slice(0, 10).map(([key, value]) => `
+                                            <div class="flex justify-between items-center min-w-0">
+                                                <span class="truncate mr-2 capitalize">${key.replace(/_/g, ' ')}:</span>
+                                                <span class="text-white font-medium flex-shrink-0">${
+                                                    typeof value === 'number' && key.includes('time') ? (value / 60).toFixed(1) + 'm' :
+                                                    typeof value === 'number' && key.includes('rate') ? (value * 100).toFixed(1) + '%' :
+                                                    typeof value === 'object' ? JSON.stringify(value) : value
+                                                }</span>
+                                            </div>
+                                        `).join('') : '<div class="text-gray-400">No statistics available</div>'}
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+    `;
 }
 
 // Render detailed statistics for a model
@@ -331,39 +326,8 @@ function renderDetailedStats(entry, index) {
         
         <div class="mt-4 sm:mt-6">
             <h4 class="font-semibold text-white mb-2 sm:mb-3 text-base sm:text-base lg:text-lg">Individual Runs</h4>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-3 max-h-48 sm:max-h-64 overflow-y-auto">
-                ${data.individual_runs.map((run, runIndex) => `
-                    <div class="rounded p-2 sm:p-3 ${run.won ? 'bg-green-900/30 border-l-4 border-green-500' : 'bg-red-900/30 border-l-4 border-red-500'} min-w-0">
-                        <div class="flex justify-between items-start mb-1.5 sm:mb-2 min-w-0">
-                            <div class="text-sm sm:text-sm lg:text-sm min-w-0 flex-1">
-                                <div class="text-white font-medium">Run ${runIndex + 1}</div>
-                                <div class="text-gray-300 text-xs sm:text-sm truncate" title="Seed: ${run.seed} | Deck: ${run.deck}">
-                                    ${run.seed} | ${run.deck}
-                                </div>
-                            </div>
-                            <div class="text-right ml-2 flex-shrink-0">
-                                <div class="text-white text-sm sm:text-sm lg:text-sm font-medium">
-                                    Ante ${run.final_ante} ${run.won ? 'Win' : 'Loss'}
-                                </div>
-                                <div class="text-gray-300 text-xs sm:text-sm">${(run.duration_seconds / 60).toFixed(1)}m</div>
-                            </div>
-                        </div>
-                        <div class="text-xs sm:text-sm text-gray-300 space-y-1">
-                            <div class="truncate" title="Money: $${run.final_money} (Peak: $${run.peak_money})">
-                                Money: $${run.final_money} (Peak: $${run.peak_money})
-                            </div>
-                            <div class="truncate" title="Tokens: ${run.total_tokens.toLocaleString()}">
-                                Tokens: ${(run.total_tokens / 1000).toFixed(0)}k
-                            </div>
-                            <div class="truncate" title="Success Rate: ${(run.success_rate * 100).toFixed(0)}%">
-                                Success: ${(run.success_rate * 100).toFixed(0)}%
-                            </div>
-                            <div class="truncate" title="Errors: ${run.parsing_errors + run.timeout_errors}">
-                                Errors: ${run.parsing_errors + run.timeout_errors}
-                            </div>
-                        </div>
-                    </div>
-                `).join('')}
+            <div class="overflow-x-auto">
+                ${renderIndividualRunsTable(data.individual_runs, index)}
             </div>
         </div>
         </div>
@@ -413,7 +377,7 @@ function updateStatsCards(entries, metadata) {
 function showError(message) {
     const tbody = document.getElementById('leaderboard-body');
     if (tbody) {
-        tbody.innerHTML = `<tr><td colspan="7" class="px-1 py-4 text-center text-gray-400 text-base sm:text-sm lg:text-base">${message}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="13" class="px-2 py-4 text-center text-gray-400 text-sm">${message}</td></tr>`;
     }
 }
 
@@ -449,10 +413,19 @@ function toggleStats(index) {
     }
 }
 
-// Toggle detailed run information (placeholder for future expansion)
-function toggleRunDetails(index) {
-    console.log(`Clicked on row ${index} for detailed information`);
+// Toggle detailed run information for individual runs
+function toggleRunDetails(modelIndex, runIndex) {
+    const detailsRow = document.getElementById(`run-details-${modelIndex}-${runIndex}`);
+    
+    if (detailsRow) {
+        if (detailsRow.classList.contains('hidden')) {
+            detailsRow.classList.remove('hidden');
+        } else {
+            detailsRow.classList.add('hidden');
+        }
+    }
 }
+
 
 // Load community strategies (legacy function for community page)
 async function loadCommunityStrategies() {
