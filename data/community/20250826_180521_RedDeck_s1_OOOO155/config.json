@@ -1,0 +1,13 @@
+{
+  "model": "cerebras/gpt-oss-120b",
+  "strategy": "default",
+  "deck": "Red Deck",
+  "stake": 1,
+  "seed": "OOOO155",
+  "challenge": null,
+  "version": "0.3.0",
+  "name": "Unknown Name",
+  "description": "Unknown Description",
+  "author": "BalatroBench",
+  "tags": []
+}
