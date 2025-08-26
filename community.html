@@ -54,8 +54,36 @@
             </p>
         </div>
 
-        <!-- Community Submissions -->
-        <div id="community-submissions" class="grid gap-6">
+        <!-- Community Leaderboard -->
+        <div class="bg-gray-800 rounded-lg border border-gray-700 mb-6 sm:mb-8">
+            <div class="w-full overflow-x-auto table-container">
+                <table class="w-full table-auto rounded-lg overflow-hidden">
+                    <thead class="bg-gray-700">
+                        <tr>
+                            <th class="px-2 py-3 text-center text-xs sm:text-sm font-medium text-gray-300 w-12 sm:w-16">Rank</th>
+                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 min-w-32 max-w-48">Model</th>
+                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24">Provider</th>
+                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24">Avg Final Round</th>
+                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-16 sm:w-20 hidden md:table-cell">Ante</th>
+                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-16 sm:w-20 hidden md:table-cell">Win %</th>
+                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden lg:table-cell">Tool Call</th>
+                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden lg:table-cell">Tool Call Errors</th>
+                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden xl:table-cell">Token (Total)</th>
+                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden xl:table-cell">Input Token</th>
+                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden xl:table-cell">Output Token</th>
+                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-16 sm:w-20 hidden lg:table-cell">Avg Time</th>
+                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-16 sm:w-20">Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody id="community-leaderboard-body" class="divide-y divide-gray-700">
+                        <!-- Data will be loaded here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Community Submissions (Legacy) -->
+        <div id="community-submissions" class="grid gap-6 hidden">
             <!-- Data will be loaded here by JavaScript -->
         </div>
 
@@ -114,89 +142,224 @@
     </div>
 
     <script>
-        // Load community submissions
-        async function loadCommunitySubmissions() {
+        // Load community leaderboard data
+        async function loadCommunityLeaderboard() {
             try {
-                // Fetch official leaderboard data
-                const officialResponse = await fetch('data/benchmarks/v0.2.0/default/leaderboard.json');
-                const officialData = await officialResponse.json();
-                const officialSubmissions = officialData.entries.map(entry => ({
-                    title: entry.model,
-                    author: 'Official Benchmark',
-                    model: entry.model,
-                    score: entry.performance_score.toFixed(1),
-                    votes: entry.total_runs,
-                    date: officialData.generated_at,
-                    description: `Official benchmark run with ${entry.total_runs} runs. Reached ante ${entry.avg_final_ante} on average.`
-                }));
-
-                // Fetch community submissions
-                // In a real application, you would dynamically list files in the directory.
-                // For this static site, we list them manually.
-                const communityFiles = ['data/strategies/default/community-submission-1.json'];
-                const communitySubmissions = [];
-                for (const file of communityFiles) {
-                    try {
-                        const response = await fetch(file);
-                        if (response.ok) {
-                            const submission = await response.json();
-                            communitySubmissions.push(submission);
-                        }
-                    } catch (error) {
-                        console.warn(`Could not load community submission: ${file}`, error);
-                    }
+                // Discover community runs
+                const communityRuns = await discoverCommunityRuns();
+                
+                if (communityRuns.length === 0) {
+                    showError('No community runs found');
+                    return;
                 }
 
-                // Combine and sort
-                const allSubmissions = [...officialSubmissions, ...communitySubmissions];
-                allSubmissions.sort((a, b) => parseFloat(b.score) - parseFloat(a.score));
+                // Sort runs by ante reached (descending), then by score (descending)
+                communityRuns.sort((a, b) => {
+                    if (b.stats.ante_reached !== a.stats.ante_reached) {
+                        return b.stats.ante_reached - a.stats.ante_reached;
+                    }
+                    return b.stats.final_score - a.stats.final_score;
+                });
 
-                const container = document.getElementById('community-submissions');
-                container.innerHTML = allSubmissions.map(submission => `
-                    <div class="bg-gray-800 rounded-lg border border-gray-700 shadow-lg hover:shadow-xl transition-all duration-300">
-                        <div class="p-6">
-                            <div class="flex items-start justify-between mb-4">
-                                <div>
-                                    <h3 class="text-xl font-bold text-white mb-2">${submission.title}</h3>
-                                    <div class="flex items-center gap-4 text-sm text-gray-400">
-                                        <span>by ${submission.author}</span>
-                                        <span class="bg-gray-700 px-2 py-1 rounded text-xs">${submission.model}</span>
-                                        <span>${new Date(submission.date).toLocaleDateString()}</span>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                                        ${submission.score} Ante
-                                    </div>
-                                    <div class="text-sm text-gray-400">
-                                        ${submission.votes} votes
-                                    </div>
-                                </div>
+                // Add rank
+                communityRuns.forEach((run, index) => {
+                    run.rank = index + 1;
+                });
+
+                renderCommunityLeaderboard(communityRuns);
+                
+            } catch (error) {
+                console.error('Error loading community leaderboard:', error);
+                showError('Error loading community data');
+            }
+        }
+
+        // Discover community runs from the data/community directory
+        async function discoverCommunityRuns() {
+            // Known run directories (in a real app, this would be dynamic)
+            const knownRuns = [
+                '20250826_180521_RedDeck_s1_OOOO155',
+                '20250826_185432_RedDeck_s1_OOOO155'
+            ];
+            
+            const communityRuns = [];
+            
+            for (const runDir of knownRuns) {
+                try {
+                    const configResponse = await fetch(`data/community/${runDir}/config.json`);
+                    const statsResponse = await fetch(`data/community/${runDir}/stats.json`);
+                    
+                    if (configResponse.ok && statsResponse.ok) {
+                        const config = await configResponse.json();
+                        const stats = await statsResponse.json();
+                        
+                        communityRuns.push({
+                            runDir,
+                            config,
+                            stats,
+                            timestamp: runDir.split('_')[1] // Extract timestamp from directory name
+                        });
+                    }
+                } catch (error) {
+                    console.warn(`Failed to load run: ${runDir}`, error);
+                }
+            }
+            
+            return communityRuns;
+        }
+
+        // Render community leaderboard
+        function renderCommunityLeaderboard(runs) {
+            const tbody = document.getElementById('community-leaderboard-body');
+            if (!tbody) return;
+            
+            tbody.innerHTML = runs.map((run, index) => {
+                const modelParts = run.config.model.split('/');
+                const provider = modelParts[0] || '';
+                const modelName = modelParts.slice(1).join('/') || run.config.model;
+                
+                return `
+                <tr class="hover:bg-gray-700 transition-colors cursor-pointer" onclick="toggleCommunityStats(${index})">
+                    <td class="px-2 py-3 text-center">
+                        <span class="text-xs sm:text-sm font-bold ${getRankColor(run.rank)}">#${run.rank}</span>
+                    </td>
+                    <td class="px-2 py-3 min-w-32 max-w-48">
+                        <div class="overflow-hidden">
+                            <div class="font-medium text-white text-xs sm:text-sm break-words" title="${modelName}">${modelName}</div>
+                            <div class="text-xs text-gray-400 mt-0.5">
+                                <span class="md:hidden">${run.stats.ante_reached} ante • ${run.stats.run_won ? 'Win' : 'Loss'}</span>
+                                <span class="hidden md:inline">${run.config.deck} • ${run.config.seed}</span>
                             </div>
-                            <p class="text-gray-300 mb-4">${submission.description}</p>
-                            <div class="flex items-center gap-2">
-                                <button class="border border-gray-600 text-gray-300 hover:border-gray-500 hover:text-white px-3 py-1 rounded text-sm transition-colors">
-                                    View Details
-                                </button>
-                                <button class="text-gray-400 hover:text-green-400 px-3 py-1 text-sm transition-colors">
-                                    <i class="fas fa-arrow-up"></i> Upvote
-                                </button>
-                                <button class="text-gray-400 hover:text-blue-400 px-3 py-1 text-sm transition-colors">
-                                    Try Strategy
-                                </button>
+                        </div>
+                    </td>
+                    <td class="px-2 py-3">
+                        <div class="text-xs sm:text-sm font-medium text-gray-300 capitalize">${provider}</div>
+                    </td>
+                    <td class="px-2 py-3">
+                        <div class="text-xs sm:text-sm font-bold text-white">${run.stats.final_round || 'N/A'}</div>
+                        <div class="text-xs text-gray-400">final round</div>
+                    </td>
+                    <td class="px-2 py-3 hidden md:table-cell">
+                        <div class="text-xs sm:text-sm font-bold text-white">${run.stats.ante_reached}</div>
+                        <div class="text-xs text-gray-400">${run.stats.run_won ? 'Win' : 'Loss'}</div>
+                    </td>
+                    <td class="px-2 py-3 hidden md:table-cell">
+                        <div class="font-medium text-white text-xs sm:text-sm">${run.stats.run_won ? '100' : '0'}%</div>
+                        <div class="text-xs text-gray-400">1 run</div>
+                    </td>
+                    <td class="px-2 py-3 hidden lg:table-cell">
+                        <div class="font-medium text-white text-xs sm:text-sm">${run.stats.tool_calls || 'N/A'}</div>
+                        <div class="text-xs text-gray-400">calls</div>
+                    </td>
+                    <td class="px-2 py-3 hidden lg:table-cell">
+                        <div class="font-medium text-white text-xs sm:text-sm">${run.stats.tool_call_errors || 0}</div>
+                        <div class="text-xs text-gray-400">errors</div>
+                    </td>
+                    <td class="px-2 py-3 hidden xl:table-cell">
+                        <div class="font-medium text-white text-xs sm:text-sm">${run.stats.total_tokens ? (run.stats.total_tokens / 1000).toFixed(0) + 'k' : 'N/A'}</div>
+                        <div class="text-xs text-gray-400">total</div>
+                    </td>
+                    <td class="px-2 py-3 hidden xl:table-cell">
+                        <div class="font-medium text-white text-xs sm:text-sm">${run.stats.input_tokens ? (run.stats.input_tokens / 1000).toFixed(0) + 'k' : 'N/A'}</div>
+                        <div class="text-xs text-gray-400">input</div>
+                    </td>
+                    <td class="px-2 py-3 hidden xl:table-cell">
+                        <div class="font-medium text-white text-xs sm:text-sm">${run.stats.output_tokens ? (run.stats.output_tokens / 1000).toFixed(0) + 'k' : 'N/A'}</div>
+                        <div class="text-xs text-gray-400">output</div>
+                    </td>
+                    <td class="px-2 py-3 hidden lg:table-cell">
+                        <div class="font-medium text-white text-xs sm:text-sm">${run.stats.avg_response_time ? run.stats.avg_response_time.toFixed(1) + 's' : 'N/A'}</div>
+                        <div class="text-xs text-gray-400">avg time</div>
+                    </td>
+                    <td class="px-2 py-3">
+                        <div class="text-white text-xs sm:text-sm font-semibold">${run.stats.total_cost ? '$' + run.stats.total_cost.toFixed(3) : 'N/A'}</div>
+                        <div class="text-xs text-gray-400 lg:hidden">${(run.stats.run_duration_seconds / 60).toFixed(1)}m</div>
+                    </td>
+                </tr>
+                <tr id="community-stats-row-${index}" class="hidden">
+                    <td colspan="13" class="px-2 py-4 bg-gray-800">
+                        ${renderCommunityDetailedStats(run, index)}
+                    </td>
+                </tr>
+                `;
+            }).join('');
+        }
+
+        // Render detailed stats for community run
+        function renderCommunityDetailedStats(run, index) {
+            return `
+                <div class="px-2 sm:px-4 w-full overflow-hidden">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                        <div class="bg-gray-700 rounded-lg p-3 sm:p-4 min-w-0">
+                            <h4 class="font-semibold text-white mb-1.5 sm:mb-2 text-sm sm:text-base lg:text-base">Configuration</h4>
+                            <div class="space-y-1.5 sm:space-y-2 text-gray-300 text-sm sm:text-sm lg:text-sm">
+                                ${Object.entries(run.config).map(([key, value]) => `
+                                    <div class="flex justify-between items-center min-w-0">
+                                        <span class="truncate mr-2 capitalize">${key.replace(/_/g, ' ')}:</span>
+                                        <span class="text-white font-medium flex-shrink-0">${typeof value === 'object' ? JSON.stringify(value) : value}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        <div class="bg-gray-700 rounded-lg p-3 sm:p-4 min-w-0">
+                            <h4 class="font-semibold text-white mb-1.5 sm:mb-2 text-sm sm:text-base lg:text-base">Statistics</h4>
+                            <div class="space-y-1.5 sm:space-y-2 text-gray-300 text-sm sm:text-sm lg:text-sm">
+                                ${Object.entries(run.stats).slice(0, 15).map(([key, value]) => `
+                                    <div class="flex justify-between items-center min-w-0">
+                                        <span class="truncate mr-2 capitalize">${key.replace(/_/g, ' ')}:</span>
+                                        <span class="text-white font-medium flex-shrink-0">${
+                                            typeof value === 'number' && key.includes('time') ? (value / 60).toFixed(1) + 'm' :
+                                            typeof value === 'number' && key.includes('rate') ? (value * 100).toFixed(1) + '%' :
+                                            typeof value === 'object' ? JSON.stringify(value) : value
+                                        }</span>
+                                    </div>
+                                `).join('')}
                             </div>
                         </div>
                     </div>
-                `).join('');
-            } catch (error) {
-                console.error('Error loading community submissions:', error);
-                const container = document.getElementById('community-submissions');
-                container.innerHTML = '<p class="text-red-500">Error loading submissions. Please check the data files.</p>';
+                </div>
+            `;
+        }
+
+        // Calculate a simple performance score for community runs
+        function calculatePerformanceScore(stats) {
+            // Simple scoring: ante_reached * 10 + money efficiency
+            return stats.ante_reached * 10 + (stats.final_money * 0.1);
+        }
+
+        // Show error message
+        function showError(message) {
+            const tbody = document.getElementById('community-leaderboard-body');
+            if (tbody) {
+                tbody.innerHTML = `<tr><td colspan="13" class="px-2 py-4 text-center text-gray-400 text-sm">${message}</td></tr>`;
+            }
+        }
+
+        // Utility function for rank colors
+        function getRankColor(rank) {
+            switch(rank) {
+                case 1: return 'text-yellow-400'; // Gold
+                case 2: return 'text-gray-300';   // Silver
+                case 3: return 'text-orange-400'; // Bronze
+                default: return 'text-gray-400';
+            }
+        }
+
+        // Toggle statistics display for a community run
+        function toggleCommunityStats(index) {
+            const statsRow = document.getElementById(`community-stats-row-${index}`);
+            
+            if (statsRow) {
+                if (statsRow.classList.contains('hidden')) {
+                    statsRow.classList.remove('hidden');
+                } else {
+                    statsRow.classList.add('hidden');
+                }
             }
         }
 
         // Load data when page loads
-        document.addEventListener('DOMContentLoaded', loadCommunitySubmissions);
+        document.addEventListener('DOMContentLoaded', loadCommunityLeaderboard);
     </script>
 </body>
 </html>

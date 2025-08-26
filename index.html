@@ -63,39 +63,23 @@
 
         <!-- Leaderboard -->
         <div class="bg-gray-800 rounded-lg border border-gray-700 mb-6 sm:mb-8">
-            <div class="p-4 sm:p-6 border-b border-gray-700">
-                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-                    <div>
-                        <h2 class="text-xl sm:text-2xl font-bold text-white">Official Leaderboard</h2>
-                        <p class="text-gray-400 mt-2 text-sm sm:text-base">Latest benchmark results across different LLM models</p>
-                    </div>
-                    <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                        <div class="flex flex-col">
-                            <label class="text-sm text-gray-400 mb-1">Version</label>
-                            <select id="version-selector" class="bg-gray-700 border border-gray-600 text-white rounded px-3 py-2 text-sm focus:outline-none focus:border-blue-400 min-w-0">
-                                <option value="">Loading...</option>
-                            </select>
-                        </div>
-                        <div class="flex flex-col">
-                            <label class="text-sm text-gray-400 mb-1">Strategy</label>
-                            <select id="strategy-selector" class="bg-gray-700 border border-gray-600 text-white rounded px-3 py-2 text-sm focus:outline-none focus:border-blue-400 min-w-0">
-                                <option value="">Loading...</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div class="w-full overflow-x-auto table-container">
-                <table class="w-full table-auto">
+                <table class="w-full table-auto rounded-lg overflow-hidden">
                     <thead class="bg-gray-700">
                         <tr>
-                            <th class="px-1 py-2 text-center text-sm sm:text-xs lg:text-sm font-medium text-gray-300 w-12">Rank</th>
-                            <th class="px-1 py-2 text-left text-sm sm:text-xs lg:text-sm font-medium text-gray-300 min-w-0 flex-1">Model</th>
-                            <th class="px-1 py-2 text-left text-sm sm:text-xs lg:text-sm font-medium text-gray-300 w-12 sm:w-16">Ante</th>
-                            <th class="px-1 py-2 text-left text-sm sm:text-xs lg:text-sm font-medium text-gray-300 w-12 sm:w-16">Win %</th>
-                            <th class="px-1 py-2 text-left text-sm sm:text-xs lg:text-sm font-medium text-gray-300 w-16 hidden sm:table-cell">Tokens</th>
-                            <th class="px-1 py-2 text-left text-sm sm:text-xs lg:text-sm font-medium text-gray-300 w-20 hidden lg:table-cell">Efficiency</th>
-                            <th class="px-1 py-2 text-left text-sm sm:text-xs lg:text-sm font-medium text-gray-300 w-12 sm:w-16">Score</th>
+                            <th class="px-2 py-3 text-center text-xs sm:text-sm font-medium text-gray-300 w-12 sm:w-16">Rank</th>
+                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 min-w-32 max-w-48">Model</th>
+                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24">Provider</th>
+                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24">Avg Final Round</th>
+                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-16 sm:w-20 hidden md:table-cell">Ante</th>
+                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-16 sm:w-20 hidden md:table-cell">Win %</th>
+                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden lg:table-cell">Tool Call</th>
+                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden lg:table-cell">Tool Call Errors</th>
+                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden xl:table-cell">Token (Total)</th>
+                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden xl:table-cell">Input Token</th>
+                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden xl:table-cell">Output Token</th>
+                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-16 sm:w-20 hidden lg:table-cell">Avg Time</th>
+                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-16 sm:w-20">Cost</th>
                         </tr>
                     </thead>
                     <tbody id="leaderboard-body" class="divide-y divide-gray-700">
@@ -104,6 +88,7 @@
                 </table>
             </div>
         </div>
+
 
         <!-- Methodology -->
         <div class="bg-gray-800 rounded-lg p-4 sm:p-6 lg:p-8 border border-gray-700">
