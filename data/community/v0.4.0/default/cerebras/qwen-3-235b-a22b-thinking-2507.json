@@ -1,0 +1,121 @@
+{
+  "config": {
+    "model": "cerebras/qwen-3-235b-a22b-thinking-2507",
+    "strategy": "default",
+    "deck": "Red Deck",
+    "stake": 1,
+    "seed": "OOOO155",
+    "challenge": null,
+    "version": "0.4.0",
+    "name": "Unknown Name",
+    "description": "Unknown Description",
+    "author": "BalatroBench",
+    "tags": []
+  },
+  "total_runs": 3,
+  "completed_runs": 0,
+  "won_runs": 0,
+  "averaged_stats": {
+    "avg_final_round": 2.33,
+    "avg_ante_reached": 1.33,
+    "avg_jokers_bought": 0,
+    "avg_jokers_sold": 0.67,
+    "avg_consumables_used": 0,
+    "avg_rerolls": 0,
+    "avg_money_spent": 10.67,
+    "avg_successful_calls": 17.67,
+    "avg_error_calls": 0,
+    "avg_failed_calls": 0,
+    "avg_total_input_tokens": 44945,
+    "avg_total_output_tokens": 38464,
+    "avg_total_reasoning_tokens": 0,
+    "avg_total_tokens": 83409,
+    "avg_total_response_time_ms": 40440.33
+  },
+  "stats": [
+    {
+      "run_won": false,
+      "completed": false,
+      "ante_reached": 2,
+      "final_round": 4,
+      "jokers_bought": [],
+      "jokers_sold": [
+        "Burglar",
+        "Juggler"
+      ],
+      "consumables_used": [],
+      "rerolls": 0,
+      "money_spent": 22,
+      "hands_played": {
+        "High Card": 14
+      },
+      "successful_calls": 36,
+      "error_calls": [],
+      "failed_calls": [],
+      "avg_input_tokens": 2532.8055555555557,
+      "avg_output_tokens": 2427.8888888888887,
+      "avg_reasoning_tokens": 0.0,
+      "avg_total_tokens": 4960.694444444444,
+      "avg_response_time_ms": 2195.2972972972975,
+      "total_input_tokens": 91181,
+      "total_output_tokens": 87404,
+      "total_reasoning_tokens": 0,
+      "total_tokens": 178585,
+      "total_response_time_ms": 81226
+    },
+    {
+      "run_won": false,
+      "completed": false,
+      "ante_reached": 1,
+      "final_round": 2,
+      "jokers_bought": [],
+      "jokers_sold": [],
+      "consumables_used": [],
+      "rerolls": 0,
+      "money_spent": 10,
+      "hands_played": {
+        "High Card": 5
+      },
+      "successful_calls": 14,
+      "error_calls": [],
+      "failed_calls": [],
+      "avg_input_tokens": 2596.0,
+      "avg_output_tokens": 1768.7857142857142,
+      "avg_reasoning_tokens": 0.0,
+      "avg_total_tokens": 4364.785714285715,
+      "avg_response_time_ms": 2031.4666666666667,
+      "total_input_tokens": 36344,
+      "total_output_tokens": 24763,
+      "total_reasoning_tokens": 0,
+      "total_tokens": 61107,
+      "total_response_time_ms": 30472
+    },
+    {
+      "run_won": false,
+      "completed": false,
+      "ante_reached": 1,
+      "final_round": 1,
+      "jokers_bought": [],
+      "jokers_sold": [],
+      "consumables_used": [],
+      "rerolls": 0,
+      "money_spent": 0,
+      "hands_played": {
+        "High Card": 1
+      },
+      "successful_calls": 3,
+      "error_calls": [],
+      "failed_calls": [],
+      "avg_input_tokens": 2436.6666666666665,
+      "avg_output_tokens": 1075.0,
+      "avg_reasoning_tokens": 0.0,
+      "avg_total_tokens": 3511.6666666666665,
+      "avg_response_time_ms": 3207.6666666666665,
+      "total_input_tokens": 7310,
+      "total_output_tokens": 3225,
+      "total_reasoning_tokens": 0,
+      "total_tokens": 10535,
+      "total_response_time_ms": 9623
+    }
+  ]
+}

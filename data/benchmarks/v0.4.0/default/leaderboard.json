@@ -1,0 +1,153 @@
+{
+  "generated_at": "2025-09-01T12:30:31.117431",
+  "version": "0.4.0",
+  "strategy": "default",
+  "total_entries": 4,
+  "total_runs_analyzed": 12,
+  "entries": [
+    {
+      "rank": 1,
+      "config": {
+        "model": "cerebras/gpt-oss-120b",
+        "strategy": "default",
+        "deck": "Red Deck",
+        "stake": 1,
+        "seed": "OOOO155",
+        "challenge": null,
+        "version": "0.4.0",
+        "name": "Unknown Name",
+        "description": "Unknown Description",
+        "author": "BalatroBench",
+        "tags": []
+      },
+      "total_runs": 3,
+      "completed_runs": 0,
+      "won_runs": 0,
+      "averaged_stats": {
+        "avg_final_round": 2.33,
+        "avg_ante_reached": 1.33,
+        "avg_jokers_bought": 0,
+        "avg_jokers_sold": 0.33,
+        "avg_consumables_used": 0.67,
+        "avg_rerolls": 0,
+        "avg_money_spent": 13.33,
+        "avg_successful_calls": 16.33,
+        "avg_error_calls": 0,
+        "avg_failed_calls": 0,
+        "avg_total_input_tokens": 33409.33,
+        "avg_total_output_tokens": 9150.33,
+        "avg_total_reasoning_tokens": 0,
+        "avg_total_tokens": 42559.67,
+        "avg_total_response_time_ms": 37359.33
+      }
+    },
+    {
+      "rank": 2,
+      "config": {
+        "model": "cerebras/qwen-3-235b-a22b-instruct-2507",
+        "strategy": "default",
+        "deck": "Red Deck",
+        "stake": 1,
+        "seed": "OOOO155",
+        "challenge": null,
+        "version": "0.4.0",
+        "name": "Unknown Name",
+        "description": "Unknown Description",
+        "author": "BalatroBench",
+        "tags": []
+      },
+      "total_runs": 3,
+      "completed_runs": 2,
+      "won_runs": 0,
+      "averaged_stats": {
+        "avg_final_round": 2,
+        "avg_ante_reached": 1,
+        "avg_jokers_bought": 0,
+        "avg_jokers_sold": 0,
+        "avg_consumables_used": 0,
+        "avg_rerolls": 0,
+        "avg_money_spent": 5,
+        "avg_successful_calls": 13.33,
+        "avg_error_calls": 0,
+        "avg_failed_calls": 0,
+        "avg_total_input_tokens": 35451,
+        "avg_total_output_tokens": 2233.67,
+        "avg_total_reasoning_tokens": 0,
+        "avg_total_tokens": 37684.67,
+        "avg_total_response_time_ms": 29097.67
+      }
+    },
+    {
+      "rank": 3,
+      "config": {
+        "model": "cerebras/qwen-3-235b-a22b-thinking-2507",
+        "strategy": "default",
+        "deck": "Red Deck",
+        "stake": 1,
+        "seed": "OOOO155",
+        "challenge": null,
+        "version": "0.4.0",
+        "name": "Unknown Name",
+        "description": "Unknown Description",
+        "author": "BalatroBench",
+        "tags": []
+      },
+      "total_runs": 3,
+      "completed_runs": 2,
+      "won_runs": 0,
+      "averaged_stats": {
+        "avg_final_round": 1.67,
+        "avg_ante_reached": 1,
+        "avg_jokers_bought": 0,
+        "avg_jokers_sold": 0,
+        "avg_consumables_used": 0.67,
+        "avg_rerolls": 0,
+        "avg_money_spent": 6,
+        "avg_successful_calls": 11,
+        "avg_error_calls": 0,
+        "avg_failed_calls": 0,
+        "avg_total_input_tokens": 27529.33,
+        "avg_total_output_tokens": 23245.67,
+        "avg_total_reasoning_tokens": 0,
+        "avg_total_tokens": 50775,
+        "avg_total_response_time_ms": 28993
+      }
+    },
+    {
+      "rank": 4,
+      "config": {
+        "model": "groq/openai/gpt-oss-20b",
+        "strategy": "default",
+        "deck": "Red Deck",
+        "stake": 1,
+        "seed": "OOOO155",
+        "challenge": null,
+        "version": "0.4.0",
+        "name": "Unknown Name",
+        "description": "Unknown Description",
+        "author": "BalatroBench",
+        "tags": []
+      },
+      "total_runs": 3,
+      "completed_runs": 0,
+      "won_runs": 0,
+      "averaged_stats": {
+        "avg_final_round": 0.67,
+        "avg_ante_reached": 1,
+        "avg_jokers_bought": 0,
+        "avg_jokers_sold": 0,
+        "avg_consumables_used": 0,
+        "avg_rerolls": 0,
+        "avg_money_spent": 1,
+        "avg_successful_calls": 2.67,
+        "avg_error_calls": 0,
+        "avg_failed_calls": 0,
+        "avg_total_input_tokens": 4978.67,
+        "avg_total_output_tokens": 1857.67,
+        "avg_total_reasoning_tokens": 0,
+        "avg_total_tokens": 6836.33,
+        "avg_total_response_time_ms": 5715.33
+      }
+    }
+  ]
+}
