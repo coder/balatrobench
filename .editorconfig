@@ -1,0 +1,31 @@
+root = true
+
+# All files
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# JavaScript files
+[*.{js,jsx,ts,tsx,mjs,cjs}]
+indent_style = space
+indent_size = 2
+max_line_length = 100
+
+# HTML files
+[*.{html,htm}]
+indent_style = space
+indent_size = 2
+max_line_length = 120
+
+# CSS files
+[*.{css,scss,sass,less}]
+indent_style = space
+indent_size = 2
+max_line_length = 120
+
+# JSON files
+[*.{json,jsonc}]
+indent_style = space
+indent_size = 2
