@@ -1,267 +1,281 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About BalatroBench - LLM Benchmark Platform</title>
-    <meta name="description" content="Learn about BalatroBench, the AI benchmark platform that evaluates Large Language Models through strategic Balatro gameplay.">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        /* Ensure no horizontal scrolling on mobile */
-        html, body {
-            max-width: 100vw;
-            overflow-x: hidden;
-        }
-        
-        /* Ensure text doesn't break out of containers */
-        * {
-            word-wrap: break-word;
-            max-width: 100%;
-        }
-        
-        /* Fix any potential flex issues */
-        .flex {
-            min-width: 0;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About BalatroBench - LLM Benchmark Platform</title>
+  <meta name="description"
+    content="Learn about BalatroBench, the AI benchmark platform that evaluates Large Language Models through strategic Balatro gameplay.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Ensure no horizontal scrolling on mobile */
+    html,
+    body {
+      max-width: 100vw;
+      overflow-x: hidden;
+    }
+
+    /* Ensure text doesn't break out of containers */
+    * {
+      word-wrap: break-word;
+      max-width: 100%;
+    }
+
+    /* Fix any potential flex issues */
+    .flex {
+      min-width: 0;
+    }
+
+  </style>
 </head>
+
 <body class="bg-gray-900 text-white min-h-screen overflow-x-hidden">
-    <!-- Navigation -->
-    <nav class="bg-gray-800 border-b border-gray-700">
-        <div class="container mx-auto px-4 py-4">
-            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <h1 class="text-xl font-bold text-blue-400">BalatroBench</h1>
-                <div class="flex flex-col sm:flex-row gap-4 sm:gap-8 w-full sm:w-auto">
-                    <a href="index.html" class="text-gray-300 hover:text-white transition-colors py-2 sm:py-0">Leaderboard</a>
-                    <a href="community.html" class="text-gray-300 hover:text-white transition-colors py-2 sm:py-0">Community</a>
-                    <a href="about.html" class="text-blue-400 hover:text-blue-300 transition-colors py-2 sm:py-0">About</a>
-                </div>
-            </div>
+  <!-- Navigation -->
+  <nav class="bg-gray-800 border-b border-gray-700">
+    <div class="container mx-auto px-4 py-4">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <h1 class="text-xl font-bold text-blue-400">BalatroBench</h1>
+        <div class="flex flex-col sm:flex-row gap-4 sm:gap-8 w-full sm:w-auto">
+          <a href="index.html" class="text-gray-300 hover:text-white transition-colors py-2 sm:py-0">Leaderboard</a>
+          <a href="community.html" class="text-gray-300 hover:text-white transition-colors py-2 sm:py-0">Community</a>
+          <a href="about.html" class="text-blue-400 hover:text-blue-300 transition-colors py-2 sm:py-0">About</a>
         </div>
-    </nav>
+      </div>
+    </div>
+  </nav>
 
-    <div class="container mx-auto px-4 py-8">
-        <!-- Hero Section -->
-        <div class="mb-12">
-            <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-6">
-                About BalatroBench
-            </h1>
-            <p class="text-gray-300 text-lg leading-relaxed">
-                BalatroBench is a cutting-edge benchmark platform that evaluates Large Language Models through strategic gameplay in Balatro, 
-                a roguelike poker deck-building game. By testing AI decision-making in a complex, dynamic environment, we measure models' 
-                strategic thinking, tool usage, and adaptive problem-solving capabilities.
-            </p>
-        </div>
-
-        <!-- What is Balatro Section -->
-        <div class="bg-gray-800 rounded-lg border border-gray-700 mb-8">
-            <div class="p-6 border-b border-gray-700">
-                <h2 class="text-2xl font-bold text-white flex items-center">
-                    <i class="fas fa-gamepad text-purple-400 mr-3"></i>
-                    What is Balatro?
-                </h2>
-            </div>
-            <div class="p-6">
-                <p class="text-gray-300 mb-4">
-                    Balatro is a sophisticated roguelike poker deck-building game where players defeat "blinds" by playing poker hands to score chips. 
-                    The game combines traditional poker mechanics with strategic deck building, resource management, and synergistic card effects.
-                </p>
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div>
-                        <h3 class="font-semibold text-white mb-3">Core Mechanics</h3>
-                        <ul class="space-y-2 text-sm text-gray-300">
-                            <li>• <strong>Scoring Formula:</strong> Chips × Multiplier = Final Score</li>
-                            <li>• <strong>Ante Structure:</strong> Sets of 3 blinds (Small → Big → Boss)</li>
-                            <li>• <strong>Limited Resources:</strong> Hands and discards per round</li>
-                            <li>• <strong>Progressive Difficulty:</strong> Each ante increases challenge</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h3 class="font-semibold text-white mb-3">Strategic Elements</h3>
-                        <ul class="space-y-2 text-sm text-gray-300">
-                            <li>• <strong>Joker Synergies:</strong> Cards that modify scoring</li>
-                            <li>• <strong>Money Management:</strong> Interest system and economics</li>
-                            <li>• <strong>Hand Type Focus:</strong> Specializing in specific poker hands</li>
-                            <li>• <strong>Boss Adaptation:</strong> Preparing for unique challenges</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- How It Works Section -->
-        <div class="bg-gray-800 rounded-lg border border-gray-700 mb-8">
-            <div class="p-6 border-b border-gray-700">
-                <h2 class="text-2xl font-bold text-white flex items-center">
-                    <i class="fas fa-cogs text-blue-400 mr-3"></i>
-                    How BalatroBench Works
-                </h2>
-            </div>
-            <div class="p-6">
-                <div class="grid gap-6">
-                    <div class="bg-gray-700 rounded-lg p-4">
-                        <h3 class="font-semibold text-white mb-2 flex items-center">
-                            <span class="bg-blue-500 w-8 h-8 rounded-full flex items-center justify-center text-sm mr-3">1</span>
-                            AI Agent Integration
-                        </h3>
-                        <p class="text-gray-300 text-sm">
-                            Language models are integrated with <strong>BalatroLLM</strong>, an intelligent bot that interfaces with the game through 
-                            strategic decision-making tools. The AI receives game state information and must make optimal choices.
-                        </p>
-                    </div>
-                    <div class="bg-gray-700 rounded-lg p-4">
-                        <h3 class="font-semibold text-white mb-2 flex items-center">
-                            <span class="bg-purple-500 w-8 h-8 rounded-full flex items-center justify-center text-sm mr-3">2</span>
-                            Strategic Decision Making
-                        </h3>
-                        <p class="text-gray-300 text-sm">
-                            Models must balance multiple strategic priorities: money management, joker synergies, hand type focus, 
-                            boss blind preparation, and resource optimization. Each decision impacts long-term success.
-                        </p>
-                    </div>
-                    <div class="bg-gray-700 rounded-lg p-4">
-                        <h3 class="font-semibold text-white mb-2 flex items-center">
-                            <span class="bg-green-500 w-8 h-8 rounded-full flex items-center justify-center text-sm mr-3">3</span>
-                            Performance Evaluation
-                        </h3>
-                        <p class="text-gray-300 text-sm">
-                            Results are measured across consistent seed sets, evaluating average ante reached, win rates, 
-                            token efficiency, and strategic decision quality over multiple runs.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Methodology Section -->
-        <div class="bg-gray-800 rounded-lg border border-gray-700 mb-8">
-            <div class="p-6 border-b border-gray-700">
-                <h2 class="text-2xl font-bold text-white flex items-center">
-                    <i class="fas fa-chart-line text-green-400 mr-3"></i>
-                    Evaluation Methodology
-                </h2>
-            </div>
-            <div class="p-6">
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div>
-                        <h3 class="font-semibold text-white mb-3">Benchmark Parameters</h3>
-                        <ul class="space-y-2 text-sm text-gray-300">
-                            <li>• <strong>Game Version:</strong> Balatro v1.0.1n</li>
-                            <li>• <strong>Consistency:</strong> 100 predefined seeds</li>
-                            <li>• <strong>Configuration:</strong> Standard deck, no modifications</li>
-                            <li>• <strong>Reproducibility:</strong> Deterministic testing environment</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h3 class="font-semibold text-white mb-3">Evaluation Metrics</h3>
-                        <ul class="space-y-2 text-sm text-gray-300">
-                            <li>• <strong>Average Ante Reached:</strong> Progression depth</li>
-                            <li>• <strong>Win Rate:</strong> Success across seed variations</li>
-                            <li>• <strong>Token Efficiency:</strong> Resource usage optimization</li>
-                            <li>• <strong>Decision Quality:</strong> Strategic choice evaluation</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Why This Matters Section -->
-        <div class="bg-gray-800 rounded-lg border border-gray-700 mb-8">
-            <div class="p-6 border-b border-gray-700">
-                <h2 class="text-2xl font-bold text-white flex items-center">
-                    <i class="fas fa-lightbulb text-yellow-400 mr-3"></i>
-                    Why This Benchmark Matters
-                </h2>
-            </div>
-            <div class="p-6">
-                <div class="grid gap-4 text-gray-300">
-                    <div>
-                        <h3 class="font-semibold text-white mb-2">Beyond Traditional Benchmarks</h3>
-                        <p class="text-sm">
-                            While most AI benchmarks focus on static question-answering or pattern recognition, BalatroBench evaluates 
-                            dynamic decision-making in complex, multi-step scenarios that require strategic thinking and adaptation.
-                        </p>
-                    </div>
-                    <div>
-                        <h3 class="font-semibold text-white mb-2">Real-World Problem Solving</h3>
-                        <p class="text-sm">
-                            The skills tested—resource management, long-term planning, risk assessment, and synergistic thinking—
-                            directly translate to real-world applications in business strategy, project management, and complex problem solving.
-                        </p>
-                    </div>
-                    <div>
-                        <h3 class="font-semibold text-white mb-2">Tool-Using AI Assessment</h3>
-                        <p class="text-sm">
-                            BalatroBench specifically evaluates models' ability to use tools effectively, make strategic decisions with incomplete 
-                            information, and optimize for long-term success rather than immediate rewards.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Technical Details Section -->
-        <div class="bg-gray-800 rounded-lg border border-gray-700 mb-8">
-            <div class="p-6 border-b border-gray-700">
-                <h2 class="text-2xl font-bold text-white flex items-center">
-                    <i class="fas fa-code text-blue-400 mr-3"></i>
-                    Technical Implementation
-                </h2>
-            </div>
-            <div class="p-6">
-                <p class="text-gray-300 mb-4">
-                    BalatroBench is powered by <strong>BalatroLLM</strong>, an open-source Python framework that integrates 
-                    Large Language Models with Balatro through the BalatroBot interface.
-                </p>
-                <div class="bg-gray-700 rounded-lg p-4">
-                    <h3 class="font-semibold text-white mb-3">Key Components</h3>
-                    <ul class="space-y-2 text-sm text-gray-300">
-                        <li>• <strong>BalatroBot:</strong> Game interface and automation layer</li>
-                        <li>• <strong>LLM Integration:</strong> OpenAI-compatible API with strategic prompting</li>
-                        <li>• <strong>Template System:</strong> Jinja2-based prompt engineering</li>
-                        <li>• <strong>Evaluation Pipeline:</strong> Automated testing and result aggregation</li>
-                    </ul>
-                </div>
-                <div class="mt-4">
-                    <a href="https://github.com/S1M0N38/balatrollm" target="_blank" 
-                       class="inline-flex items-center text-blue-400 hover:text-blue-300 transition-colors">
-                        <i class="fab fa-github mr-2"></i>
-                        View on GitHub
-                        <i class="fas fa-external-link-alt ml-1 text-xs"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Get Involved Section -->
-        <div class="bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg border border-blue-500/20 p-6">
-            <h2 class="text-2xl font-bold text-white mb-4 flex items-center">
-                <i class="fas fa-users text-purple-400 mr-3"></i>
-                Get Involved
-            </h2>
-            <p class="text-gray-300 mb-6">
-                BalatroBench is a community-driven platform. Whether you're an AI researcher, developer, or strategic gaming enthusiast, 
-                there are multiple ways to contribute to advancing LLM evaluation.
-            </p>
-            <div class="flex flex-wrap gap-4">
-                <a href="https://github.com/S1M0N38/balatrobench/blob/main/CONTRIBUTING.md" target="_blank" 
-                   class="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 shadow-lg">
-                    <i class="fas fa-upload mr-2"></i>Submit Your Strategy
-                </a>
-                <a href="community.html" 
-                   class="border border-gray-600 text-gray-300 hover:border-gray-500 hover:text-white px-6 py-3 rounded-lg font-medium transition-colors">
-                    <i class="fas fa-comments mr-2"></i>Join Community
-                </a>
-                <a href="https://github.com/S1M0N38/balatrollm" target="_blank"
-                   class="border border-gray-600 text-gray-300 hover:border-gray-500 hover:text-white px-6 py-3 rounded-lg font-medium transition-colors">
-                    <i class="fab fa-github mr-2"></i>Contribute Code
-                </a>
-            </div>
-        </div>
+  <div class="container mx-auto px-4 py-8">
+    <!-- Hero Section -->
+    <div class="mb-12">
+      <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-6">
+        About BalatroBench
+      </h1>
+      <p class="text-gray-300 text-lg leading-relaxed">
+        BalatroBench is a cutting-edge benchmark platform that evaluates Large Language Models through strategic
+        gameplay in Balatro,
+        a roguelike poker deck-building game. By testing AI decision-making in a complex, dynamic environment, we
+        measure models'
+        strategic thinking, tool usage, and adaptive problem-solving capabilities.
+      </p>
     </div>
 
-    <script src="js/app.js"></script>
+    <!-- What is Balatro Section -->
+    <div class="bg-gray-800 rounded-lg border border-gray-700 mb-8">
+      <div class="p-6 border-b border-gray-700">
+        <h2 class="text-2xl font-bold text-white flex items-center">
+          <i class="fas fa-gamepad text-purple-400 mr-3"></i>
+          What is Balatro?
+        </h2>
+      </div>
+      <div class="p-6">
+        <p class="text-gray-300 mb-4">
+          Balatro is a sophisticated roguelike poker deck-building game where players defeat "blinds" by playing poker
+          hands to score chips.
+          The game combines traditional poker mechanics with strategic deck building, resource management, and
+          synergistic card effects.
+        </p>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <h3 class="font-semibold text-white mb-3">Core Mechanics</h3>
+            <ul class="space-y-2 text-sm text-gray-300">
+              <li>• <strong>Scoring Formula:</strong> Chips × Multiplier = Final Score</li>
+              <li>• <strong>Ante Structure:</strong> Sets of 3 blinds (Small → Big → Boss)</li>
+              <li>• <strong>Limited Resources:</strong> Hands and discards per round</li>
+              <li>• <strong>Progressive Difficulty:</strong> Each ante increases challenge</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-semibold text-white mb-3">Strategic Elements</h3>
+            <ul class="space-y-2 text-sm text-gray-300">
+              <li>• <strong>Joker Synergies:</strong> Cards that modify scoring</li>
+              <li>• <strong>Money Management:</strong> Interest system and economics</li>
+              <li>• <strong>Hand Type Focus:</strong> Specializing in specific poker hands</li>
+              <li>• <strong>Boss Adaptation:</strong> Preparing for unique challenges</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- How It Works Section -->
+    <div class="bg-gray-800 rounded-lg border border-gray-700 mb-8">
+      <div class="p-6 border-b border-gray-700">
+        <h2 class="text-2xl font-bold text-white flex items-center">
+          <i class="fas fa-cogs text-blue-400 mr-3"></i>
+          How BalatroBench Works
+        </h2>
+      </div>
+      <div class="p-6">
+        <div class="grid gap-6">
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h3 class="font-semibold text-white mb-2 flex items-center">
+              <span class="bg-blue-500 w-8 h-8 rounded-full flex items-center justify-center text-sm mr-3">1</span>
+              AI Agent Integration
+            </h3>
+            <p class="text-gray-300 text-sm">
+              Language models are integrated with <strong>BalatroLLM</strong>, an intelligent bot that interfaces with
+              the game through
+              strategic decision-making tools. The AI receives game state information and must make optimal choices.
+            </p>
+          </div>
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h3 class="font-semibold text-white mb-2 flex items-center">
+              <span class="bg-purple-500 w-8 h-8 rounded-full flex items-center justify-center text-sm mr-3">2</span>
+              Strategic Decision Making
+            </h3>
+            <p class="text-gray-300 text-sm">
+              Models must balance multiple strategic priorities: money management, joker synergies, hand type focus,
+              boss blind preparation, and resource optimization. Each decision impacts long-term success.
+            </p>
+          </div>
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h3 class="font-semibold text-white mb-2 flex items-center">
+              <span class="bg-green-500 w-8 h-8 rounded-full flex items-center justify-center text-sm mr-3">3</span>
+              Performance Evaluation
+            </h3>
+            <p class="text-gray-300 text-sm">
+              Results are measured across consistent seed sets, evaluating average ante reached, win rates,
+              token efficiency, and strategic decision quality over multiple runs.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Methodology Section -->
+    <div class="bg-gray-800 rounded-lg border border-gray-700 mb-8">
+      <div class="p-6 border-b border-gray-700">
+        <h2 class="text-2xl font-bold text-white flex items-center">
+          <i class="fas fa-chart-line text-green-400 mr-3"></i>
+          Evaluation Methodology
+        </h2>
+      </div>
+      <div class="p-6">
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <h3 class="font-semibold text-white mb-3">Benchmark Parameters</h3>
+            <ul class="space-y-2 text-sm text-gray-300">
+              <li>• <strong>Game Version:</strong> Balatro v1.0.1n</li>
+              <li>• <strong>Consistency:</strong> 100 predefined seeds</li>
+              <li>• <strong>Configuration:</strong> Standard deck, no modifications</li>
+              <li>• <strong>Reproducibility:</strong> Deterministic testing environment</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-semibold text-white mb-3">Evaluation Metrics</h3>
+            <ul class="space-y-2 text-sm text-gray-300">
+              <li>• <strong>Average Ante Reached:</strong> Progression depth</li>
+              <li>• <strong>Win Rate:</strong> Success across seed variations</li>
+              <li>• <strong>Token Efficiency:</strong> Resource usage optimization</li>
+              <li>• <strong>Decision Quality:</strong> Strategic choice evaluation</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Why This Matters Section -->
+    <div class="bg-gray-800 rounded-lg border border-gray-700 mb-8">
+      <div class="p-6 border-b border-gray-700">
+        <h2 class="text-2xl font-bold text-white flex items-center">
+          <i class="fas fa-lightbulb text-yellow-400 mr-3"></i>
+          Why This Benchmark Matters
+        </h2>
+      </div>
+      <div class="p-6">
+        <div class="grid gap-4 text-gray-300">
+          <div>
+            <h3 class="font-semibold text-white mb-2">Beyond Traditional Benchmarks</h3>
+            <p class="text-sm">
+              While most AI benchmarks focus on static question-answering or pattern recognition, BalatroBench evaluates
+              dynamic decision-making in complex, multi-step scenarios that require strategic thinking and adaptation.
+            </p>
+          </div>
+          <div>
+            <h3 class="font-semibold text-white mb-2">Real-World Problem Solving</h3>
+            <p class="text-sm">
+              The skills tested—resource management, long-term planning, risk assessment, and synergistic thinking—
+              directly translate to real-world applications in business strategy, project management, and complex
+              problem solving.
+            </p>
+          </div>
+          <div>
+            <h3 class="font-semibold text-white mb-2">Tool-Using AI Assessment</h3>
+            <p class="text-sm">
+              BalatroBench specifically evaluates models' ability to use tools effectively, make strategic decisions
+              with incomplete
+              information, and optimize for long-term success rather than immediate rewards.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Technical Details Section -->
+    <div class="bg-gray-800 rounded-lg border border-gray-700 mb-8">
+      <div class="p-6 border-b border-gray-700">
+        <h2 class="text-2xl font-bold text-white flex items-center">
+          <i class="fas fa-code text-blue-400 mr-3"></i>
+          Technical Implementation
+        </h2>
+      </div>
+      <div class="p-6">
+        <p class="text-gray-300 mb-4">
+          BalatroBench is powered by <strong>BalatroLLM</strong>, an open-source Python framework that integrates
+          Large Language Models with Balatro through the BalatroBot interface.
+        </p>
+        <div class="bg-gray-700 rounded-lg p-4">
+          <h3 class="font-semibold text-white mb-3">Key Components</h3>
+          <ul class="space-y-2 text-sm text-gray-300">
+            <li>• <strong>BalatroBot:</strong> Game interface and automation layer</li>
+            <li>• <strong>LLM Integration:</strong> OpenAI-compatible API with strategic prompting</li>
+            <li>• <strong>Template System:</strong> Jinja2-based prompt engineering</li>
+            <li>• <strong>Evaluation Pipeline:</strong> Automated testing and result aggregation</li>
+          </ul>
+        </div>
+        <div class="mt-4">
+          <a href="https://github.com/S1M0N38/balatrollm" target="_blank"
+            class="inline-flex items-center text-blue-400 hover:text-blue-300 transition-colors">
+            <i class="fab fa-github mr-2"></i>
+            View on GitHub
+            <i class="fas fa-external-link-alt ml-1 text-xs"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Get Involved Section -->
+    <div class="bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg border border-blue-500/20 p-6">
+      <h2 class="text-2xl font-bold text-white mb-4 flex items-center">
+        <i class="fas fa-users text-purple-400 mr-3"></i>
+        Get Involved
+      </h2>
+      <p class="text-gray-300 mb-6">
+        BalatroBench is a community-driven platform. Whether you're an AI researcher, developer, or strategic gaming
+        enthusiast,
+        there are multiple ways to contribute to advancing LLM evaluation.
+      </p>
+      <div class="flex flex-wrap gap-4">
+        <a href="https://github.com/S1M0N38/balatrobench/blob/main/CONTRIBUTING.md" target="_blank"
+          class="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 shadow-lg">
+          <i class="fas fa-upload mr-2"></i>Submit Your Strategy
+        </a>
+        <a href="community.html"
+          class="border border-gray-600 text-gray-300 hover:border-gray-500 hover:text-white px-6 py-3 rounded-lg font-medium transition-colors">
+          <i class="fas fa-comments mr-2"></i>Join Community
+        </a>
+        <a href="https://github.com/S1M0N38/balatrollm" target="_blank"
+          class="border border-gray-600 text-gray-300 hover:border-gray-500 hover:text-white px-6 py-3 rounded-lg font-medium transition-colors">
+          <i class="fab fa-github mr-2"></i>Contribute Code
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
 </body>
+
 </html>

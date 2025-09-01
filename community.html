@@ -1,365 +1,593 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Community Leaderboard - BalatroBench</title>
-    <meta name="description" content="Community-submitted strategies and results for the BalatroBench platform.">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        /* Ensure no horizontal scrolling on mobile */
-        html, body {
-            max-width: 100vw;
-            overflow-x: hidden;
-        }
-        
-        /* Ensure text doesn't break out of containers */
-        * {
-            word-wrap: break-word;
-            max-width: 100%;
-        }
-        
-        /* Fix any potential flex issues */
-        .flex {
-            min-width: 0;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Community Leaderboard - BalatroBench</title>
+  <meta name="description" content="Community-submitted strategies and results for the BalatroBench platform.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Ensure no horizontal scrolling on mobile */
+    html,
+    body {
+      max-width: 100vw;
+      overflow-x: hidden;
+    }
+
+    /* Ensure text doesn't break out of containers */
+    * {
+      word-wrap: break-word;
+      max-width: 100%;
+    }
+
+    /* Fix any potential flex issues */
+    .flex {
+      min-width: 0;
+    }
+
+  </style>
 </head>
+
 <body class="bg-gray-900 text-white min-h-screen overflow-x-hidden">
-    <!-- Navigation -->
-    <nav class="bg-gray-800 border-b border-gray-700">
-        <div class="container mx-auto px-4 py-4">
-            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <h1 class="text-xl font-bold text-blue-400">BalatroBench</h1>
-                <div class="flex flex-col sm:flex-row gap-4 sm:gap-8 w-full sm:w-auto">
-                    <a href="index.html" class="text-gray-300 hover:text-white transition-colors py-2 sm:py-0">Leaderboard</a>
-                    <a href="community.html" class="text-blue-400 hover:text-blue-300 transition-colors py-2 sm:py-0">Community</a>
-                    <a href="about.html" class="text-gray-300 hover:text-white transition-colors py-2 sm:py-0">About</a>
-                </div>
-            </div>
+  <!-- Navigation -->
+  <nav class="bg-gray-800 border-b border-gray-700">
+    <div class="container mx-auto px-4 py-4">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <h1 class="text-xl font-bold text-blue-400">BalatroBench</h1>
+        <div class="flex flex-col sm:flex-row gap-4 sm:gap-8 w-full sm:w-auto">
+          <a href="index.html" class="text-gray-300 hover:text-white transition-colors py-2 sm:py-0">Leaderboard</a>
+          <a href="community.html"
+            class="text-blue-400 hover:text-blue-300 transition-colors py-2 sm:py-0">Community</a>
+          <a href="about.html" class="text-gray-300 hover:text-white transition-colors py-2 sm:py-0">About</a>
         </div>
-    </nav>
+      </div>
+    </div>
+  </nav>
 
-    <div class="container mx-auto px-4 py-8">
-        <!-- Hero Section -->
-        <div class="mb-8">
-            <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-4">
-                Community Leaderboard
-            </h1>
-            <p class="text-gray-300 text-lg max-w-3xl mb-6">
-                Explore custom strategies and prompts submitted by the community. 
-                Submit your own approach and see how it performs!
-            </p>
-        </div>
-
-        <!-- Community Leaderboard -->
-        <div class="bg-gray-800 rounded-lg border border-gray-700 mb-6 sm:mb-8">
-            <div class="w-full overflow-x-auto table-container">
-                <table class="w-full table-auto rounded-lg overflow-hidden">
-                    <thead class="bg-gray-700">
-                        <tr>
-                            <th class="px-2 py-3 text-center text-xs sm:text-sm font-medium text-gray-300 w-12 sm:w-16">Rank</th>
-                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 min-w-32 max-w-48">Model</th>
-                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24">Provider</th>
-                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24">Avg Final Round</th>
-                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-16 sm:w-20 hidden md:table-cell">Ante</th>
-                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-16 sm:w-20 hidden md:table-cell">Win %</th>
-                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden lg:table-cell">Tool Call</th>
-                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden lg:table-cell">Tool Call Errors</th>
-                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden xl:table-cell">Token (Total)</th>
-                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden xl:table-cell">Input Token</th>
-                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden xl:table-cell">Output Token</th>
-                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-16 sm:w-20 hidden lg:table-cell">Avg Time</th>
-                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-16 sm:w-20">Cost</th>
-                        </tr>
-                    </thead>
-                    <tbody id="community-leaderboard-body" class="divide-y divide-gray-700">
-                        <!-- Data will be loaded here by JavaScript -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Community Submissions (Legacy) -->
-        <div id="community-submissions" class="grid gap-6 hidden">
-            <!-- Data will be loaded here by JavaScript -->
-        </div>
-
-        <!-- Submit Strategy Button -->
-        <div class="flex justify-center mt-12 mb-8">
-            <a href="https://github.com/S1M0N38/balatrobench/blob/main/CONTRIBUTING.md" target="_blank" class="inline-block bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8 py-4 rounded-lg font-medium transition-all duration-200 shadow-lg text-lg">
-                <i class="fas fa-plus mr-2"></i>Submit Your Strategy
-            </a>
-        </div>
-
-        <!-- How to Submit Section -->
-        <div class="mt-12">
-            <div class="bg-gray-800 rounded-lg border border-gray-700 shadow-lg">
-                <div class="p-6 border-b border-gray-700">
-                    <h2 class="text-2xl font-bold text-white">How to Submit</h2>
-                </div>
-                <div class="p-6">
-                    <div class="grid md:grid-cols-3 gap-6 text-sm">
-                        <div class="text-center">
-                            <div class="bg-blue-500 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
-                                <i class="fas fa-code-branch text-xl"></i>
-                            </div>
-                            <h4 class="font-semibold text-white mb-2">1. Fork & Clone</h4>
-                            <p class="text-gray-300">
-                                Fork the repository and clone it to your local machine.
-                            </p>
-                        </div>
-                        <div class="text-center">
-                            <div class="bg-purple-500 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
-                                <i class="fas fa-file-alt text-xl"></i>
-                            </div>
-                            <h4 class="font-semibold text-white mb-2">2. Create JSON</h4>
-                            <p class="text-gray-300">
-                                Add your strategy as a JSON file in the data/strategies/ folder.
-                            </p>
-                        </div>
-                        <div class="text-center">
-                            <div class="bg-green-500 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
-                                <i class="fas fa-pull-request text-xl"></i>
-                            </div>
-                            <h4 class="font-semibold text-white mb-2">3. Submit PR</h4>
-                            <p class="text-gray-300">
-                                Create a pull request with your strategy data.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="text-center mt-6">
-                        <a href="https://github.com/S1M0N38/balatrobench/blob/main/CONTRIBUTING.md" target="_blank" class="text-blue-400 hover:text-blue-300 transition-colors">
-                            <i class="fas fa-external-link-alt mr-1"></i>
-                            View detailed submission guidelines
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="container mx-auto px-4 py-8">
+    <!-- Hero Section -->
+    <div class="mb-8">
+      <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-4">
+        Community Leaderboard
+      </h1>
+      <p class="text-gray-300 text-lg max-w-3xl mb-6">
+        Explore custom strategies and prompts submitted by the community.
+        Submit your own approach and see how it performs!
+      </p>
     </div>
 
-    <script>
-        // Load community leaderboard data
-        async function loadCommunityLeaderboard() {
-            try {
-                // Discover community runs
-                const communityRuns = await discoverCommunityRuns();
-                
-                if (communityRuns.length === 0) {
-                    showError('No community runs found');
-                    return;
-                }
+    <!-- Community Leaderboard -->
+    <div class="bg-gray-800 rounded-lg border border-gray-700 mb-6 sm:mb-8">
+      <div class="w-full overflow-x-auto table-container">
+        <table class="w-full table-auto rounded-lg overflow-hidden">
+          <thead class="bg-gray-700">
+            <tr>
+              <th class="px-2 py-3 text-center text-xs sm:text-sm font-medium text-gray-300 w-12 sm:w-16">Rank</th>
+              <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 min-w-32 max-w-48">Model</th>
+              <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24">Provider</th>
+              <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24">Rounds</th>
+              <th
+                class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-16 sm:w-20 hidden md:table-cell">
+                Ante</th>
+              <th
+                class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-16 sm:w-20 hidden md:table-cell">
+                Runs</th>
+              <th
+                class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden lg:table-cell">
+                <div class="flex items-center gap-1">Success
+                  <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
+                    className="size-4">
+                    <path fillRule="evenodd" class="w-4 h-4"
+                      d="M15 4.5A3.5 3.5 0 0 1 11.435 8c-.99-.019-2.093.132-2.7.913l-4.13 5.31a2.015 2.015 0 1 1-2.827-2.828l5.309-4.13c.78-.607.932-1.71.914-2.7L8 4.5a3.5 3.5 0 0 1 4.477-3.362c.325.094.39.497.15.736L10.6 3.902a.48.48 0 0 0-.033.653c.271.314.565.608.879.879a.48.48 0 0 0 .653-.033l2.027-2.027c.239-.24.642-.175.736.15.09.31.138.637.138.976ZM3.75 13a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+                      clipRule="evenodd" />
+                    <path
+                      d="M11.5 9.5c.313 0 .62-.029.917-.084l1.962 1.962a2.121 2.121 0 0 1-3 3l-2.81-2.81 1.35-1.734c.05-.064.158-.158.426-.233.278-.078.639-.11 1.062-.102l.093.001ZM5 4l1.446 1.445a2.256 2.256 0 0 1-.047.21c-.075.268-.169.377-.233.427l-.61.474L4 5H2.655a.25.25 0 0 1-.224-.139l-1.35-2.7a.25.25 0 0 1 .047-.289l.745-.745a.25.25 0 0 1 .289-.047l2.7 1.35A.25.25 0 0 1 5 2.654V4Z" />
+                  </svg>
+                </div>
+              </th>
+              <th
+                class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden lg:table-cell">
+                <div class="flex items-center gap-1">Error
+                  <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
+                    className="size-4">
+                    <path fillRule="evenodd" class="w-4 h-4"
+                      d="M15 4.5A3.5 3.5 0 0 1 11.435 8c-.99-.019-2.093.132-2.7.913l-4.13 5.31a2.015 2.015 0 1 1-2.827-2.828l5.309-4.13c.78-.607.932-1.71.914-2.7L8 4.5a3.5 3.5 0 0 1 4.477-3.362c.325.094.39.497.15.736L10.6 3.902a.48.48 0 0 0-.033.653c.271.314.565.608.879.879a.48.48 0 0 0 .653-.033l2.027-2.027c.239-.24.642-.175.736.15.09.31.138.637.138.976ZM3.75 13a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+                      clipRule="evenodd" />
+                    <path
+                      d="M11.5 9.5c.313 0 .62-.029.917-.084l1.962 1.962a2.121 2.121 0 0 1-3 3l-2.81-2.81 1.35-1.734c.05-.064.158-.158.426-.233.278-.078.639-.11 1.062-.102l.093.001ZM5 4l1.446 1.445a2.256 2.256 0 0 1-.047.21c-.075.268-.169.377-.233.427l-.61.474L4 5H2.655a.25.25 0 0 1-.224-.139l-1.35-2.7a.25.25 0 0 1 .047-.289l.745-.745a.25.25 0 0 1 .289-.047l2.7 1.35A.25.25 0 0 1 5 2.654V4Z" />
+                  </svg>
+                </div>
+              </th>
+              <th
+                class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden lg:table-cell">
+                <div class="flex items-center gap-1">Failed
+                  <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
+                    className="size-4">
+                    <path fillRule="evenodd" class="w-4 h-4"
+                      d="M15 4.5A3.5 3.5 0 0 1 11.435 8c-.99-.019-2.093.132-2.7.913l-4.13 5.31a2.015 2.015 0 1 1-2.827-2.828l5.309-4.13c.78-.607.932-1.71.914-2.7L8 4.5a3.5 3.5 0 0 1 4.477-3.362c.325.094.39.497.15.736L10.6 3.902a.48.48 0 0 0-.033.653c.271.314.565.608.879.879a.48.48 0 0 0 .653-.033l2.027-2.027c.239-.24.642-.175.736.15.09.31.138.637.138.976ZM3.75 13a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+                      clipRule="evenodd" />
+                    <path
+                      d="M11.5 9.5c.313 0 .62-.029.917-.084l1.962 1.962a2.121 2.121 0 0 1-3 3l-2.81-2.81 1.35-1.734c.05-.064.158-.158.426-.233.278-.078.639-.11 1.062-.102l.093.001ZM5 4l1.446 1.445a2.256 2.256 0 0 1-.047.21c-.075.268-.169.377-.233.427l-.61.474L4 5H2.655a.25.25 0 0 1-.224-.139l-1.35-2.7a.25.25 0 0 1 .047-.289l.745-.745a.25.25 0 0 1 .289-.047l2.7 1.35A.25.25 0 0 1 5 2.654V4Z" />
 
-                // Sort runs by ante reached (descending), then by score (descending)
-                communityRuns.sort((a, b) => {
-                    if (b.stats.ante_reached !== a.stats.ante_reached) {
-                        return b.stats.ante_reached - a.stats.ante_reached;
-                    }
-                    return b.stats.final_score - a.stats.final_score;
-                });
+                  </svg>
+                </div>
+              </th>
+              <th
+                class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden xl:table-cell">
+                In Tok. (k)</th>
+              <th
+                class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden xl:table-cell">
+                Out Tok. (k)</th>
+              <th
+                class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-16 sm:w-20 hidden lg:table-cell">
+                <div class="flex items-center gap-1">Tot.
+                  <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
+                    className="size-4">
+                    <path fillRule="evenodd"
+                      d="M1 8a7 7 0 1 1 14 0A7 7 0 0 1 1 8Zm7.75-4.25a.75.75 0 0 0-1.5 0V8c0 .414.336.75.75.75h3.25a.75.75 0 0 0 0-1.5h-2.5v-3.5Z"
+                      clipRule="evenodd" />
+                  </svg> (s)
+                </div>
+              </th>
+              <th
+                class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-16 sm:w-20 hidden lg:table-cell">
+                <div class="flex items-center gap-1">Avg
+                  <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
+                    className="size-4">
+                    <path fillRule="evenodd"
+                      d="M1 8a7 7 0 1 1 14 0A7 7 0 0 1 1 8Zm7.75-4.25a.75.75 0 0 0-1.5 0V8c0 .414.336.75.75.75h3.25a.75.75 0 0 0 0-1.5h-2.5v-3.5Z"
+                      clipRule="evenodd" />
+                  </svg> (s)
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody id="community-leaderboard-body" class="divide-y divide-gray-700">
+            <!-- Data will be loaded here by JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-                // Add rank
-                communityRuns.forEach((run, index) => {
-                    run.rank = index + 1;
-                });
+    <!-- Community Submissions (Legacy) -->
+    <div id="community-submissions" class="grid gap-6 hidden">
+      <!-- Data will be loaded here by JavaScript -->
+    </div>
 
-                renderCommunityLeaderboard(communityRuns);
-                
-            } catch (error) {
-                console.error('Error loading community leaderboard:', error);
-                showError('Error loading community data');
-            }
+    <!-- Submit Strategy Button -->
+    <div class="flex justify-center mt-12 mb-8">
+      <button onclick="toggleSubmissionForm()"
+        class="inline-block bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8 py-4 rounded-lg font-medium transition-all duration-200 shadow-lg text-lg">
+        <i class="fas fa-plus mr-2"></i>Submit Your Strategy
+      </button>
+    </div>
+
+    <!-- Submission Form -->
+    <div id="submission-form" class="hidden mt-8">
+      <div class="bg-gray-800 rounded-lg border border-gray-700 shadow-lg p-6">
+        <iframe
+          src="https://docs.google.com/forms/d/e/1FAIpQLSepqz8mm9G9Dc2C_zWPhyKlZ7XQTSroLmfuXGguM-l2120WCA/viewform?embedded=true"
+          class="w-full h-screen border-0 rounded-lg">
+          Loading…
+        </iframe>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Global state for community page
+    const currentVersion = 'v0.4.0';
+    const currentStrategy = 'default';
+
+    // Load community leaderboard data
+    async function loadCommunityLeaderboard() {
+      try {
+        const leaderboardResponse = await fetch(
+          `data/community/${currentVersion}/${currentStrategy}/leaderboard.json`);
+
+        if (!leaderboardResponse.ok) {
+          throw new Error(`Failed to load community leaderboard: ${leaderboardResponse.status}`);
         }
 
-        // Discover community runs from the data/community directory
-        async function discoverCommunityRuns() {
-            // Known run directories (in a real app, this would be dynamic)
-            const knownRuns = [
-                '20250826_180521_RedDeck_s1_OOOO155',
-                '20250826_185432_RedDeck_s1_OOOO155'
-            ];
-            
-            const communityRuns = [];
-            
-            for (const runDir of knownRuns) {
-                try {
-                    const configResponse = await fetch(`data/community/${runDir}/config.json`);
-                    const statsResponse = await fetch(`data/community/${runDir}/stats.json`);
-                    
-                    if (configResponse.ok && statsResponse.ok) {
-                        const config = await configResponse.json();
-                        const stats = await statsResponse.json();
+        const leaderboardData = await leaderboardResponse.json();
+        const leaderboard = leaderboardData.entries;
+
+        // Use the leaderboard data directly - detailed data is already included
+        const detailedEntries = leaderboard;
+
+        renderCommunityLeaderboard(detailedEntries, leaderboardData);
+
+      } catch (error) {
+        console.error('Error loading community leaderboard:', error);
+        showError('Error loading community leaderboard data');
+      }
+    }
+
+    // Render the community leaderboard table
+    function renderCommunityLeaderboard(entries, metadata) {
+      const tbody = document.getElementById('community-leaderboard-body');
+      if (!tbody) return;
+
+      tbody.innerHTML = entries.map((entry, index) => {
+        const modelParts = entry.config.model.split('/');
+        const provider = modelParts[0] || '';
+        const modelName = modelParts.slice(1).join('/') || entry.config.model;
+
+        const stats = entry.averaged_stats;
+
+        // Calculate total tool calls for fractions
+        const totalToolCalls = stats.avg_successful_calls + stats.avg_error_calls + stats.avg_failed_calls;
+        const totalTokens = stats.avg_total_input_tokens + stats.avg_total_output_tokens;
+
+        return `
+            <tr class="hover:bg-gray-700 transition-colors cursor-pointer" onclick="loadCommunityModelDetails('${entry.config.model}', ${index})">
+                <td class="px-2 py-3 text-center">
+                    <span class="text-xs sm:text-sm font-bold ${getRankColor(entry.rank)}">#${entry.rank}</span>
+                </td>
+                <td class="px-2 py-3 min-w-32 max-w-48">
+                    <div class="overflow-hidden">
+                        <div class="font-medium text-white text-xs sm:text-sm break-words" title="${modelName}">${modelName}</div>
+                        <div class="text-xs text-gray-400 mt-0.5">
+                            <span class="md:hidden">${stats.avg_ante_reached} ante • ${entry.total_runs} runs</span>
+                            <span class="hidden md:inline">${entry.total_runs} runs</span>
+                        </div>
+                    </div>
+                </td>
+                <td class="px-2 py-3">
+                    <div class="text-xs sm:text-sm font-medium text-gray-300 capitalize">${provider}</div>
+                </td>
+                <td class="px-2 py-3">
+                    <div class="text-xs sm:text-sm font-bold text-white">${stats.avg_final_round}</div>
+                </td>
+                <td class="px-2 py-3 hidden md:table-cell">
+                    <div class="text-xs sm:text-sm font-bold text-white">${stats.avg_ante_reached}<span class="text-gray-500">/8</span></div>
+                </td>
+                <td class="px-2 py-3 hidden md:table-cell">
+                    <div class="font-medium text-white text-xs sm:text-sm">${entry.completed_runs}<span class="text-gray-500">/${entry.total_runs}</span></div>
+                </td>
+                <td class="px-2 py-3 hidden lg:table-cell">
+                    <div class="font-medium text-white text-xs sm:text-sm">${stats.avg_successful_calls.toFixed(1)}<span class="text-gray-500">/${totalToolCalls.toFixed(1)}</span></div>
+                </td>
+                <td class="px-2 py-3 hidden lg:table-cell">
+                    <div class="font-medium text-white text-xs sm:text-sm">${stats.avg_error_calls.toFixed(1)}<span class="text-gray-500">/${totalToolCalls.toFixed(1)}</span></div>
+                </td>
+                <td class="px-2 py-3 hidden lg:table-cell">
+                    <div class="font-medium text-white text-xs sm:text-sm">${stats.avg_failed_calls.toFixed(1)}<span class="text-gray-500">/${totalToolCalls.toFixed(1)}</span></div>
+                </td>
+                <td class="px-2 py-3 hidden xl:table-cell">
+                    <div class="font-medium text-white text-xs sm:text-sm">${(stats.avg_total_input_tokens / 1000).toFixed(1)}<span class="text-gray-500">/${(totalTokens / 1000).toFixed(1)}</span></div>
+                </td>
+                <td class="px-2 py-3 hidden xl:table-cell">
+                    <div class="font-medium text-white text-xs sm:text-sm">${(stats.avg_total_output_tokens / 1000).toFixed(1)}<span class="text-gray-500">/${(totalTokens / 1000).toFixed(1)}</span></div>
+                </td>
+                <td class="px-2 py-3 hidden lg:table-cell">
+                    <div class="font-medium text-white text-xs sm:text-sm">${(stats.avg_total_response_time_ms / 1000).toFixed(1)}</div>
+                </td>
+                <td class="px-2 py-3 hidden lg:table-cell">
+                    <div class="font-medium text-white text-xs sm:text-sm">${(stats.avg_total_response_time_ms / totalToolCalls / 1000).toFixed(2)}</div>
+                </td>
+            </tr>
+            <tr id="community-stats-row-${index}" class="hidden">
+                <td colspan="13" class="px-2 py-4 bg-gray-800">
+                    <!-- Details will be loaded dynamically -->
+                </td>
+            </tr>
+            `;
+      }).join('');
+    }
+
+    // Render individual runs table for details view
+    function renderIndividualRunsDetailTable(runs) {
+      return `
+            <table class="min-w-full bg-gray-600 rounded-lg overflow-hidden">
+                <thead>
+                    <tr class="bg-gray-500 text-left text-xs sm:text-sm">
+                        <th class="px-2 py-3 text-center font-medium text-gray-300">Run</th>
+                        <th class="px-2 py-3 text-center font-medium text-gray-300">Completed</th>
+                        <th class="px-2 py-3 text-left font-medium text-gray-300">Rounds</th>
+                        <th class="px-2 py-3 text-left font-medium text-gray-300 hidden md:table-cell">Ante</th>
+                        <th class="px-2 py-3 text-left font-medium text-gray-300 hidden lg:table-cell">
+                            <div class="flex items-center gap-1">Success
+                                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
+                                    <path fillRule="evenodd" d="M15 4.5A3.5 3.5 0 0 1 11.435 8c-.99-.019-2.093.132-2.7.913l-4.13 5.31a2.015 2.015 0 1 1-2.827-2.828l5.309-4.13c.78-.607.932-1.71.914-2.7L8 4.5a3.5 3.5 0 0 1 4.477-3.362c.325.094.39.497.15.736L10.6 3.902a.48.48 0 0 0-.033.653c.271.314.565.608.879.879a.48.48 0 0 0 .653-.033l2.027-2.027c.239-.24.642-.175.736.15.09.31.138.637.138.976ZM3.75 13a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" clipRule="evenodd" />
+                                    <path d="M11.5 9.5c.313 0 .62-.029.917-.084l1.962 1.962a2.121 2.121 0 0 1-3 3l-2.81-2.81 1.35-1.734c.05-.064.158-.158.426-.233.278-.078.639-.11 1.062-.102l.093.001ZM5 4l1.446 1.445a2.256 2.256 0 0 1-.047.21c-.075.268-.169.377-.233.427l-.61.474L4 5H2.655a.25.25 0 0 1-.224-.139l-1.35-2.7a.25.25 0 0 1 .047-.289l.745-.745a.25.25 0 0 1 .289-.047l2.7 1.35A.25.25 0 0 1 5 2.654V4Z" />
+                                </svg>
+                            </div>
+                        </th>
+                        <th class="px-2 py-3 text-left font-medium text-gray-300 hidden lg:table-cell">
+                            <div class="flex items-center gap-1">Error
+                                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
+                                    <path fillRule="evenodd" d="M15 4.5A3.5 3.5 0 0 1 11.435 8c-.99-.019-2.093.132-2.7.913l-4.13 5.31a2.015 2.015 0 1 1-2.827-2.828l5.309-4.13c.78-.607.932-1.71.914-2.7L8 4.5a3.5 3.5 0 0 1 4.477-3.362c.325.094.39.497.15.736L10.6 3.902a.48.48 0 0 0-.033.653c.271.314.565.608.879.879a.48.48 0 0 0 .653-.033l2.027-2.027c.239-.24.642-.175.736.15.09.31.138.637.138.976ZM3.75 13a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" clipRule="evenodd" />
+                                    <path d="M11.5 9.5c.313 0 .62-.029.917-.084l1.962 1.962a2.121 2.121 0 0 1-3 3l-2.81-2.81 1.35-1.734c.05-.064.158-.158.426-.233.278-.078.639-.11 1.062-.102l.093.001ZM5 4l1.446 1.445a2.256 2.256 0 0 1-.047.21c-.075.268-.169.377-.233.427l-.61.474L4 5H2.655a.25.25 0 0 1-.224-.139l-1.35-2.7a.25.25 0 0 1 .047-.289l.745-.745a.25.25 0 0 1 .289-.047l2.7 1.35A.25.25 0 0 1 5 2.654V4Z" />
+                                </svg>
+                            </div>
+                        </th>
+                        <th class="px-2 py-3 text-left font-medium text-gray-300 hidden lg:table-cell">
+                            <div class="flex items-center gap-1">Failed
+                                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
+                                    <path fillRule="evenodd" d="M15 4.5A3.5 3.5 0 0 1 11.435 8c-.99-.019-2.093.132-2.7.913l-4.13 5.31a2.015 2.015 0 1 1-2.827-2.828l5.309-4.13c.78-.607.932-1.71.914-2.7L8 4.5a3.5 3.5 0 0 1 4.477-3.362c.325.094.39.497.15.736L10.6 3.902a.48.48 0 0 0-.033.653c.271.314.565.608.879.879a.48.48 0 0 0 .653-.033l2.027-2.027c.239-.24.642-.175.736.15.09.31.138.637.138.976ZM3.75 13a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" clipRule="evenodd" />
+                                    <path d="M11.5 9.5c.313 0 .62-.029.917-.084l1.962 1.962a2.121 2.121 0 0 1-3 3l-2.81-2.81 1.35-1.734c.05-.064.158-.158.426-.233.278-.078.639-.11 1.062-.102l.093.001ZM5 4l1.446 1.445a2.256 2.256 0 0 1-.047.21c-.075.268-.169.377-.233.427l-.61.474L4 5H2.655a.25.25 0 0 1-.224-.139l-1.35-2.7a.25.25 0 0 1 .047-.289l.745-.745a.25.25 0 0 1 .289-.047l2.7 1.35A.25.25 0 0 1 5 2.654V4Z" />
+                                </svg>
+                            </div>
+                        </th>
+                        <th class="px-2 py-3 text-left font-medium text-gray-300 hidden xl:table-cell">In Tok. (k)</th>
+                        <th class="px-2 py-3 text-left font-medium text-gray-300 hidden xl:table-cell">Out Tok. (k)</th>
+                        <th class="px-2 py-3 text-left font-medium text-gray-300 hidden lg:table-cell">
+                            <div class="flex items-center gap-1">Tot.
+                                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
+                                    <path fillRule="evenodd" d="M1 8a7 7 0 1 1 14 0A7 7 0 0 1 1 8Zm7.75-4.25a.75.75 0 0 0-1.5 0V8c0 .414.336.75.75.75h3.25a.75.75 0 0 0 0-1.5h-2.5v-3.5Z" clipRule="evenodd" />
+                                </svg> (s)
+                            </div>
+                        </th>
+                        <th class="px-2 py-3 text-left font-medium text-gray-300 hidden lg:table-cell">
+                            <div class="flex items-center gap-1">Avg
+                                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
+                                    <path fillRule="evenodd" d="M1 8a7 7 0 1 1 14 0A7 7 0 0 1 1 8Zm7.75-4.25a.75.75 0 0 0-1.5 0V8c0 .414.336.75.75.75h3.25a.75.75 0 0 0 0-1.5h-2.5v-3.5Z" clipRule="evenodd" />
+                                </svg> (s)
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-700">
+                    ${runs.map((run, runIndex) => {
+                        const totalToolCalls = run.successful_calls + (run.error_calls?.length || 0) + (run.failed_calls?.length || 0);
+                        const totalTokens = run.total_input_tokens + run.total_output_tokens;
                         
-                        communityRuns.push({
-                            runDir,
-                            config,
-                            stats,
-                            timestamp: runDir.split('_')[1] // Extract timestamp from directory name
-                        });
-                    }
-                } catch (error) {
-                    console.warn(`Failed to load run: ${runDir}`, error);
-                }
-            }
-            
-            return communityRuns;
-        }
+                        return `
+                        <tr class="hover:bg-gray-500 transition-colors">
+                            <td class="px-2 py-3 text-center">
+                                <span class="text-xs sm:text-sm font-bold text-white">#${runIndex + 1}</span>
+                            </td>
+                            <td class="px-2 py-3 text-center">
+                                ${run.completed ? 
+                                    '<span class="text-green-400 text-lg">✓</span>' : 
+                                    '<span class="text-red-400 text-lg">✗</span>'
+                                }
+                            </td>
+                            <td class="px-2 py-3">
+                                <div class="text-xs sm:text-sm font-bold ${run.run_won ? 'text-green-400' : 'text-white'}">${run.final_round}</div>
+                            </td>
+                            <td class="px-2 py-3 hidden md:table-cell">
+                                <div class="text-xs sm:text-sm font-bold text-white">${run.ante_reached}<span class="text-gray-500">/8</span></div>
+                            </td>
+                            <td class="px-2 py-3 hidden lg:table-cell">
+                                <div class="font-medium text-white text-xs sm:text-sm">${run.successful_calls}<span class="text-gray-500">/${totalToolCalls}</span></div>
+                            </td>
+                            <td class="px-2 py-3 hidden lg:table-cell">
+                                <div class="font-medium text-white text-xs sm:text-sm">${run.error_calls?.length || 0}<span class="text-gray-500">/${totalToolCalls}</span></div>
+                            </td>
+                            <td class="px-2 py-3 hidden lg:table-cell">
+                                <div class="font-medium text-white text-xs sm:text-sm">${run.failed_calls?.length || 0}<span class="text-gray-500">/${totalToolCalls}</span></div>
+                            </td>
+                            <td class="px-2 py-3 hidden xl:table-cell">
+                                <div class="font-medium text-white text-xs sm:text-sm">${(run.total_input_tokens / 1000).toFixed(1)}<span class="text-gray-500">/${(totalTokens / 1000).toFixed(1)}</span></div>
+                            </td>
+                            <td class="px-2 py-3 hidden xl:table-cell">
+                                <div class="font-medium text-white text-xs sm:text-sm">${(run.total_output_tokens / 1000).toFixed(1)}<span class="text-gray-500">/${(totalTokens / 1000).toFixed(1)}</span></div>
+                            </td>
+                            <td class="px-2 py-3 hidden lg:table-cell">
+                                <div class="font-medium text-white text-xs sm:text-sm">${(run.total_response_time_ms / 1000).toFixed(1)}</div>
+                            </td>
+                            <td class="px-2 py-3 hidden lg:table-cell">
+                                <div class="font-medium text-white text-xs sm:text-sm">${(run.total_response_time_ms / totalToolCalls / 1000).toFixed(2)}</div>
+                            </td>
+                        </tr>
+                        `;
+                    }).join('')}
+                </tbody>
+            </table>
+        `;
+    }
 
-        // Render community leaderboard
-        function renderCommunityLeaderboard(runs) {
-            const tbody = document.getElementById('community-leaderboard-body');
-            if (!tbody) return;
-            
-            tbody.innerHTML = runs.map((run, index) => {
-                const modelParts = run.config.model.split('/');
-                const provider = modelParts[0] || '';
-                const modelName = modelParts.slice(1).join('/') || run.config.model;
-                
-                return `
-                <tr class="hover:bg-gray-700 transition-colors cursor-pointer" onclick="toggleCommunityStats(${index})">
-                    <td class="px-2 py-3 text-center">
-                        <span class="text-xs sm:text-sm font-bold ${getRankColor(run.rank)}">#${run.rank}</span>
-                    </td>
-                    <td class="px-2 py-3 min-w-32 max-w-48">
-                        <div class="overflow-hidden">
-                            <div class="font-medium text-white text-xs sm:text-sm break-words" title="${modelName}">${modelName}</div>
-                            <div class="text-xs text-gray-400 mt-0.5">
-                                <span class="md:hidden">${run.stats.ante_reached} ante • ${run.stats.run_won ? 'Win' : 'Loss'}</span>
-                                <span class="hidden md:inline">${run.config.deck} • ${run.config.seed}</span>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="px-2 py-3">
-                        <div class="text-xs sm:text-sm font-medium text-gray-300 capitalize">${provider}</div>
-                    </td>
-                    <td class="px-2 py-3">
-                        <div class="text-xs sm:text-sm font-bold text-white">${run.stats.final_round || 'N/A'}</div>
-                        <div class="text-xs text-gray-400">final round</div>
-                    </td>
-                    <td class="px-2 py-3 hidden md:table-cell">
-                        <div class="text-xs sm:text-sm font-bold text-white">${run.stats.ante_reached}</div>
-                        <div class="text-xs text-gray-400">${run.stats.run_won ? 'Win' : 'Loss'}</div>
-                    </td>
-                    <td class="px-2 py-3 hidden md:table-cell">
-                        <div class="font-medium text-white text-xs sm:text-sm">${run.stats.run_won ? '100' : '0'}%</div>
-                        <div class="text-xs text-gray-400">1 run</div>
-                    </td>
-                    <td class="px-2 py-3 hidden lg:table-cell">
-                        <div class="font-medium text-white text-xs sm:text-sm">${run.stats.tool_calls || 'N/A'}</div>
-                        <div class="text-xs text-gray-400">calls</div>
-                    </td>
-                    <td class="px-2 py-3 hidden lg:table-cell">
-                        <div class="font-medium text-white text-xs sm:text-sm">${run.stats.tool_call_errors || 0}</div>
-                        <div class="text-xs text-gray-400">errors</div>
-                    </td>
-                    <td class="px-2 py-3 hidden xl:table-cell">
-                        <div class="font-medium text-white text-xs sm:text-sm">${run.stats.total_tokens ? (run.stats.total_tokens / 1000).toFixed(0) + 'k' : 'N/A'}</div>
-                        <div class="text-xs text-gray-400">total</div>
-                    </td>
-                    <td class="px-2 py-3 hidden xl:table-cell">
-                        <div class="font-medium text-white text-xs sm:text-sm">${run.stats.input_tokens ? (run.stats.input_tokens / 1000).toFixed(0) + 'k' : 'N/A'}</div>
-                        <div class="text-xs text-gray-400">input</div>
-                    </td>
-                    <td class="px-2 py-3 hidden xl:table-cell">
-                        <div class="font-medium text-white text-xs sm:text-sm">${run.stats.output_tokens ? (run.stats.output_tokens / 1000).toFixed(0) + 'k' : 'N/A'}</div>
-                        <div class="text-xs text-gray-400">output</div>
-                    </td>
-                    <td class="px-2 py-3 hidden lg:table-cell">
-                        <div class="font-medium text-white text-xs sm:text-sm">${run.stats.avg_response_time ? run.stats.avg_response_time.toFixed(1) + 's' : 'N/A'}</div>
-                        <div class="text-xs text-gray-400">avg time</div>
-                    </td>
-                    <td class="px-2 py-3">
-                        <div class="text-white text-xs sm:text-sm font-semibold">${run.stats.total_cost ? '$' + run.stats.total_cost.toFixed(3) : 'N/A'}</div>
-                        <div class="text-xs text-gray-400 lg:hidden">${(run.stats.run_duration_seconds / 60).toFixed(1)}m</div>
-                    </td>
-                </tr>
-                <tr id="community-stats-row-${index}" class="hidden">
-                    <td colspan="13" class="px-2 py-4 bg-gray-800">
-                        ${renderCommunityDetailedStats(run, index)}
-                    </td>
-                </tr>
-                `;
-            }).join('');
-        }
+    // Render detailed model information with config, avg stats, and individual runs
+    function renderCommunityModelDetails(modelData) {
+      const config = modelData.config;
+      const avgStats = modelData.averaged_stats;
+      const runs = modelData.stats;
 
-        // Render detailed stats for community run
-        function renderCommunityDetailedStats(run, index) {
-            return `
-                <div class="px-2 sm:px-4 w-full overflow-hidden">
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                        <div class="bg-gray-700 rounded-lg p-3 sm:p-4 min-w-0">
-                            <h4 class="font-semibold text-white mb-1.5 sm:mb-2 text-sm sm:text-base lg:text-base">Configuration</h4>
-                            <div class="space-y-1.5 sm:space-y-2 text-gray-300 text-sm sm:text-sm lg:text-sm">
-                                ${Object.entries(run.config).map(([key, value]) => `
-                                    <div class="flex justify-between items-center min-w-0">
-                                        <span class="truncate mr-2 capitalize">${key.replace(/_/g, ' ')}:</span>
-                                        <span class="text-white font-medium flex-shrink-0">${typeof value === 'object' ? JSON.stringify(value) : value}</span>
-                                    </div>
-                                `).join('')}
-                            </div>
+      return `
+            <div class="px-2 sm:px-4 w-full overflow-hidden">
+                <!-- Config Card -->
+                <div class="bg-gray-700 rounded-lg p-4 mb-4">
+                    <h4 class="font-semibold text-white mb-3 text-lg">Configuration</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Model:</span>
+                            <span class="text-white font-medium">${config.model}</span>
                         </div>
-                        <div class="bg-gray-700 rounded-lg p-3 sm:p-4 min-w-0">
-                            <h4 class="font-semibold text-white mb-1.5 sm:mb-2 text-sm sm:text-base lg:text-base">Statistics</h4>
-                            <div class="space-y-1.5 sm:space-y-2 text-gray-300 text-sm sm:text-sm lg:text-sm">
-                                ${Object.entries(run.stats).slice(0, 15).map(([key, value]) => `
-                                    <div class="flex justify-between items-center min-w-0">
-                                        <span class="truncate mr-2 capitalize">${key.replace(/_/g, ' ')}:</span>
-                                        <span class="text-white font-medium flex-shrink-0">${
-                                            typeof value === 'number' && key.includes('time') ? (value / 60).toFixed(1) + 'm' :
-                                            typeof value === 'number' && key.includes('rate') ? (value * 100).toFixed(1) + '%' :
-                                            typeof value === 'object' ? JSON.stringify(value) : value
-                                        }</span>
-                                    </div>
-                                `).join('')}
-                            </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Strategy:</span>
+                            <span class="text-white font-medium">${config.strategy}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Deck:</span>
+                            <span class="text-white font-medium">${config.deck}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Stake:</span>
+                            <span class="text-white font-medium">${config.stake}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Seed:</span>
+                            <span class="text-white font-medium">${config.seed}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Version:</span>
+                            <span class="text-white font-medium">${config.version}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Author:</span>
+                            <span class="text-white font-medium">${config.author}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Challenge:</span>
+                            <span class="text-white font-medium">${config.challenge || 'None'}</span>
                         </div>
                     </div>
                 </div>
-            `;
+                
+                <!-- Average Stats Card -->
+                <div class="bg-gray-700 rounded-lg p-4 mb-4">
+                    <h4 class="font-semibold text-white mb-3 text-lg">Average Statistics</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Final Round:</span>
+                            <span class="text-white font-medium">${avgStats.avg_final_round}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Ante Reached:</span>
+                            <span class="text-white font-medium">${avgStats.avg_ante_reached}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Jokers Bought:</span>
+                            <span class="text-white font-medium">${avgStats.avg_jokers_bought}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Jokers Sold:</span>
+                            <span class="text-white font-medium">${avgStats.avg_jokers_sold}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Consumables Used:</span>
+                            <span class="text-white font-medium">${avgStats.avg_consumables_used}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Rerolls:</span>
+                            <span class="text-white font-medium">${avgStats.avg_rerolls}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Money Spent:</span>
+                            <span class="text-white font-medium">${avgStats.avg_money_spent}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Successful Calls:</span>
+                            <span class="text-white font-medium">${avgStats.avg_successful_calls.toFixed(1)}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Error Calls:</span>
+                            <span class="text-white font-medium">${avgStats.avg_error_calls.toFixed(1)}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Failed Calls:</span>
+                            <span class="text-white font-medium">${avgStats.avg_failed_calls.toFixed(1)}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Input Tokens:</span>
+                            <span class="text-white font-medium">${(avgStats.avg_total_input_tokens / 1000).toFixed(1)}k</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Output Tokens:</span>
+                            <span class="text-white font-medium">${(avgStats.avg_total_output_tokens / 1000).toFixed(1)}k</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Total Tokens:</span>
+                            <span class="text-white font-medium">${(avgStats.avg_total_tokens / 1000).toFixed(1)}k</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Reasoning Tokens:</span>
+                            <span class="text-white font-medium">${(avgStats.avg_total_reasoning_tokens / 1000).toFixed(1)}k</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Total Response Time:</span>
+                            <span class="text-white font-medium">${(avgStats.avg_total_response_time_ms / 1000).toFixed(1)}s</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Individual Runs Table -->
+                <div class="bg-gray-700 rounded-lg p-4">
+                    <h4 class="font-semibold text-white mb-3 text-lg">Individual Runs</h4>
+                    <div class="overflow-x-auto">
+                        ${renderIndividualRunsDetailTable(runs)}
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // Load detailed community model data from JSON file
+    async function loadCommunityModelDetails(modelPath, index) {
+      const statsRow = document.getElementById(`community-stats-row-${index}`);
+
+      if (!statsRow) return;
+
+      // Toggle visibility first
+      if (!statsRow.classList.contains('hidden')) {
+        statsRow.classList.add('hidden');
+        return;
+      }
+
+      try {
+        // Show loading state
+        statsRow.querySelector('td').innerHTML =
+          '<div class="px-4 py-8 text-center text-gray-400">Loading detailed data...</div>';
+        statsRow.classList.remove('hidden');
+
+        // Construct file path for community data with proper path sanitization (/ -> -- only in filename)
+        const modelParts = modelPath.split('/');
+        const provider = modelParts[0];
+        const sanitizedModelName = modelParts.slice(1).join('--');
+        const filePath = `data/community/${currentVersion}/${currentStrategy}/${provider}/${sanitizedModelName}.json`;
+
+        // Fetch model data
+        const response = await fetch(filePath);
+        if (!response.ok) {
+          throw new Error(`Failed to load community model data: ${response.status}`);
         }
 
-        // Calculate a simple performance score for community runs
-        function calculatePerformanceScore(stats) {
-            // Simple scoring: ante_reached * 10 + money efficiency
-            return stats.ante_reached * 10 + (stats.final_money * 0.1);
-        }
+        const modelData = await response.json();
 
-        // Show error message
-        function showError(message) {
-            const tbody = document.getElementById('community-leaderboard-body');
-            if (tbody) {
-                tbody.innerHTML = `<tr><td colspan="13" class="px-2 py-4 text-center text-gray-400 text-sm">${message}</td></tr>`;
-            }
-        }
+        // Render detailed view
+        statsRow.querySelector('td').innerHTML = renderCommunityModelDetails(modelData);
 
-        // Utility function for rank colors
-        function getRankColor(rank) {
-            switch(rank) {
-                case 1: return 'text-yellow-400'; // Gold
-                case 2: return 'text-gray-300';   // Silver
-                case 3: return 'text-orange-400'; // Bronze
-                default: return 'text-gray-400';
-            }
-        }
+      } catch (error) {
+        console.error('Error loading community model details:', error);
+        statsRow.querySelector('td').innerHTML =
+          '<div class="px-4 py-8 text-center text-red-400">Error loading detailed data</div>';
+      }
+    }
 
-        // Toggle statistics display for a community run
-        function toggleCommunityStats(index) {
-            const statsRow = document.getElementById(`community-stats-row-${index}`);
-            
-            if (statsRow) {
-                if (statsRow.classList.contains('hidden')) {
-                    statsRow.classList.remove('hidden');
-                } else {
-                    statsRow.classList.add('hidden');
-                }
-            }
-        }
+    // Show error message
+    function showError(message) {
+      const tbody = document.getElementById('community-leaderboard-body');
+      if (tbody) {
+        tbody.innerHTML =
+          `<tr><td colspan="13" class="px-2 py-4 text-center text-gray-400 text-sm">${message}</td></tr>`;
+      }
+    }
 
-        // Load data when page loads
-        document.addEventListener('DOMContentLoaded', loadCommunityLeaderboard);
-    </script>
+    // Utility function for rank colors
+    function getRankColor(rank) {
+      switch (rank) {
+        case 1:
+          return 'text-yellow-400'; // Gold
+        case 2:
+          return 'text-gray-300'; // Silver
+        case 3:
+          return 'text-orange-400'; // Bronze
+        default:
+          return 'text-gray-400';
+      }
+    }
+
+    // Toggle submission form
+    function toggleSubmissionForm() {
+      const form = document.getElementById('submission-form');
+      if (form) {
+        if (form.classList.contains('hidden')) {
+          form.classList.remove('hidden');
+        } else {
+          form.classList.add('hidden');
+        }
+      }
+    }
+
+    // Load data when page loads
+    document.addEventListener('DOMContentLoaded', loadCommunityLeaderboard);
+
+  </script>
 </body>
+
 </html>

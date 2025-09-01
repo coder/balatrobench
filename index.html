@@ -1,121 +1,194 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BalatroBench - LLM Benchmark Platform</title>
-    <meta name="description" content="Community-driven platform for benchmarking Large Language Models' strategic performance in Balatro through custom strategies and tool-calling.">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        /* Ensure no horizontal scrolling on mobile */
-        html, body {
-            max-width: 100vw;
-            overflow-x: hidden;
-        }
-        
-        /* Improve table responsiveness */
-        .table-container {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-        
-        /* Ensure text doesn't break out of containers */
-        * {
-            word-wrap: break-word;
-            max-width: 100%;
-        }
-        
-        /* Fix any potential flex issues */
-        .flex {
-            min-width: 0;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BalatroBench - LLM Benchmark Platform</title>
+  <meta name="description"
+    content="Community-driven platform for benchmarking Large Language Models' strategic performance in Balatro through custom strategies and tool-calling.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/heroicons@2.0.18/24/outline/index.js"></script>
+  <style>
+    /* Ensure no horizontal scrolling on mobile */
+    html,
+    body {
+      max-width: 100vw;
+      overflow-x: hidden;
+    }
+
+    /* Improve table responsiveness */
+    .table-container {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Ensure text doesn't break out of containers */
+    * {
+      word-wrap: break-word;
+      max-width: 100%;
+    }
+
+    /* Fix any potential flex issues */
+    .flex {
+      min-width: 0;
+    }
+
+  </style>
 </head>
+
 <body class="bg-gray-900 text-white min-h-screen overflow-x-hidden">
-    <!-- Navigation -->
-    <nav class="bg-gray-800 border-b border-gray-700">
-        <div class="container mx-auto px-4 py-4">
-            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <h1 class="text-xl font-bold text-blue-400">BalatroBench</h1>
-                <div class="flex flex-col sm:flex-row gap-4 sm:gap-8 w-full sm:w-auto">
-                    <a href="index.html" class="text-blue-400 hover:text-blue-300 transition-colors py-2 sm:py-0">Leaderboard</a>
-                    <a href="community.html" class="text-gray-300 hover:text-white transition-colors py-2 sm:py-0">Community</a>
-                    <a href="about.html" class="text-gray-300 hover:text-white transition-colors py-2 sm:py-0">About</a>
-                </div>
-            </div>
+  <!-- Navigation -->
+  <nav class="bg-gray-800 border-b border-gray-700">
+    <div class="container mx-auto px-4 py-4">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <h1 class="text-xl font-bold text-blue-400">BalatroBench</h1>
+        <div class="flex flex-col sm:flex-row gap-4 sm:gap-8 w-full sm:w-auto">
+          <a href="index.html" class="text-blue-400 hover:text-blue-300 transition-colors py-2 sm:py-0">Leaderboard</a>
+          <a href="community.html" class="text-gray-300 hover:text-white transition-colors py-2 sm:py-0">Community</a>
+          <a href="about.html" class="text-gray-300 hover:text-white transition-colors py-2 sm:py-0">About</a>
         </div>
-    </nav>
+      </div>
+    </div>
+  </nav>
 
-    <div class="container mx-auto px-4 py-8">
-        <!-- Hero Section -->
-        <div class="mb-6 sm:mb-8">
-            <h1 class="text-2xl sm:text-4xl font-bold text-white mb-4">
-                BalatroBench
-            </h1>
-            <p class="text-gray-300 text-base sm:text-lg max-w-3xl leading-relaxed">
-                Community-driven benchmark platform for evaluating Large Language Models' strategic performance in Balatro through intelligent tool-calling and decision-making.
-            </p>
-        </div>
-
-
-
-        <!-- Leaderboard -->
-        <div class="bg-gray-800 rounded-lg border border-gray-700 mb-6 sm:mb-8">
-            <div class="w-full overflow-x-auto table-container">
-                <table class="w-full table-auto rounded-lg overflow-hidden">
-                    <thead class="bg-gray-700">
-                        <tr>
-                            <th class="px-2 py-3 text-center text-xs sm:text-sm font-medium text-gray-300 w-12 sm:w-16">Rank</th>
-                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 min-w-32 max-w-48">Model</th>
-                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24">Provider</th>
-                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24">Avg Final Round</th>
-                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-16 sm:w-20 hidden md:table-cell">Ante</th>
-                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-16 sm:w-20 hidden md:table-cell">Win %</th>
-                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden lg:table-cell">Tool Call</th>
-                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden lg:table-cell">Tool Call Errors</th>
-                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden xl:table-cell">Token (Total)</th>
-                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden xl:table-cell">Input Token</th>
-                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden xl:table-cell">Output Token</th>
-                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-16 sm:w-20 hidden lg:table-cell">Avg Time</th>
-                            <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-16 sm:w-20">Cost</th>
-                        </tr>
-                    </thead>
-                    <tbody id="leaderboard-body" class="divide-y divide-gray-700">
-                        <!-- Data will be loaded here by JavaScript -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-
-        <!-- Methodology -->
-        <div class="bg-gray-800 rounded-lg p-4 sm:p-6 lg:p-8 border border-gray-700">
-            <h2 class="text-xl sm:text-2xl font-bold mb-4">Methodology</h2>
-            <div class="grid sm:grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 text-gray-300">
-                <div>
-                    <h3 class="font-semibold text-white mb-2 text-base sm:text-lg">Game Parameters</h3>
-                    <ul class="space-y-1 text-sm sm:text-base">
-                        <li>• Balatro v1.0.1n</li>
-                        <li>• 100 consistent seeds</li>
-                        <li>• Standard deck configuration</li>
-                        <li>• No modifications or cheats</li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="font-semibold text-white mb-2 text-base sm:text-lg">Evaluation Criteria</h3>
-                    <ul class="space-y-1 text-sm sm:text-base">
-                        <li>• Average ante reached</li>
-                        <li>• Win rate across seeds</li>
-                        <li>• Token efficiency</li>
-                        <li>• Decision quality scoring</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+  <div class="container mx-auto px-4 py-8">
+    <!-- Hero Section -->
+    <div class="mb-6 sm:mb-8">
+      <h1 class="text-2xl sm:text-4xl font-bold text-white mb-4">
+        BalatroBench
+      </h1>
+      <p class="text-gray-300 text-base sm:text-lg max-w-3xl leading-relaxed">
+        Community-driven benchmark platform for evaluating Large Language Models' strategic performance in Balatro
+        through intelligent tool-calling and decision-making.
+      </p>
     </div>
 
-    <script src="js/app.js"></script>
+
+
+    <!-- Leaderboard -->
+    <div class="bg-gray-800 rounded-lg border border-gray-700 mb-6 sm:mb-8">
+      <div class="w-full overflow-x-auto table-container">
+        <table class="w-full table-auto rounded-lg overflow-hidden">
+          <thead class="bg-gray-700">
+            <tr>
+              <th class="px-2 py-3 text-center text-xs sm:text-sm font-medium text-gray-300 w-12 sm:w-16">Rank</th>
+              <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 min-w-32 max-w-48">Model</th>
+              <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24">Provider</th>
+              <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24">Rounds</th>
+              <th
+                class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-16 sm:w-20 hidden md:table-cell">
+                Ante</th>
+              <th
+                class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-16 sm:w-20 hidden md:table-cell">
+                Runs</th>
+              <th
+                class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden lg:table-cell">
+                <div class="flex items-center gap-1">Success
+                  <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
+                    className="size-4">
+                    <path fillRule="evenodd" class="w-4 h-4"
+                      d="M15 4.5A3.5 3.5 0 0 1 11.435 8c-.99-.019-2.093.132-2.7.913l-4.13 5.31a2.015 2.015 0 1 1-2.827-2.828l5.309-4.13c.78-.607.932-1.71.914-2.7L8 4.5a3.5 3.5 0 0 1 4.477-3.362c.325.094.39.497.15.736L10.6 3.902a.48.48 0 0 0-.033.653c.271.314.565.608.879.879a.48.48 0 0 0 .653-.033l2.027-2.027c.239-.24.642-.175.736.15.09.31.138.637.138.976ZM3.75 13a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+                      clipRule="evenodd" />
+                    <path
+                      d="M11.5 9.5c.313 0 .62-.029.917-.084l1.962 1.962a2.121 2.121 0 0 1-3 3l-2.81-2.81 1.35-1.734c.05-.064.158-.158.426-.233.278-.078.639-.11 1.062-.102l.093.001ZM5 4l1.446 1.445a2.256 2.256 0 0 1-.047.21c-.075.268-.169.377-.233.427l-.61.474L4 5H2.655a.25.25 0 0 1-.224-.139l-1.35-2.7a.25.25 0 0 1 .047-.289l.745-.745a.25.25 0 0 1 .289-.047l2.7 1.35A.25.25 0 0 1 5 2.654V4Z" />
+                  </svg>
+                </div>
+              </th>
+              <th
+                class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden lg:table-cell">
+                <div class="flex items-center gap-1">Error
+                  <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
+                    className="size-4">
+                    <path fillRule="evenodd" class="w-4 h-4"
+                      d="M15 4.5A3.5 3.5 0 0 1 11.435 8c-.99-.019-2.093.132-2.7.913l-4.13 5.31a2.015 2.015 0 1 1-2.827-2.828l5.309-4.13c.78-.607.932-1.71.914-2.7L8 4.5a3.5 3.5 0 0 1 4.477-3.362c.325.094.39.497.15.736L10.6 3.902a.48.48 0 0 0-.033.653c.271.314.565.608.879.879a.48.48 0 0 0 .653-.033l2.027-2.027c.239-.24.642-.175.736.15.09.31.138.637.138.976ZM3.75 13a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+                      clipRule="evenodd" />
+                    <path
+                      d="M11.5 9.5c.313 0 .62-.029.917-.084l1.962 1.962a2.121 2.121 0 0 1-3 3l-2.81-2.81 1.35-1.734c.05-.064.158-.158.426-.233.278-.078.639-.11 1.062-.102l.093.001ZM5 4l1.446 1.445a2.256 2.256 0 0 1-.047.21c-.075.268-.169.377-.233.427l-.61.474L4 5H2.655a.25.25 0 0 1-.224-.139l-1.35-2.7a.25.25 0 0 1 .047-.289l.745-.745a.25.25 0 0 1 .289-.047l2.7 1.35A.25.25 0 0 1 5 2.654V4Z" />
+                  </svg>
+                </div>
+              </th>
+              <th
+                class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden lg:table-cell">
+                <div class="flex items-center gap-1">Failed
+                  <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
+                    className="size-4">
+                    <path fillRule="evenodd" class="w-4 h-4"
+                      d="M15 4.5A3.5 3.5 0 0 1 11.435 8c-.99-.019-2.093.132-2.7.913l-4.13 5.31a2.015 2.015 0 1 1-2.827-2.828l5.309-4.13c.78-.607.932-1.71.914-2.7L8 4.5a3.5 3.5 0 0 1 4.477-3.362c.325.094.39.497.15.736L10.6 3.902a.48.48 0 0 0-.033.653c.271.314.565.608.879.879a.48.48 0 0 0 .653-.033l2.027-2.027c.239-.24.642-.175.736.15.09.31.138.637.138.976ZM3.75 13a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+                      clipRule="evenodd" />
+                    <path
+                      d="M11.5 9.5c.313 0 .62-.029.917-.084l1.962 1.962a2.121 2.121 0 0 1-3 3l-2.81-2.81 1.35-1.734c.05-.064.158-.158.426-.233.278-.078.639-.11 1.062-.102l.093.001ZM5 4l1.446 1.445a2.256 2.256 0 0 1-.047.21c-.075.268-.169.377-.233.427l-.61.474L4 5H2.655a.25.25 0 0 1-.224-.139l-1.35-2.7a.25.25 0 0 1 .047-.289l.745-.745a.25.25 0 0 1 .289-.047l2.7 1.35A.25.25 0 0 1 5 2.654V4Z" />
+                  </svg>
+
+                </div>
+              </th>
+              <th
+                class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden xl:table-cell">
+                In Tok. (k)</th>
+              <th
+                class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden xl:table-cell">
+                Out Tok. (k)</th>
+              <th
+                class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-16 sm:w-20 hidden lg:table-cell">
+                <div class="flex items-center gap-1">Tot.
+                  <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
+                    className="size-4">
+                    <path fillRule="evenodd"
+                      d="M1 8a7 7 0 1 1 14 0A7 7 0 0 1 1 8Zm7.75-4.25a.75.75 0 0 0-1.5 0V8c0 .414.336.75.75.75h3.25a.75.75 0 0 0 0-1.5h-2.5v-3.5Z"
+                      clipRule="evenodd" />
+                  </svg> (s)
+                </div>
+              </th>
+              <th
+                class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-16 sm:w-20 hidden lg:table-cell">
+                <div class="flex items-center gap-1">Avg
+                  <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
+                    className="size-4">
+                    <path fillRule="evenodd"
+                      d="M1 8a7 7 0 1 1 14 0A7 7 0 0 1 1 8Zm7.75-4.25a.75.75 0 0 0-1.5 0V8c0 .414.336.75.75.75h3.25a.75.75 0 0 0 0-1.5h-2.5v-3.5Z"
+                      clipRule="evenodd" />
+                  </svg> (s)
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody id="leaderboard-body" class="divide-y divide-gray-700">
+            <!-- Data will be loaded here by JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+    <!-- Methodology -->
+    <div class="bg-gray-800 rounded-lg p-4 sm:p-6 lg:p-8 border border-gray-700">
+      <h2 class="text-xl sm:text-2xl font-bold mb-4">Methodology</h2>
+      <div class="grid sm:grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 text-gray-300">
+        <div>
+          <h3 class="font-semibold text-white mb-2 text-base sm:text-lg">Game Parameters</h3>
+          <ul class="space-y-1 text-sm sm:text-base">
+            <li>• Balatro v1.0.1n</li>
+            <li>• 100 consistent seeds</li>
+            <li>• Standard deck configuration</li>
+            <li>• No modifications or cheats</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-semibold text-white mb-2 text-base sm:text-lg">Evaluation Criteria</h3>
+          <ul class="space-y-1 text-sm sm:text-base">
+            <li>• Average ante reached</li>
+            <li>• Win rate across seeds</li>
+            <li>• Token efficiency</li>
+            <li>• Decision quality scoring</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
 </body>
+
 </html>
