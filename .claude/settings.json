@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "js-beautify --editorconfig -r \"**/*.js\" && js-beautify --editorconfig -r \"**/*.html\" && js-beautify --editorconfig -r \"**/*.css\""
+          }
+        ]
+      }
+    ]
+  }
+}
