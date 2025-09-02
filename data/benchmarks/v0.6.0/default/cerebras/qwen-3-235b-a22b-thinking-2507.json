@@ -1,0 +1,208 @@
+{
+  "config": {
+    "model": "cerebras/qwen-3-235b-a22b-thinking-2507",
+    "strategy": "default",
+    "deck": "Red Deck",
+    "stake": 1,
+    "seed": "OOOO155",
+    "challenge": null,
+    "version": "0.6.0",
+    "name": "Unknown Name",
+    "description": "Unknown Description",
+    "author": "BalatroBench",
+    "tags": []
+  },
+  "total_runs": 5,
+  "completed_runs": 4,
+  "won_runs": 0,
+  "averaged_stats": {
+    "avg_final_round": 3.2,
+    "avg_ante_reached": 1.6,
+    "avg_jokers_bought": 0,
+    "avg_jokers_sold": 0.8,
+    "avg_consumables_used": 0.6,
+    "avg_rerolls": 0.2,
+    "avg_money_spent": 13.6,
+    "avg_successful_calls": 33.2,
+    "avg_error_calls": 0,
+    "avg_failed_calls": 4.2,
+    "avg_total_input_tokens": 99560.6,
+    "avg_total_output_tokens": 98818.2,
+    "avg_total_reasoning_tokens": 0,
+    "avg_total_tokens": 198378.8,
+    "avg_total_response_time_ms": 63466.2
+  },
+  "stats": [
+    {
+      "run_won": false,
+      "completed": true,
+      "ante_reached": 2,
+      "final_round": 3,
+      "jokers_bought": [],
+      "jokers_sold": [],
+      "consumables_used": [
+        "Jupiter"
+      ],
+      "rerolls": 0,
+      "money_spent": 7,
+      "hands_played": {
+        "High Card": 9
+      },
+      "successful_calls": 27,
+      "invalid_responses": 0,
+      "failed_calls": [],
+      "avg_input_tokens": 2839.703703703704,
+      "avg_output_tokens": 2821.296296296296,
+      "avg_reasoning_tokens": 0.0,
+      "avg_total_tokens": 5661.0,
+      "avg_response_time_ms": 2098.8214285714284,
+      "total_input_tokens": 76672,
+      "total_output_tokens": 76175,
+      "total_reasoning_tokens": 0,
+      "total_tokens": 152847,
+      "total_response_time_ms": 58767
+    },
+    {
+      "run_won": false,
+      "completed": true,
+      "ante_reached": 2,
+      "final_round": 4,
+      "jokers_bought": [],
+      "jokers_sold": [
+        "Burglar",
+        "Juggler"
+      ],
+      "consumables_used": [
+        "Jupiter"
+      ],
+      "rerolls": 0,
+      "money_spent": 28,
+      "hands_played": {
+        "High Card": 12
+      },
+      "successful_calls": 44,
+      "invalid_responses": 0,
+      "failed_calls": [
+        "E011: Card index out of range",
+        "E011: Card index out of range",
+        "E011: Card index out of range",
+        "E011: Card index out of range",
+        "E011: Card index out of range"
+      ],
+      "avg_input_tokens": 3103.0227272727275,
+      "avg_output_tokens": 3007.068181818182,
+      "avg_reasoning_tokens": 0.0,
+      "avg_total_tokens": 6110.090909090909,
+      "avg_response_time_ms": 2129.35,
+      "total_input_tokens": 136533,
+      "total_output_tokens": 132311,
+      "total_reasoning_tokens": 0,
+      "total_tokens": 268844,
+      "total_response_time_ms": 85174
+    },
+    {
+      "run_won": false,
+      "completed": true,
+      "ante_reached": 2,
+      "final_round": 5,
+      "jokers_bought": [],
+      "jokers_sold": [
+        "Hanging Chad",
+        "Hanging Chad"
+      ],
+      "consumables_used": [
+        "Jupiter"
+      ],
+      "rerolls": 0,
+      "money_spent": 24,
+      "hands_played": {
+        "High Card": 16
+      },
+      "successful_calls": 52,
+      "invalid_responses": 0,
+      "failed_calls": [
+        "E012: No consumables available to sell",
+        "E011: Card index out of range"
+      ],
+      "avg_input_tokens": 2989.423076923077,
+      "avg_output_tokens": 3026.6153846153848,
+      "avg_reasoning_tokens": 0.0,
+      "avg_total_tokens": 6016.038461538462,
+      "avg_response_time_ms": 2230.6666666666665,
+      "total_input_tokens": 155450,
+      "total_output_tokens": 157384,
+      "total_reasoning_tokens": 0,
+      "total_tokens": 312834,
+      "total_response_time_ms": 113764
+    },
+    {
+      "run_won": false,
+      "completed": false,
+      "ante_reached": 1,
+      "final_round": 2,
+      "jokers_bought": [],
+      "jokers_sold": [],
+      "consumables_used": [],
+      "rerolls": 0,
+      "money_spent": 0,
+      "hands_played": {
+        "High Card": 1
+      },
+      "successful_calls": 8,
+      "invalid_responses": 0,
+      "failed_calls": [],
+      "avg_input_tokens": 2874.5,
+      "avg_output_tokens": 3024.875,
+      "avg_reasoning_tokens": 0.0,
+      "avg_total_tokens": 5899.375,
+      "avg_response_time_ms": 1536.3333333333333,
+      "total_input_tokens": 22996,
+      "total_output_tokens": 24199,
+      "total_reasoning_tokens": 0,
+      "total_tokens": 47195,
+      "total_response_time_ms": 13827
+    },
+    {
+      "run_won": false,
+      "completed": true,
+      "ante_reached": 1,
+      "final_round": 2,
+      "jokers_bought": [],
+      "jokers_sold": [],
+      "consumables_used": [],
+      "rerolls": 1,
+      "money_spent": 9,
+      "hands_played": {
+        "High Card": 8
+      },
+      "successful_calls": 35,
+      "invalid_responses": 0,
+      "failed_calls": [
+        "E010: Cannot skip Boss blind. Use select instead",
+        "E012: No consumables available to sell",
+        "E011: Card index out of range",
+        "E011: Card index out of range",
+        "E011: Card index out of range",
+        "E011: Card index out of range",
+        "E011: Card index out of range",
+        "E011: Card index out of range",
+        "E011: Card index out of range",
+        "E011: Card index out of range",
+        "E011: Card index out of range",
+        "E011: Card index out of range",
+        "E011: Card index out of range",
+        "E011: Card index out of range"
+      ],
+      "avg_input_tokens": 3032.9142857142856,
+      "avg_output_tokens": 2972.057142857143,
+      "avg_reasoning_tokens": 0.0,
+      "avg_total_tokens": 6004.971428571429,
+      "avg_response_time_ms": 2081.7727272727275,
+      "total_input_tokens": 106152,
+      "total_output_tokens": 104022,
+      "total_reasoning_tokens": 0,
+      "total_tokens": 210174,
+      "total_response_time_ms": 45799
+    }
+  ]
+}
