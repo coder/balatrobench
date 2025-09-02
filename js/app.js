@@ -1,7 +1,7 @@
 // Main application JavaScript for BalatroBench
 
 // Global state
-const currentVersion = 'v0.4.0';
+const currentVersion = 'v0.6.0';
 const currentStrategy = 'default';
 
 // Initialize the app when DOM is loaded
@@ -197,15 +197,15 @@ function renderIndividualRunsDetailTable(runs) {
                 ${runs.map((run, runIndex) => {
                     const totalToolCalls = run.successful_calls + (run.error_calls?.length || 0) + (run.failed_calls?.length || 0);
                     const totalTokens = run.total_input_tokens + run.total_output_tokens;
-                    
+
                     return `
                     <tr class="hover:bg-gray-500 transition-colors">
                         <td class="px-2 py-3 text-center">
                             <span class="text-xs sm:text-sm font-bold text-white">#${runIndex + 1}</span>
                         </td>
                         <td class="px-2 py-3 text-center">
-                            ${run.completed ? 
-                                '<span class="text-green-400 text-lg">✓</span>' : 
+                            ${run.completed ?
+                                '<span class="text-green-400 text-lg">✓</span>' :
                                 '<span class="text-red-400 text-lg">✗</span>'
                             }
                         </td>
@@ -290,7 +290,7 @@ function renderModelDetails(modelData) {
                     </div>
                 </div>
             </div>
-            
+
             <!-- Average Stats Card -->
             <div class="bg-gray-700 rounded-lg p-4 mb-4">
                 <h4 class="font-semibold text-white mb-3 text-lg">Average Statistics</h4>
@@ -357,12 +357,20 @@ function renderModelDetails(modelData) {
                     </div>
                 </div>
             </div>
-            
+
             <!-- Individual Runs Table -->
-            <div class="bg-gray-700 rounded-lg p-4">
+            <div class="bg-gray-700 rounded-lg p-4 mb-4">
                 <h4 class="font-semibold text-white mb-3 text-lg">Individual Runs</h4>
                 <div class="overflow-x-auto">
                     ${renderIndividualRunsDetailTable(runs)}
+                </div>
+            </div>
+
+            <!-- Final Round Distribution Chart -->
+            <div class="bg-gray-700 rounded-lg p-4">
+                <h4 class="font-semibold text-white mb-3 text-lg">Final Round Distribution</h4>
+                <div class="h-64">
+                    <canvas id="finalRoundChart-${modelData.config.model.replace(/[^a-zA-Z0-9]/g, '-')}"></canvas>
                 </div>
             </div>
         </div>
@@ -463,6 +471,11 @@ async function loadModelDetails(modelPath, index) {
     // Render detailed view
     statsRow.querySelector('td').innerHTML = renderModelDetails(modelData);
 
+    // Create final round distribution chart after DOM is updated
+    setTimeout(() => {
+      createFinalRoundDistributionChart(modelData);
+    }, 100);
+
   } catch (error) {
     console.error('Error loading model details:', error);
     statsRow.querySelector('td').innerHTML =
@@ -544,7 +557,7 @@ async function loadCommunityStrategies() {
                     </div>
                     <p class="text-gray-300 mb-4">${strategy.description}</p>
                     <div class="flex flex-wrap gap-2 mb-4">
-                        ${strategy.tags ? strategy.tags.map(tag => 
+                        ${strategy.tags ? strategy.tags.map(tag =>
                             `<span class="bg-gray-700 text-gray-300 px-2 py-1 rounded text-xs">${tag}</span>`
                         ).join('') : ''}
                     </div>
@@ -594,6 +607,81 @@ function tryStrategy(title) {
     `Trying strategy: ${title}\n\nThis would redirect to a page where you can test the strategy.`);
 }
 
+// Create final round distribution chart
+function createFinalRoundDistributionChart(modelData) {
+  const chartId = `finalRoundChart-${modelData.config.model.replace(/[^a-zA-Z0-9]/g, '-')}`;
+  const canvas = document.getElementById(chartId);
+
+  if (!canvas) return;
+
+  // Extract final round data from all runs
+  const finalRounds = modelData.stats.map(run => run.final_round);
+
+  // Create frequency distribution
+  const roundCounts = {};
+  finalRounds.forEach(round => {
+    roundCounts[round] = (roundCounts[round] || 0) + 1;
+  });
+
+  // Prepare data for Chart.js
+  const rounds = Object.keys(roundCounts).map(Number).sort((a, b) => a - b);
+  const counts = rounds.map(round => roundCounts[round]);
+
+  const ctx = canvas.getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: rounds.map(r => `Round ${r}`),
+      datasets: [{
+        label: 'Number of Runs',
+        data: counts,
+        backgroundColor: 'rgba(59, 130, 246, 0.8)',
+        borderColor: 'rgba(59, 130, 246, 1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: false
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            stepSize: 1,
+            color: '#9CA3AF'
+          },
+          grid: {
+            color: 'rgba(156, 163, 175, 0.2)'
+          },
+          title: {
+            display: true,
+            text: 'Number of Runs',
+            color: '#9CA3AF'
+          }
+        },
+        x: {
+          ticks: {
+            color: '#9CA3AF'
+          },
+          grid: {
+            color: 'rgba(156, 163, 175, 0.2)'
+          },
+          title: {
+            display: true,
+            text: 'Final Round',
+            color: '#9CA3AF'
+          }
+        }
+      }
+    }
+  });
+}
+
 // Export functions for global access
 window.BalatroBench = {
   loadLeaderboard,
@@ -603,5 +691,6 @@ window.BalatroBench = {
   tryStrategy,
   loadModelDetails,
   toggleRunDetails,
-  initializeLeaderboard
+  initializeLeaderboard,
+  createFinalRoundDistributionChart
 };
