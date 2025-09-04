@@ -1,7 +1,7 @@
 // Main application JavaScript for BalatroBench
 
 // Global state
-const currentVersion = 'v0.6.0';
+const currentVersion = 'v0.7.0';
 const currentStrategy = 'default';
 
 // Initialize the app when DOM is loaded
