@@ -93,13 +93,7 @@ function renderLeaderboard(entries, metadata) {
                 <span class="text-xs sm:text-sm font-bold ${getRankColor(entry.rank)}">#${entry.rank}</span>
             </td>
             <td class="px-2 py-3 min-w-32 max-w-48">
-                <div class="overflow-hidden">
-                    <div class="font-medium text-white text-xs sm:text-sm break-words" title="${modelName}">${modelName}</div>
-                    <div class="text-xs text-gray-400 mt-0.5">
-                        <span class="md:hidden">${entry.total_runs} runs</span>
-                        <span class="hidden md:inline">${entry.total_runs} runs</span>
-                    </div>
-                </div>
+                <div class="font-medium text-white text-xs sm:text-sm break-words" title="${modelName}">${modelName}</div>
             </td>
             <td class="px-2 py-3">
                 <div class="text-xs sm:text-sm font-medium text-gray-300 capitalize">${provider}</div>
