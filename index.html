@@ -132,6 +132,18 @@
                   </svg> (s)
                 </div>
               </th>
+              <th
+                class="px-2 py-3 text-center text-xs sm:text-sm font-medium text-gray-300 w-32 sm:w-36 hidden xl:table-cell">
+                <div class="flex items-center justify-center gap-1">Cost per 1K <svg class="w-4 h-4"
+                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="size-4">
+                    <path fillRule="evenodd" class="w-4 h-4"
+                      d="M15 4.5A3.5 3.5 0 0 1 11.435 8c-.99-.019-2.093.132-2.7.913l-4.13 5.31a2.015 2.015 0 1 1-2.827-2.828l5.309-4.13c.78-.607.932-1.71.914-2.7L8 4.5a3.5 3.5 0 0 1 4.477-3.362c.325.094.39.497.15.736L10.6 3.902a.48.48 0 0 0-.033.653c.271.314.565.608.879.879a.48.48 0 0 0 .653-.033l2.027-2.027c.239-.24.642-.175.736.15.09.31.138.637.138.976ZM3.75 13a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+                      clipRule="evenodd" />
+                    <path
+                      d="M11.5 9.5c.313 0 .62-.029.917-.084l1.962 1.962a2.121 2.121 0 0 1-3 3l-2.81-2.81 1.35-1.734c.05-.064.158-.158.426-.233.278-.078.639-.11 1.062-.102l.093.001ZM5 4l1.446 1.445a2.256 2.256 0 0 1-.047.21c-.075.268-.169.377-.233.427l-.61.474L4 5H2.655a.25.25 0 0 1-.224-.139l-1.35-2.7a.25.25 0 0 1 .047-.289l.745-.745a.25.25 0 0 1 .289-.047l2.7 1.35A.25.25 0 0 1 5 2.654V4Z" />
+                  </svg> ($)
+                </div>
+              </th>
             </tr>
           </thead>
           <tbody id="leaderboard-body" class="divide-y divide-gray-700">
@@ -142,27 +154,51 @@
     </div>
 
 
-    <!-- Methodology -->
+    <!-- Leaderboard Columns Explained -->
     <div class="bg-gray-800 rounded-lg p-4 sm:p-6 lg:p-8 border border-gray-700">
-      <h2 class="text-xl sm:text-2xl font-bold mb-4">Methodology</h2>
-      <div class="grid sm:grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 text-gray-300">
-        <div>
-          <h3 class="font-semibold text-white mb-2 text-base sm:text-lg">Game Parameters</h3>
-          <ul class="space-y-1 text-sm sm:text-base">
-            <li>• Balatro v1.0.1n</li>
-            <li>• 100 consistent seeds</li>
-            <li>• Standard deck configuration</li>
-            <li>• No modifications or cheats</li>
-          </ul>
+      <h2 class="text-xl sm:text-2xl font-bold mb-4">Leaderboard Columns Explained</h2>
+      <div class="grid sm:grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 text-gray-300">
+        <div class="space-y-4">
+          <div>
+            <h3 class="font-semibold text-white mb-2 text-base sm:text-lg">Ranking & Model Info</h3>
+            <div class="space-y-2 text-sm sm:text-base">
+              <div><strong class="text-blue-400">Rank:</strong> Sorted by average rounds reached (highest first)</div>
+              <div><strong class="text-blue-400">Model:</strong> OpenRouter model names with creator-suggested
+                parameters for open-source models, defaults for closed-source</div>
+              <div><strong class="text-blue-400">Provider:</strong> Model developer/organization</div>
+            </div>
+          </div>
+          <div>
+            <h3 class="font-semibold text-white mb-2 text-base sm:text-lg">Performance Metrics</h3>
+            <div class="space-y-2 text-sm sm:text-base">
+              <div><strong class="text-blue-400">Rounds:</strong> Average rounds reached across multiple games</div>
+              <div><strong class="text-blue-400">Completed:</strong> Success rate for round completion (rounds stopped
+                at 3 consecutive errors/failed calls)</div>
+            </div>
+          </div>
         </div>
-        <div>
-          <h3 class="font-semibold text-white mb-2 text-base sm:text-lg">Evaluation Criteria</h3>
-          <ul class="space-y-1 text-sm sm:text-base">
-            <li>• Average ante reached</li>
-            <li>• Win rate across seeds</li>
-            <li>• Token efficiency</li>
-            <li>• Decision quality scoring</li>
-          </ul>
+        <div class="space-y-4">
+          <div>
+            <h3 class="font-semibold text-white mb-2 text-base sm:text-lg">Call Quality Breakdown</h3>
+            <div class="space-y-2 text-sm sm:text-base">
+              <div><strong class="text-green-400">Success:</strong> Valid tool calls that execute successfully in game
+                state</div>
+              <div><strong class="text-red-400">Error:</strong> Invalid responses (no tool call, JSON errors, plain text
+                responses)</div>
+              <div><strong class="text-yellow-400">Failed:</strong> Valid tool calls that can't execute (e.g.,
+                discarding 6 cards when limit is 5)</div>
+            </div>
+          </div>
+          <div>
+            <h3 class="font-semibold text-white mb-2 text-base sm:text-lg">Efficiency Metrics</h3>
+            <div class="space-y-2 text-sm sm:text-base">
+              <div><strong class="text-blue-400">Input/Output Tokens:</strong> Token counts per tool call (including
+                reasoning and tool call tokens)</div>
+              <div><strong class="text-blue-400">Time per Call:</strong> Average LLM response generation time</div>
+              <div><strong class="text-blue-400">Cost per 1K Calls:</strong> Pricing based on cheapest OpenRouter option
+                (scaled to 1K for visual comparison)</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

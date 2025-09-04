@@ -116,9 +116,12 @@ function renderLeaderboard(entries, metadata) {
             <td class="px-2 py-3 hidden lg:table-cell text-center">
                 <div class="font-medium text-white text-xs sm:text-sm">${(stats.avg_total_response_time_ms / totalToolCalls / 1000).toFixed(2)}<span class="font-normal text-gray-400"> ± ${(stdStats.std_avg_response_time_ms / 1000).toFixed(2)}</span></div>
             </td>
+            <td class="px-2 py-3 hidden xl:table-cell text-center">
+                <div class="font-medium text-white text-xs sm:text-sm">${(stats.avg_avg_cost_per_call * 1000).toFixed(2)}<span class="font-normal text-gray-400"> ± ${(stdStats.std_avg_cost_per_call * 1000).toFixed(2)}</span></div>
+            </td>
         </tr>
         <tr id="stats-row-${index}" class="hidden">
-            <td colspan="10" class="px-2 py-4 bg-gray-800">
+            <td colspan="11" class="px-2 py-4 bg-gray-800">
                 <!-- Details will be loaded dynamically -->
             </td>
         </tr>
