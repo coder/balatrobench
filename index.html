@@ -78,16 +78,13 @@
               <th class="px-2 py-3 text-center text-xs sm:text-sm font-medium text-gray-300 w-12 sm:w-16">Rank</th>
               <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 min-w-32 max-w-48">Model</th>
               <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24">Provider</th>
-              <th class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24">Rounds</th>
+              <th class="px-2 py-3 text-center text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24">Rounds</th>
               <th
-                class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-16 sm:w-20 hidden md:table-cell">
-                Ante</th>
+                class="px-2 py-3 text-center text-xs sm:text-sm font-medium text-gray-300 w-16 sm:w-20 hidden md:table-cell">
+                Completed</th>
               <th
-                class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-16 sm:w-20 hidden md:table-cell">
-                Runs</th>
-              <th
-                class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden lg:table-cell">
-                <div class="flex items-center gap-1">Success
+                class="px-2 py-3 text-center text-xs sm:text-sm font-medium text-gray-300 w-44 sm:w-52 hidden lg:table-cell">
+                <div class="flex items-center justify-center gap-2">Success | Error | Failed
                   <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
                     className="size-4">
                     <path fillRule="evenodd" class="w-4 h-4"
@@ -99,10 +96,9 @@
                 </div>
               </th>
               <th
-                class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden lg:table-cell">
-                <div class="flex items-center gap-1">Error
-                  <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
-                    className="size-4">
+                class="px-2 py-3 text-center text-xs sm:text-sm font-medium text-gray-300 w-28 sm:w-32 hidden xl:table-cell">
+                <div class="flex items-center justify-center gap-1"> In Tok. per <svg class="w-4 h-4"
+                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="size-4">
                     <path fillRule="evenodd" class="w-4 h-4"
                       d="M15 4.5A3.5 3.5 0 0 1 11.435 8c-.99-.019-2.093.132-2.7.913l-4.13 5.31a2.015 2.015 0 1 1-2.827-2.828l5.309-4.13c.78-.607.932-1.71.914-2.7L8 4.5a3.5 3.5 0 0 1 4.477-3.362c.325.094.39.497.15.736L10.6 3.902a.48.48 0 0 0-.033.653c.271.314.565.608.879.879a.48.48 0 0 0 .653-.033l2.027-2.027c.239-.24.642-.175.736.15.09.31.138.637.138.976ZM3.75 13a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
                       clipRule="evenodd" />
@@ -112,44 +108,27 @@
                 </div>
               </th>
               <th
-                class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden lg:table-cell">
-                <div class="flex items-center gap-1">Failed
-                  <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
-                    className="size-4">
+                class="px-2 py-3 text-center text-xs sm:text-sm font-medium text-gray-300 w-28 sm:w-32 hidden xl:table-cell">
+                <div class="flex items-center justify-center gap-1">
+                  Out Tok. per <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"
+                    fill="currentColor" className="size-4">
                     <path fillRule="evenodd" class="w-4 h-4"
                       d="M15 4.5A3.5 3.5 0 0 1 11.435 8c-.99-.019-2.093.132-2.7.913l-4.13 5.31a2.015 2.015 0 1 1-2.827-2.828l5.309-4.13c.78-.607.932-1.71.914-2.7L8 4.5a3.5 3.5 0 0 1 4.477-3.362c.325.094.39.497.15.736L10.6 3.902a.48.48 0 0 0-.033.653c.271.314.565.608.879.879a.48.48 0 0 0 .653-.033l2.027-2.027c.239-.24.642-.175.736.15.09.31.138.637.138.976ZM3.75 13a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
                       clipRule="evenodd" />
                     <path
                       d="M11.5 9.5c.313 0 .62-.029.917-.084l1.962 1.962a2.121 2.121 0 0 1-3 3l-2.81-2.81 1.35-1.734c.05-.064.158-.158.426-.233.278-.078.639-.11 1.062-.102l.093.001ZM5 4l1.446 1.445a2.256 2.256 0 0 1-.047.21c-.075.268-.169.377-.233.427l-.61.474L4 5H2.655a.25.25 0 0 1-.224-.139l-1.35-2.7a.25.25 0 0 1 .047-.289l.745-.745a.25.25 0 0 1 .289-.047l2.7 1.35A.25.25 0 0 1 5 2.654V4Z" />
                   </svg>
-
                 </div>
               </th>
               <th
-                class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden xl:table-cell">
-                In Tok. (k)</th>
-              <th
-                class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-20 sm:w-24 hidden xl:table-cell">
-                Out Tok. (k)</th>
-              <th
-                class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-16 sm:w-20 hidden lg:table-cell">
-                <div class="flex items-center gap-1">Tot.
-                  <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
-                    className="size-4">
-                    <path fillRule="evenodd"
-                      d="M1 8a7 7 0 1 1 14 0A7 7 0 0 1 1 8Zm7.75-4.25a.75.75 0 0 0-1.5 0V8c0 .414.336.75.75.75h3.25a.75.75 0 0 0 0-1.5h-2.5v-3.5Z"
+                class="px-2 py-3 text-center text-xs sm:text-sm font-medium text-gray-300 w-28 sm:w-32 hidden xl:table-cell">
+                <div class="flex items-center justify-center gap-1">Time per <svg class="w-4 h-4"
+                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="size-4">
+                    <path fillRule="evenodd" class="w-4 h-4"
+                      d="M15 4.5A3.5 3.5 0 0 1 11.435 8c-.99-.019-2.093.132-2.7.913l-4.13 5.31a2.015 2.015 0 1 1-2.827-2.828l5.309-4.13c.78-.607.932-1.71.914-2.7L8 4.5a3.5 3.5 0 0 1 4.477-3.362c.325.094.39.497.15.736L10.6 3.902a.48.48 0 0 0-.033.653c.271.314.565.608.879.879a.48.48 0 0 0 .653-.033l2.027-2.027c.239-.24.642-.175.736.15.09.31.138.637.138.976ZM3.75 13a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
                       clipRule="evenodd" />
-                  </svg> (s)
-                </div>
-              </th>
-              <th
-                class="px-2 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 w-16 sm:w-20 hidden lg:table-cell">
-                <div class="flex items-center gap-1">Avg
-                  <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
-                    className="size-4">
-                    <path fillRule="evenodd"
-                      d="M1 8a7 7 0 1 1 14 0A7 7 0 0 1 1 8Zm7.75-4.25a.75.75 0 0 0-1.5 0V8c0 .414.336.75.75.75h3.25a.75.75 0 0 0 0-1.5h-2.5v-3.5Z"
-                      clipRule="evenodd" />
+                    <path
+                      d="M11.5 9.5c.313 0 .62-.029.917-.084l1.962 1.962a2.121 2.121 0 0 1-3 3l-2.81-2.81 1.35-1.734c.05-.064.158-.158.426-.233.278-.078.639-.11 1.062-.102l.093.001ZM5 4l1.446 1.445a2.256 2.256 0 0 1-.047.21c-.075.268-.169.377-.233.427l-.61.474L4 5H2.655a.25.25 0 0 1-.224-.139l-1.35-2.7a.25.25 0 0 1 .047-.289l.745-.745a.25.25 0 0 1 .289-.047l2.7 1.35A.25.25 0 0 1 5 2.654V4Z" />
                   </svg> (s)
                 </div>
               </th>

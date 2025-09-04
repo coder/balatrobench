@@ -75,11 +75,17 @@ function renderLeaderboard(entries, metadata) {
     const modelName = modelParts.slice(1).join('/') || entry.config.model;
 
     const stats = entry.averaged_stats;
+    const stdStats = entry.standard_deviation_stats;
 
     // Calculate total tool calls for fractions
-    const totalToolCalls = stats.avg_successful_calls + stats.avg_error_calls + stats
+    const totalToolCalls = stats.avg_successful_calls + stats.avg_invalid_responses + stats
       .avg_failed_calls;
     const totalTokens = stats.avg_total_input_tokens + stats.avg_total_output_tokens;
+
+    // Calculate total tool calls for percentage calculations
+    const totalStats = entry.total_stats;
+    const totalAllCalls = totalStats.total_successful_calls + totalStats
+      .total_invalid_responses + totalStats.total_failed_calls;
 
     return `
         <tr class="hover:bg-gray-700 transition-colors cursor-pointer" onclick="loadModelDetails('${entry.config.model}', ${index})">
@@ -90,7 +96,7 @@ function renderLeaderboard(entries, metadata) {
                 <div class="overflow-hidden">
                     <div class="font-medium text-white text-xs sm:text-sm break-words" title="${modelName}">${modelName}</div>
                     <div class="text-xs text-gray-400 mt-0.5">
-                        <span class="md:hidden">${stats.avg_ante_reached} ante • ${entry.total_runs} runs</span>
+                        <span class="md:hidden">${entry.total_runs} runs</span>
                         <span class="hidden md:inline">${entry.total_runs} runs</span>
                     </div>
                 </div>
@@ -98,39 +104,27 @@ function renderLeaderboard(entries, metadata) {
             <td class="px-2 py-3">
                 <div class="text-xs sm:text-sm font-medium text-gray-300 capitalize">${provider}</div>
             </td>
-            <td class="px-2 py-3">
-                <div class="text-xs sm:text-sm font-bold text-white">${stats.avg_final_round}</div>
+            <td class="px-2 py-3 text-center">
+                <div class="text-xs sm:text-sm font-bold text-white">${stats.avg_final_round.toFixed(1)}<span class="font-normal text-gray-400"> ± ${stdStats.std_final_round.toFixed(1)}</span></div>
             </td>
-            <td class="px-2 py-3 hidden md:table-cell">
-                <div class="text-xs sm:text-sm font-bold text-white">${stats.avg_ante_reached}<span class="text-gray-500">/8</span></div>
+            <td class="px-2 py-3 hidden md:table-cell text-center">
+                <div class="font-medium text-white text-xs sm:text-sm">${((entry.completed_runs / entry.total_runs) * 100).toFixed(1)}<span class="font-normal text-gray-500"> %</span></div>
             </td>
-            <td class="px-2 py-3 hidden md:table-cell">
-                <div class="font-medium text-white text-xs sm:text-sm">${entry.completed_runs}<span class="text-gray-500">/${entry.total_runs}</span></div>
+            <td class="px-2 py-3 hidden lg:table-cell text-center">
+                <div class="font-medium text-white text-xs sm:text-sm">${((totalStats.total_successful_calls / totalAllCalls) * 100).toFixed(1)}<span class="font-normal text-gray-600"> % </span>| ${((totalStats.total_invalid_responses / totalAllCalls) * 100).toFixed(1)}<span class="font-normal text-gray-600"> % </span>| ${((totalStats.total_failed_calls / totalAllCalls) * 100).toFixed(1)}<span class="font-normal text-gray-600"> %</span></div>
             </td>
-            <td class="px-2 py-3 hidden lg:table-cell">
-                <div class="font-medium text-white text-xs sm:text-sm">${stats.avg_successful_calls.toFixed(1)}<span class="text-gray-500">/${totalToolCalls.toFixed(1)}</span></div>
+            <td class="px-2 py-3 hidden xl:table-cell text-center">
+                <div class="font-medium text-white text-xs sm:text-sm">${stats.avg_avg_input_tokens.toFixed(0)}<span class="font-normal text-gray-400"> ± ${stdStats.std_avg_input_tokens.toFixed(0)}</span></div>
             </td>
-            <td class="px-2 py-3 hidden lg:table-cell">
-                <div class="font-medium text-white text-xs sm:text-sm">${stats.avg_error_calls.toFixed(1)}<span class="text-gray-500">/${totalToolCalls.toFixed(1)}</span></div>
+            <td class="px-2 py-3 hidden xl:table-cell text-center">
+                <div class="font-medium text-white text-xs sm:text-sm">${stats.avg_avg_output_tokens.toFixed(0)}<span class="font-normal text-gray-400"> ± ${stdStats.std_avg_output_tokens.toFixed(0)}</span></div>
             </td>
-            <td class="px-2 py-3 hidden lg:table-cell">
-                <div class="font-medium text-white text-xs sm:text-sm">${stats.avg_failed_calls.toFixed(1)}<span class="text-gray-500">/${totalToolCalls.toFixed(1)}</span></div>
-            </td>
-            <td class="px-2 py-3 hidden xl:table-cell">
-                <div class="font-medium text-white text-xs sm:text-sm">${(stats.avg_total_input_tokens / 1000).toFixed(1)}<span class="text-gray-500">/${(totalTokens / 1000).toFixed(1)}</span></div>
-            </td>
-            <td class="px-2 py-3 hidden xl:table-cell">
-                <div class="font-medium text-white text-xs sm:text-sm">${(stats.avg_total_output_tokens / 1000).toFixed(1)}<span class="text-gray-500">/${(totalTokens / 1000).toFixed(1)}</span></div>
-            </td>
-            <td class="px-2 py-3 hidden lg:table-cell">
-                <div class="font-medium text-white text-xs sm:text-sm">${(stats.avg_total_response_time_ms / 1000).toFixed(1)}</div>
-            </td>
-            <td class="px-2 py-3 hidden lg:table-cell">
-                <div class="font-medium text-white text-xs sm:text-sm">${(stats.avg_total_response_time_ms / totalToolCalls / 1000).toFixed(2)}</div>
+            <td class="px-2 py-3 hidden lg:table-cell text-center">
+                <div class="font-medium text-white text-xs sm:text-sm">${(stats.avg_total_response_time_ms / totalToolCalls / 1000).toFixed(2)}<span class="font-normal text-gray-400"> ± ${(stdStats.std_avg_response_time_ms / 1000).toFixed(2)}</span></div>
             </td>
         </tr>
         <tr id="stats-row-${index}" class="hidden">
-            <td colspan="13" class="px-2 py-4 bg-gray-800">
+            <td colspan="10" class="px-2 py-4 bg-gray-800">
                 <!-- Details will be loaded dynamically -->
             </td>
         </tr>
@@ -160,7 +154,7 @@ function renderIndividualRunsDetailTable(runs) {
                         </div>
                     </th>
                     <th class="px-2 py-3 text-left font-medium text-gray-300 hidden lg:table-cell">
-                        <div class="flex items-center gap-1">Error
+                        <div class="flex items-center gap-1">Invalid
                             <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
                                 <path fillRule="evenodd" d="M15 4.5A3.5 3.5 0 0 1 11.435 8c-.99-.019-2.093.132-2.7.913l-4.13 5.31a2.015 2.015 0 1 1-2.827-2.828l5.309-4.13c.78-.607.932-1.71.914-2.7L8 4.5a3.5 3.5 0 0 1 4.477-3.362c.325.094.39.497.15.736L10.6 3.902a.48.48 0 0 0-.033.653c.271.314.565.608.879.879a.48.48 0 0 0 .653-.033l2.027-2.027c.239-.24.642-.175.736.15.09.31.138.637.138.976ZM3.75 13a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" clipRule="evenodd" />
                                 <path d="M11.5 9.5c.313 0 .62-.029.917-.084l1.962 1.962a2.121 2.121 0 0 1-3 3l-2.81-2.81 1.35-1.734c.05-.064.158-.158.426-.233.278-.078.639-.11 1.062-.102l.093.001ZM5 4l1.446 1.445a2.256 2.256 0 0 1-.047.21c-.075.268-.169.377-.233.427l-.61.474L4 5H2.655a.25.25 0 0 1-.224-.139l-1.35-2.7a.25.25 0 0 1 .047-.289l.745-.745a.25.25 0 0 1 .289-.047l2.7 1.35A.25.25 0 0 1 5 2.654V4Z" />
@@ -178,13 +172,6 @@ function renderIndividualRunsDetailTable(runs) {
                     <th class="px-2 py-3 text-left font-medium text-gray-300 hidden xl:table-cell">In Tok. (k)</th>
                     <th class="px-2 py-3 text-left font-medium text-gray-300 hidden xl:table-cell">Out Tok. (k)</th>
                     <th class="px-2 py-3 text-left font-medium text-gray-300 hidden lg:table-cell">
-                        <div class="flex items-center gap-1">Tot.
-                            <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
-                                <path fillRule="evenodd" d="M1 8a7 7 0 1 1 14 0A7 7 0 0 1 1 8Zm7.75-4.25a.75.75 0 0 0-1.5 0V8c0 .414.336.75.75.75h3.25a.75.75 0 0 0 0-1.5h-2.5v-3.5Z" clipRule="evenodd" />
-                            </svg> (s)
-                        </div>
-                    </th>
-                    <th class="px-2 py-3 text-left font-medium text-gray-300 hidden lg:table-cell">
                         <div class="flex items-center gap-1">Avg
                             <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
                                 <path fillRule="evenodd" d="M1 8a7 7 0 1 1 14 0A7 7 0 0 1 1 8Zm7.75-4.25a.75.75 0 0 0-1.5 0V8c0 .414.336.75.75.75h3.25a.75.75 0 0 0 0-1.5h-2.5v-3.5Z" clipRule="evenodd" />
@@ -195,7 +182,7 @@ function renderIndividualRunsDetailTable(runs) {
             </thead>
             <tbody class="divide-y divide-gray-700">
                 ${runs.map((run, runIndex) => {
-                    const totalToolCalls = run.successful_calls + (run.error_calls?.length || 0) + (run.failed_calls?.length || 0);
+                    const totalToolCalls = run.successful_calls + (run.invalid_responses || 0) + (run.failed_calls?.length || 0);
                     const totalTokens = run.total_input_tokens + run.total_output_tokens;
 
                     return `
@@ -219,7 +206,7 @@ function renderIndividualRunsDetailTable(runs) {
                             <div class="font-medium text-white text-xs sm:text-sm">${run.successful_calls}<span class="text-gray-500">/${totalToolCalls}</span></div>
                         </td>
                         <td class="px-2 py-3 hidden lg:table-cell">
-                            <div class="font-medium text-white text-xs sm:text-sm">${run.error_calls?.length || 0}<span class="text-gray-500">/${totalToolCalls}</span></div>
+                            <div class="font-medium text-white text-xs sm:text-sm">${run.invalid_responses || 0}<span class="text-gray-500">/${totalToolCalls}</span></div>
                         </td>
                         <td class="px-2 py-3 hidden lg:table-cell">
                             <div class="font-medium text-white text-xs sm:text-sm">${run.failed_calls?.length || 0}<span class="text-gray-500">/${totalToolCalls}</span></div>
@@ -229,9 +216,6 @@ function renderIndividualRunsDetailTable(runs) {
                         </td>
                         <td class="px-2 py-3 hidden xl:table-cell">
                             <div class="font-medium text-white text-xs sm:text-sm">${(run.total_output_tokens / 1000).toFixed(1)}<span class="text-gray-500">/${(totalTokens / 1000).toFixed(1)}</span></div>
-                        </td>
-                        <td class="px-2 py-3 hidden lg:table-cell">
-                            <div class="font-medium text-white text-xs sm:text-sm">${(run.total_response_time_ms / 1000).toFixed(1)}</div>
                         </td>
                         <td class="px-2 py-3 hidden lg:table-cell">
                             <div class="font-medium text-white text-xs sm:text-sm">${(run.total_response_time_ms / totalToolCalls / 1000).toFixed(2)}</div>
@@ -328,8 +312,8 @@ function renderModelDetails(modelData) {
                         <span class="text-white font-medium">${avgStats.avg_successful_calls.toFixed(1)}</span>
                     </div>
                     <div class="flex justify-between items-center">
-                        <span class="text-gray-300">Error Calls:</span>
-                        <span class="text-white font-medium">${avgStats.avg_error_calls.toFixed(1)}</span>
+                        <span class="text-gray-300">Invalid Responses:</span>
+                        <span class="text-white font-medium">${avgStats.avg_invalid_responses.toFixed(1)}</span>
                     </div>
                     <div class="flex justify-between items-center">
                         <span class="text-gray-300">Failed Calls:</span>
@@ -408,7 +392,7 @@ function showError(message) {
   const tbody = document.getElementById('leaderboard-body');
   if (tbody) {
     tbody.innerHTML =
-      `<tr><td colspan="13" class="px-2 py-4 text-center text-gray-400 text-sm">${message}</td></tr>`;
+      `<tr><td colspan="10" class="px-2 py-4 text-center text-gray-400 text-sm">${message}</td></tr>`;
   }
 }
 
