@@ -155,48 +155,103 @@
 
 
     <!-- Leaderboard Columns Explained -->
-    <div class="bg-gray-800 rounded-lg p-4 sm:p-6 lg:p-8 border border-gray-700">
-      <h2 class="text-xl sm:text-2xl font-bold mb-4">Leaderboard Columns Explained</h2>
-      <div class="grid sm:grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 text-gray-300">
-        <div class="space-y-4">
-          <div>
-            <h3 class="font-semibold text-white mb-2 text-base sm:text-lg">Ranking & Model Info</h3>
-            <div class="space-y-2 text-sm sm:text-base">
-              <div><strong class="text-blue-400">Rank:</strong> Sorted by average rounds reached (highest first)</div>
-              <div><strong class="text-blue-400">Model:</strong> OpenRouter model names with creator-suggested
-                parameters for open-source models, defaults for closed-source</div>
-              <div><strong class="text-blue-400">Provider:</strong> Model developer/organization</div>
+    <div class="bg-gray-800 rounded-lg p-4 sm:p-6 lg:p-8 border border-gray-700 shadow-lg">
+      <div class="grid grid-cols-1 gap-6 sm:gap-8">
+        <div class="space-y-6">
+          <!-- Ranking & Model Info -->
+          <div class="bg-gray-700/50 rounded-lg p-4 border border-gray-600">
+            <div class="flex items-center gap-2 mb-3">
+              <i class="fas fa-trophy text-yellow-400"></i>
+              <h3 class="font-semibold text-white text-base sm:text-lg">Ranking & Model Info</h3>
+            </div>
+            <div class="space-y-3 text-sm sm:text-base">
+              <div class="flex items-start gap-2">
+                <i class="fas fa-medal text-yellow-500 mt-1 text-xs"></i>
+                <div><strong class="text-blue-400">Rank:</strong> <span class="text-gray-300">Sorted by average rounds
+                    reached (highest first)</span></div>
+              </div>
+              <div class="flex items-start gap-2">
+                <i class="fas fa-robot text-blue-500 mt-1 text-xs"></i>
+                <div><strong class="text-blue-400">Model:</strong> <span class="text-gray-300">OpenRouter model names
+                    with creator-suggested parameters for open-source models, defaults for closed-source</span></div>
+              </div>
+              <div class="flex items-start gap-2">
+                <i class="fas fa-building text-purple-500 mt-1 text-xs"></i>
+                <div><strong class="text-blue-400">Provider:</strong> <span class="text-gray-300">Model
+                    developer/organization</span></div>
+              </div>
             </div>
           </div>
-          <div>
-            <h3 class="font-semibold text-white mb-2 text-base sm:text-lg">Performance Metrics</h3>
-            <div class="space-y-2 text-sm sm:text-base">
-              <div><strong class="text-blue-400">Rounds:</strong> Average rounds reached across multiple games</div>
-              <div><strong class="text-blue-400">Completed:</strong> Success rate for round completion (rounds stopped
-                at 3 consecutive errors/failed calls)</div>
+
+          <!-- Performance Metrics -->
+          <div class="bg-gray-700/50 rounded-lg p-4 border border-gray-600">
+            <div class="flex items-center gap-2 mb-3">
+              <i class="fas fa-chart-line text-green-400"></i>
+              <h3 class="font-semibold text-white text-base sm:text-lg">Performance Metrics</h3>
+            </div>
+            <div class="space-y-3 text-sm sm:text-base">
+              <div class="flex items-start gap-2">
+                <i class="fas fa-dice text-orange-500 mt-1 text-xs"></i>
+                <div><strong class="text-blue-400">Rounds:</strong> <span class="text-gray-300">Average rounds reached
+                    across multiple games</span></div>
+              </div>
+              <div class="flex items-start gap-2">
+                <i class="fas fa-check-circle text-green-500 mt-1 text-xs"></i>
+                <div><strong class="text-blue-400">Completed:</strong> <span class="text-gray-300">Success rate for
+                    round completion (rounds stopped at 3 consecutive errors/failed calls)</span></div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="space-y-4">
-          <div>
-            <h3 class="font-semibold text-white mb-2 text-base sm:text-lg">Call Quality Breakdown</h3>
-            <div class="space-y-2 text-sm sm:text-base">
-              <div><strong class="text-green-400">Success:</strong> Valid tool calls that execute successfully in game
-                state</div>
-              <div><strong class="text-red-400">Error:</strong> Invalid responses (no tool call, JSON errors, plain text
-                responses)</div>
-              <div><strong class="text-yellow-400">Failed:</strong> Valid tool calls that can't execute (e.g.,
-                discarding 6 cards when limit is 5)</div>
+
+        <div class="space-y-6">
+          <!-- Call Quality Breakdown -->
+          <div class="bg-gray-700/50 rounded-lg p-4 border border-gray-600">
+            <div class="flex items-center gap-2 mb-3">
+              <i class="fas fa-traffic-light text-yellow-400"></i>
+              <h3 class="font-semibold text-white text-base sm:text-lg">Call Quality Breakdown</h3>
+            </div>
+            <div class="space-y-3 text-sm sm:text-base">
+              <div class="flex items-start gap-2">
+                <div class="w-3 h-3 bg-green-400 rounded-full mt-2 flex-shrink-0"></div>
+                <div><strong class="text-green-400">Success:</strong> <span class="text-gray-300">Valid tool calls that
+                    execute successfully in game state</span></div>
+              </div>
+              <div class="flex items-start gap-2">
+                <div class="w-3 h-3 bg-red-400 rounded-full mt-2 flex-shrink-0"></div>
+                <div><strong class="text-red-400">Error:</strong> <span class="text-gray-300">Invalid responses (no tool
+                    call, JSON errors, plain text responses)</span></div>
+              </div>
+              <div class="flex items-start gap-2">
+                <div class="w-3 h-3 bg-yellow-400 rounded-full mt-2 flex-shrink-0"></div>
+                <div><strong class="text-yellow-400">Failed:</strong> <span class="text-gray-300">Valid tool calls that
+                    can't execute (e.g., discarding 6 cards when limit is 5)</span></div>
+              </div>
             </div>
           </div>
-          <div>
-            <h3 class="font-semibold text-white mb-2 text-base sm:text-lg">Efficiency Metrics</h3>
-            <div class="space-y-2 text-sm sm:text-base">
-              <div><strong class="text-blue-400">Input/Output Tokens:</strong> Token counts per tool call (including
-                reasoning and tool call tokens)</div>
-              <div><strong class="text-blue-400">Time per Call:</strong> Average LLM response generation time</div>
-              <div><strong class="text-blue-400">Cost per 1K Calls:</strong> Pricing based on cheapest OpenRouter option
-                (scaled to 1K for visual comparison)</div>
+
+          <!-- Efficiency Metrics -->
+          <div class="bg-gray-700/50 rounded-lg p-4 border border-gray-600">
+            <div class="flex items-center gap-2 mb-3">
+              <i class="fas fa-tachometer-alt text-cyan-400"></i>
+              <h3 class="font-semibold text-white text-base sm:text-lg">Efficiency Metrics</h3>
+            </div>
+            <div class="space-y-3 text-sm sm:text-base">
+              <div class="flex items-start gap-2">
+                <i class="fas fa-coins text-amber-500 mt-1 text-xs"></i>
+                <div><strong class="text-blue-400">Input/Output Tokens:</strong> <span class="text-gray-300">Token
+                    counts per tool call (including reasoning and tool call tokens)</span></div>
+              </div>
+              <div class="flex items-start gap-2">
+                <i class="fas fa-clock text-indigo-500 mt-1 text-xs"></i>
+                <div><strong class="text-blue-400">Time per Call:</strong> <span class="text-gray-300">Average LLM
+                    response generation time</span></div>
+              </div>
+              <div class="flex items-start gap-2">
+                <i class="fas fa-dollar-sign text-green-500 mt-1 text-xs"></i>
+                <div><strong class="text-blue-400">Cost per 1K Calls:</strong> <span class="text-gray-300">Pricing based
+                    on cheapest OpenRouter option (scaled to 1K for visual comparison)</span></div>
+              </div>
             </div>
           </div>
         </div>
