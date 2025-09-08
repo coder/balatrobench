@@ -4,16 +4,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-BalatroBench is a static web application that displays performance leaderboards for LLMs playing the card game Balatro. It's a frontend-only project without build tools - the site uses vanilla JavaScript with Tailwind CSS loaded from CDN.
+BalatroBench is a static web application that displays performance leaderboards for LLMs playing the card game Balatro. It's a frontend-only project without build tools - the site uses vanilla JavaScript with Tailwind CSS and Chart.js loaded from CDN.
 
 ## Architecture
 
 ### Core Components
 
 - **index.html**: Main leaderboard page with responsive table layout using Tailwind CSS
-- **script.js**: Fetches and renders leaderboard data from JSON files in the data directory
-- **data/**: Contains benchmark results organized by version and strategy
-  - `data/benchmarks/v0.8.0/default/leaderboard.json`: Primary leaderboard data
+- **script.js**: Fetches and renders leaderboard data, with interactive expandable rows showing detailed charts and statistics
+- **data/**: Contains benchmark results organized by version, strategy, and data type
+  - `data/benchmarks/v0.8.0/default/leaderboard.json`: Primary model leaderboard data
+  - `data/community/v0.8.0/default/leaderboard.json`: Community strategy leaderboard data
   - Individual model result files in vendor subdirectories (e.g., `openai/gpt-oss-120b.json`)
 
 ### Data Structure
@@ -21,11 +22,22 @@ BalatroBench is a static web application that displays performance leaderboards 
 The leaderboard displays AI model performance with metrics including:
 - Final round reached (with standard deviation)
 - Success/failure/error rates for API calls
-- Token usage (input/output)
-- Execution time and cost per game
-- Multiple provider usage statistics
+- Token usage (input/output with standard deviations)
+- Execution time and cost per game (with standard deviations)
+- Provider usage distribution
+- Detailed per-game statistics and histograms
 
 Models are identified by `vendor/model` format and ranked by performance metrics.
+
+### Interactive Features
+
+- **Expandable Rows**: Click on desktop (lg+) to expand detailed view with:
+  - Round distribution histogram using Chart.js
+  - Provider usage pie chart
+  - Complete per-game statistics table
+  - Total aggregated metrics (tokens, costs, time)
+- **Responsive Design**: Columns hide/show based on screen size
+- **Dual Display Modes**: Support for both model-based and community strategy leaderboards
 
 ## Development Commands
 
@@ -38,6 +50,12 @@ python3 -m http.server 8000
 # Then visit http://localhost:8000
 ```
 
+### Dependencies
+
+- **Tailwind CSS**: Styling framework loaded from CDN
+- **Chart.js**: Charting library for histograms and pie charts
+- **Heroicons**: Icon library (included but minimal usage in current implementation)
+
 ### File Structure Conventions
 
 - All files use UTF-8 encoding with LF line endings
@@ -47,20 +65,29 @@ python3 -m http.server 8000
 
 ## Data Management
 
-### Adding New Results
+### Data Organization
 
-- Leaderboard data is loaded from `data/benchmarks/v0.8.0/default/leaderboard.json`
-- Individual model results stored in `data/benchmarks/v0.8.0/default/[vendor]/[model].json`
-- The application automatically parses `vendor/model` from the `config.model` field
+**Benchmark Data** (`data/benchmarks/v0.8.0/default/`):
+- `leaderboard.json`: Aggregated model performance data
+- `[vendor]/[model].json`: Detailed individual model results with per-game statistics
+
+**Community Data** (`data/community/v0.8.0/default/`):
+- `leaderboard.json`: Community strategy performance data
+- `[vendor]/[model].json`: Detailed strategy results
 
 ### Result Format
 
-Each entry contains:
-- Run statistics (runs, wins, completion rate)
-- Performance averages and standard deviations
-- API call success metrics
-- Provider usage breakdown
-- Token usage and cost analysis
+**Leaderboard entries** contain:
+- Model/strategy configuration and metadata
+- Aggregated performance averages and standard deviations
+- API call success/failure/error rates
+- Token usage and cost summaries
+
+**Detailed model files** contain:
+- Individual game statistics (`stats` array)
+- Provider usage distribution (`providers` object)
+- Total aggregated metrics (`total` object)
+- Per-game breakdowns including final round, token usage, timing, and costs
 
 ## Community Contributions
 
