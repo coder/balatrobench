@@ -1,5 +1,5 @@
 // Load details for a specific model
-async function loadDetails(vendor, model, basePath = 'data/benchmarks/v0.8.0/default') {
+async function loadDetails(vendor, model, basePath = 'data/benchmarks/v0.8.1/default') {
   try {
     const response = await fetch(`${basePath}/${vendor}/${model}.json`);
     const data = await response.json();
@@ -406,7 +406,7 @@ function createDetailRow(stats, modelName, data) {
 }
 
 // Load and display leaderboard data
-async function loadLeaderboard(basePath = 'data/benchmarks/v0.8.0/default', displayMode = 'model') {
+async function loadLeaderboard(basePath = 'data/benchmarks/v0.8.1/default', displayMode = 'model') {
   try {
     const response = await fetch(`${basePath}/leaderboard.json`);
     const data = await response.json();
