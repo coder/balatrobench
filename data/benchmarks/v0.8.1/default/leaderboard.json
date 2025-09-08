@@ -1,0 +1,116 @@
+{
+  "generated_at": 1757357267,
+  "entries": [
+    {
+      "runs": 17,
+      "wins": 0,
+      "completed": 16,
+      "avg_final_round": 3.8823529411764706,
+      "std_dev_final_round": 2.420804436059852,
+      "providers": {
+        "DeepInfra": 490,
+        "BaseTen": 60,
+        "Phala": 17,
+        "WandB": 14,
+        "Fireworks": 8
+      },
+      "calls": {
+        "successful": 505,
+        "error": 25,
+        "failed": 59,
+        "total": 589
+      },
+      "total": {
+        "input_tokens": 1339867,
+        "output_tokens": 354372,
+        "input_cost": 0.12713984,
+        "output_cost": 0.16354642,
+        "total_cost": 0.29068626,
+        "time_ms": 2631445
+      },
+      "average": {
+        "input_tokens": 2274.8166383701187,
+        "output_tokens": 601.6502546689304,
+        "input_cost": 0.00021585711375212224,
+        "output_cost": 0.0002776679456706282,
+        "total_cost": 0.0004935250594227503,
+        "time_ms": 4467.648556876061
+      },
+      "std_dev": {
+        "input_tokens": 0.6114481824990139,
+        "output_tokens": 0.5650659688695626,
+        "input_cost": 9.301591232728288e-08,
+        "output_cost": 2.639989471800902e-07,
+        "total_cost": 2.928295915546032e-07,
+        "time_ms": 10.727416484876812
+      },
+      "config": {
+        "model": "openai/gpt-oss-120b",
+        "strategy": "default",
+        "deck": "Red Deck",
+        "stake": 1,
+        "seed": "OOOO155",
+        "challenge": null,
+        "version": "0.8.1",
+        "name": "Unknown Name",
+        "description": "Unknown Description",
+        "author": "BalatroBench",
+        "tags": []
+      }
+    },
+    {
+      "runs": 15,
+      "wins": 0,
+      "completed": 9,
+      "avg_final_round": 1.5333333333333334,
+      "std_dev_final_round": 0.7432233529572065,
+      "providers": {
+        "DeepInfra": 197,
+        "WandB": 15
+      },
+      "calls": {
+        "successful": 123,
+        "error": 56,
+        "failed": 33,
+        "total": 212
+      },
+      "total": {
+        "input_tokens": 517908,
+        "output_tokens": 166518,
+        "input_cost": 0.02107899,
+        "output_cost": 0.02714064,
+        "total_cost": 0.04821963,
+        "time_ms": 1460212
+      },
+      "average": {
+        "input_tokens": 2442.9622641509436,
+        "output_tokens": 785.4622641509434,
+        "input_cost": 9.942919811320755e-05,
+        "output_cost": 0.00012802188679245284,
+        "total_cost": 0.00022745108490566037,
+        "time_ms": 6887.792452830188
+      },
+      "std_dev": {
+        "input_tokens": 5.457290199469387,
+        "output_tokens": 2.900164168555246,
+        "input_cost": 2.2304852007640677e-07,
+        "output_cost": 4.719941536941418e-07,
+        "total_cost": 5.395084561919838e-07,
+        "time_ms": 43.96923376402001
+      },
+      "config": {
+        "model": "openai/gpt-oss-20b",
+        "strategy": "default",
+        "deck": "Red Deck",
+        "stake": 1,
+        "seed": "OOOO155",
+        "challenge": null,
+        "version": "0.8.1",
+        "name": "Unknown Name",
+        "description": "Unknown Description",
+        "author": "BalatroBench",
+        "tags": []
+      }
+    }
+  ]
+}
