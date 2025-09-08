@@ -43,10 +43,34 @@ function createDetailRow(stats, modelName) {
         <td class="px-2 py-2 text-center text-green-600 font-mono">${successRate}%</td>
         <td class="px-2 py-2 text-center text-yellow-600 font-mono">${failedRate}%</td>
         <td class="px-2 py-2 text-center text-red-600 font-mono">${errorRate}%</td>
-        <td class="px-4 py-2 text-center text-gray-700 font-mono">${avgInputTokens} ± ${avgInputTokensStdDev}</td>
-        <td class="px-4 py-2 text-center text-gray-700 font-mono">${avgOutputTokens} ± ${avgOutputTokensStdDev}</td>
-        <td class="px-4 py-2 text-center text-gray-700 font-mono">${avgTimeSeconds} ± ${avgTimeSecondsStdDev}</td>
-        <td class="px-4 py-2 text-center text-gray-700 font-mono">${avgCost} ± ${costStdDev}</td>
+        <td class="px-4 py-2 text-center text-gray-700 font-mono">
+          <div class="flex justify-center items-center">
+            <span class="w-12 text-center">${avgInputTokens}</span>
+            <span class="px-1">±</span>
+            <span class="w-9 text-center">${avgInputTokensStdDev}</span>
+          </div>
+        </td>
+        <td class="px-4 py-2 text-center text-gray-700 font-mono">
+          <div class="flex justify-center items-center">
+            <span class="w-12 text-center">${avgOutputTokens}</span>
+            <span class="px-1">±</span>
+            <span class="w-9 text-center">${avgOutputTokensStdDev}</span>
+          </div>
+        </td>
+        <td class="px-4 py-2 text-center text-gray-700 font-mono">
+          <div class="flex justify-center items-center">
+            <span class="w-12 text-center">${avgTimeSeconds}</span>
+            <span class="px-1">±</span>
+            <span class="w-12 text-center">${avgTimeSecondsStdDev}</span>
+          </div>
+        </td>
+        <td class="px-4 py-2 text-center text-gray-700 font-mono">
+          <div class="flex justify-center items-center">
+            <span class="w-12 text-center">${avgCost}</span>
+            <span class="px-1">±</span>
+            <span class="w-12 text-center">${costStdDev}</span>
+          </div>
+        </td>
       </tr>
     `;
   });
@@ -231,22 +255,42 @@ async function loadLeaderboard() {
         <td class="px-4 py-3 text-center text-gray-700 font-mono whitespace-nowrap">${model}</td>
         <td class="px-4 py-3 text-center text-gray-700 font-mono whitespace-nowrap hidden lg:table-cell">${vendor}</td>
         <td class="px-4 py-3 text-center text-gray-700 font-mono">
-          ${avgRound} ± ${avgRoundStdDev}
+          <div class="flex justify-center items-center">
+            <span class="w-8 text-center">${avgRound}</span>
+            <span class="px-1">±</span>
+            <span class="w-8 text-center">${avgRoundStdDev}</span>
+          </div>
         </td>
         <td class="px-4 py-3 text-center text-green-600 font-mono hidden sm:table-cell">${successRate}%</td>
         <td class="px-4 py-3 text-center text-yellow-600 font-mono hidden sm:table-cell">${failureRate}%</td>
         <td class="px-4 py-3 text-center text-red-600 font-mono hidden sm:table-cell">${errorRate}%</td>
         <td class="px-4 py-3 text-center text-gray-700 font-mono hidden lg:table-cell">
-          ${avgInputTokens}<span class="hidden xl:inline"> ± ${avgInputTokensStdDev}</span>
+          <div class="flex justify-center items-center">
+            <span class="w-12 text-center">${avgInputTokens}</span>
+            <span class="px-1 hidden xl:inline">±</span>
+            <span class="w-6 text-center hidden xl:inline">${avgInputTokensStdDev}</span>
+          </div>
         </td>
         <td class="px-4 py-3 text-center text-gray-700 font-mono hidden lg:table-cell">
-          ${avgOutputTokens}<span class="hidden xl:inline"> ± ${avgOutputTokensStdDev}</span>
+          <div class="flex justify-center items-center">
+            <span class="w-12 text-center">${avgOutputTokens}</span>
+            <span class="px-1 hidden xl:inline">±</span>
+            <span class="w-6 text-center hidden xl:inline">${avgOutputTokensStdDev}</span>
+          </div>
         </td>
         <td class="px-4 py-3 text-center text-gray-700 font-mono hidden md:table-cell">
-          ${avgTimeSeconds}<span class="hidden xl:inline"> ± ${avgTimeSecondsStdDev}</span>
+          <div class="flex justify-center items-center">
+            <span class="w-12 text-center">${avgTimeSeconds}</span>
+            <span class="px-1 hidden xl:inline">±</span>
+            <span class="w-12 text-center hidden xl:inline">${avgTimeSecondsStdDev}</span>
+          </div>
         </td>
         <td class="px-4 py-3 text-center text-gray-700 font-mono hidden md:table-cell">
-          ${cost}<span class="hidden xl:inline"> ± ${costStdDev}</span>
+          <div class="flex justify-center items-center">
+            <span class="w-12 text-center">${cost}</span>
+            <span class="px-1 hidden xl:inline">±</span>
+            <span class="w-12 text-center hidden xl:inline">${costStdDev}</span>
+          </div>
         </td>
       `;
 
