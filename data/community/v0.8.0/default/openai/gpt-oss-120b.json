@@ -1,0 +1,337 @@
+{
+  "runs": 5,
+  "wins": 0,
+  "completed": 0,
+  "avg_final_round": 2.4,
+  "std_dev_final_round": 0.5477225575051661,
+  "providers": {
+    "BaseTen": 55,
+    "Phala": 18,
+    "DeepInfra": 17
+  },
+  "calls": {
+    "successful": 84,
+    "error": 3,
+    "failed": 3,
+    "total": 90
+  },
+  "total": {
+    "input_tokens": 198931,
+    "output_tokens": 52450,
+    "input_cost": 0.02102201,
+    "output_cost": 0.02558423,
+    "total_cost": 0.04660624,
+    "time_ms": 795258
+  },
+  "average": {
+    "input_tokens": 2210.3444444444444,
+    "output_tokens": 582.7777777777778,
+    "input_cost": 0.0002335778888888889,
+    "output_cost": 0.0002842692222222222,
+    "total_cost": 0.0005178471111111111,
+    "time_ms": 8836.2
+  },
+  "std_dev": {
+    "input_tokens": 4.895888048200027,
+    "output_tokens": 4.6540897357709285,
+    "input_cost": 6.111147053547993e-07,
+    "output_cost": 2.3064425045199026e-06,
+    "total_cost": 2.6128666442394534e-06,
+    "time_ms": 90.27728387273908
+  },
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "strategy": "default",
+    "deck": "Red Deck",
+    "stake": 1,
+    "seed": "OOOO155",
+    "challenge": null,
+    "version": "0.8.0",
+    "name": "Unknown Name",
+    "description": "Unknown Description",
+    "author": "BalatroBench",
+    "tags": []
+  },
+  "stats": [
+    {
+      "won": false,
+      "completed": false,
+      "ante_reached": 1,
+      "final_round": 2,
+      "providers": [
+        "BaseTen",
+        "BaseTen",
+        "BaseTen",
+        "BaseTen",
+        "Phala",
+        "BaseTen",
+        "BaseTen",
+        "BaseTen",
+        "Phala",
+        "BaseTen",
+        "Phala",
+        "BaseTen"
+      ],
+      "calls": {
+        "successful": 11,
+        "error": 0,
+        "failed": 1,
+        "total": 12
+      },
+      "total": {
+        "input_tokens": 25639,
+        "output_tokens": 7499,
+        "input_cost": 0.00283382,
+        "output_cost": 0.00371906,
+        "total_cost": 0.00655288,
+        "time_ms": 153283
+      },
+      "average": {
+        "input_tokens": 2136.5833333333335,
+        "output_tokens": 624.9166666666666,
+        "input_cost": 0.00023615166666666665,
+        "output_cost": 0.0003099216666666667,
+        "total_cost": 0.0005460733333333333,
+        "time_ms": 12773.583333333334
+      },
+      "std_dev": {
+        "input_tokens": 209.54472654839688,
+        "output_tokens": 425.4092058527206,
+        "input_cost": 5.154776246503349e-05,
+        "output_cost": 0.00020968270101765814,
+        "total_cost": 0.0002480853702158826,
+        "time_ms": 13319.076568170478
+      }
+    },
+    {
+      "won": false,
+      "completed": false,
+      "ante_reached": 1,
+      "final_round": 2,
+      "providers": [
+        "BaseTen",
+        "BaseTen",
+        "BaseTen",
+        "BaseTen",
+        "BaseTen",
+        "BaseTen",
+        "Phala",
+        "BaseTen",
+        "BaseTen",
+        "BaseTen",
+        "BaseTen",
+        "BaseTen"
+      ],
+      "calls": {
+        "successful": 12,
+        "error": 0,
+        "failed": 0,
+        "total": 12
+      },
+      "total": {
+        "input_tokens": 25155,
+        "output_tokens": 7752,
+        "input_cost": 0.0026047,
+        "output_cost": 0.0038675100000000002,
+        "total_cost": 0.00647221,
+        "time_ms": 90589
+      },
+      "average": {
+        "input_tokens": 2096.25,
+        "output_tokens": 646.0,
+        "input_cost": 0.00021705833333333336,
+        "output_cost": 0.0003222925,
+        "total_cost": 0.0005393508333333333,
+        "time_ms": 7549.083333333333
+      },
+      "std_dev": {
+        "input_tokens": 189.38614953676955,
+        "output_tokens": 325.28253453379153,
+        "input_cost": 3.519435539280627e-05,
+        "output_cost": 0.0001621774010220682,
+        "total_cost": 0.00018532567576901593,
+        "time_ms": 6270.980124326417
+      }
+    },
+    {
+      "won": false,
+      "completed": false,
+      "ante_reached": 2,
+      "final_round": 3,
+      "providers": [
+        "Phala",
+        "Phala",
+        "Phala",
+        "Phala",
+        "Phala",
+        "Phala",
+        "Phala",
+        "Phala",
+        "Phala",
+        "Phala",
+        "Phala",
+        "DeepInfra",
+        "DeepInfra",
+        "DeepInfra",
+        "DeepInfra",
+        "DeepInfra",
+        "DeepInfra",
+        "DeepInfra",
+        "DeepInfra",
+        "DeepInfra",
+        "DeepInfra",
+        "DeepInfra",
+        "DeepInfra",
+        "DeepInfra",
+        "DeepInfra"
+      ],
+      "calls": {
+        "successful": 22,
+        "error": 1,
+        "failed": 2,
+        "total": 25
+      },
+      "total": {
+        "input_tokens": 54828,
+        "output_tokens": 13827,
+        "input_cost": 0.00607507,
+        "output_cost": 0.00644307,
+        "total_cost": 0.01251814,
+        "time_ms": 292394
+      },
+      "average": {
+        "input_tokens": 2193.12,
+        "output_tokens": 553.08,
+        "input_cost": 0.0002430028,
+        "output_cost": 0.0002577228,
+        "total_cost": 0.0005007256,
+        "time_ms": 11695.76
+      },
+      "std_dev": {
+        "input_tokens": 171.27227835622824,
+        "output_tokens": 259.90654089499174,
+        "input_cost": 4.6316281651272476e-05,
+        "output_cost": 0.0001222439144538492,
+        "total_cost": 0.00013728236176095845,
+        "time_ms": 8395.666998914778
+      }
+    },
+    {
+      "won": false,
+      "completed": false,
+      "ante_reached": 2,
+      "final_round": 3,
+      "providers": [
+        "BaseTen",
+        "BaseTen",
+        "BaseTen",
+        "BaseTen",
+        "BaseTen",
+        "BaseTen",
+        "BaseTen",
+        "BaseTen",
+        "BaseTen",
+        "BaseTen",
+        "BaseTen",
+        "Phala",
+        "BaseTen",
+        "BaseTen",
+        "BaseTen",
+        "BaseTen",
+        "Phala",
+        "BaseTen",
+        "BaseTen",
+        "BaseTen",
+        "BaseTen",
+        "BaseTen",
+        "BaseTen",
+        "BaseTen",
+        "BaseTen",
+        "BaseTen",
+        "DeepInfra",
+        "DeepInfra",
+        "DeepInfra"
+      ],
+      "calls": {
+        "successful": 27,
+        "error": 2,
+        "failed": 0,
+        "total": 29
+      },
+      "total": {
+        "input_tokens": 68390,
+        "output_tokens": 17668,
+        "input_cost": 0.00694084,
+        "output_cost": 0.0087058,
+        "total_cost": 0.01564664,
+        "time_ms": 190305
+      },
+      "average": {
+        "input_tokens": 2358.2758620689656,
+        "output_tokens": 609.2413793103449,
+        "input_cost": 0.0002393393103448276,
+        "output_cost": 0.0003002,
+        "total_cost": 0.0005395393103448275,
+        "time_ms": 6562.241379310345
+      },
+      "std_dev": {
+        "input_tokens": 696.76102157215,
+        "output_tokens": 544.7349063779565,
+        "input_cost": 7.208584777546415e-05,
+        "output_cost": 0.00027124590886974025,
+        "total_cost": 0.00030849008895784914,
+        "time_ms": 4997.845597677723
+      }
+    },
+    {
+      "won": false,
+      "completed": false,
+      "ante_reached": 1,
+      "final_round": 2,
+      "providers": [
+        "BaseTen",
+        "Phala",
+        "BaseTen",
+        "BaseTen",
+        "BaseTen",
+        "BaseTen",
+        "BaseTen",
+        "BaseTen",
+        "BaseTen",
+        "BaseTen",
+        "BaseTen",
+        "BaseTen"
+      ],
+      "calls": {
+        "successful": 12,
+        "error": 0,
+        "failed": 0,
+        "total": 12
+      },
+      "total": {
+        "input_tokens": 24919,
+        "output_tokens": 5704,
+        "input_cost": 0.00256758,
+        "output_cost": 0.00284879,
+        "total_cost": 0.00541637,
+        "time_ms": 68687
+      },
+      "average": {
+        "input_tokens": 2076.5833333333335,
+        "output_tokens": 475.3333333333333,
+        "input_cost": 0.000213965,
+        "output_cost": 0.00023739916666666667,
+        "total_cost": 0.0004513641666666667,
+        "time_ms": 5723.916666666667
+      },
+      "std_dev": {
+        "input_tokens": 189.74837804233525,
+        "output_tokens": 368.4896281587937,
+        "input_cost": 2.415256376378368e-05,
+        "output_cost": 0.00018436932354076366,
+        "total_cost": 0.00019382761260546274,
+        "time_ms": 3049.044364695074
+      }
+    }
+  ]
+}
