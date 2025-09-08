@@ -47,7 +47,7 @@ function createRoundHistogram(stats, canvasId) {
           display: false
         },
         title: {
-          display: true,
+          display: false,
           text: 'Rounds'
         }
       },
@@ -104,7 +104,7 @@ function createProviderPieChart(data, canvasId) {
           }
         },
         title: {
-          display: true,
+          display: false,
           text: 'Providers',
         }
       }
@@ -182,12 +182,109 @@ function createDetailRow(stats, modelName, data) {
 
   detailRow.innerHTML = `
     <td colspan="12" class="p-4">
-      <div class="mb-4 flex flex-col lg:flex-row gap-4">
+      <div class="mb-8 pb-4 flex flex-col lg:flex-row gap-4 h-52">
+        <!-- Rounds -->
         <div class="flex-1">
+          <h4 class="text-sm font-semibold text-gray-700 mb-2 text-center">Rounds</h4>
           <canvas id="${histogramCanvasId}" width="400" height="200"></canvas>
         </div>
-        <div class="w-full lg:w-80">
+        <!-- Providers -->
+        <div>
+          <h4 class="text-sm font-semibold text-gray-700 mb-2 text-center">Providers</h4>
           <canvas id="${pieChartCanvasId}" width="300" height="200"></canvas>
+        </div>
+        <!-- Totals -->
+        <div class="min-w-36 ml-4 mr-4">
+          <h4 class="text-sm font-semibold text-gray-700 mb-2 text-center">Totals</h4>
+          <table class="w-full">
+            <tbody>
+              <tr>
+                <td class="py-1">
+                  <div class="flex items-center justify-left space-x-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
+                      <path d="M8 7c3.314 0 6-1.343 6-3s-2.686-3-6-3-6 1.343-6 3 2.686 3 6 3Z" />
+                      <path d="M8 8.5c1.84 0 3.579-.37 4.914-1.037A6.33 6.33 0 0 0 14 6.78V8c0 1.657-2.686 3-6 3S2 9.657 2 8V6.78c.346.273.72.5 1.087.683C4.42 8.131 6.16 8.5 8 8.5Z" />
+                      <path d="M8 12.5c1.84 0 3.579-.37 4.914-1.037.366-.183.74-.41 1.086-.684V12c0 1.657-2.686 3-6 3s-6-1.343-6-3v-1.22c.346.273.72.5 1.087.683C4.42 12.131 6.16 12.5 8 12.5Z" />
+                    </svg>
+                    <span>in</span>
+                  </div>
+                </td>
+                <td class="text-right py-1">
+                  <span class="text-sm font-mono text-gray-700">${(data.total.input_tokens / 1000000).toFixed(2)} M</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="py-1">
+                  <div class="flex items-center justify-left space-x-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
+                      <path d="M8 7c3.314 0 6-1.343 6-3s-2.686-3-6-3-6 1.343-6 3 2.686 3 6 3Z" />
+                      <path d="M8 8.5c1.84 0 3.579-.37 4.914-1.037A6.33 6.33 0 0 0 14 6.78V8c0 1.657-2.686 3-6 3S2 9.657 2 8V6.78c.346.273.72.5 1.087.683C4.42 8.131 6.16 8.5 8 8.5Z" />
+                      <path d="M8 12.5c1.84 0 3.579-.37 4.914-1.037.366-.183.74-.41 1.086-.684V12c0 1.657-2.686 3-6 3s-6-1.343-6-3v-1.22c.346.273.72.5 1.087.683C4.42 12.131 6.16 12.5 8 12.5Z" />
+                    </svg>
+                    <span>out</span>
+                  </div>
+                </td>
+                <td class="text-right py-1">
+                  <span class="text-sm font-mono text-gray-700">${(data.total.output_tokens / 1000000).toFixed(2)} M</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="py-1">
+                  <div class="flex items-center justify-left space-x-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
+                      <path d="M6.375 5.5h.875v1.75h-.875a.875.875 0 1 1 0-1.75ZM8.75 10.5V8.75h.875a.875.875 0 0 1 0 1.75H8.75Z" />
+                      <path fill-rule="evenodd" d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM7.25 3.75a.75.75 0 0 1 1.5 0V4h2.5a.75.75 0 0 1 0 1.5h-2.5v1.75h.875a2.375 2.375 0 1 1 0 4.75H8.75v.25a.75.75 0 0 1-1.5 0V12h-2.5a.75.75 0 0 1 0-1.5h2.5V8.75h-.875a2.375 2.375 0 1 1 0-4.75h.875v-.25Z" clip-rule="evenodd" />
+                    </svg>
+                    <span>in</span>
+                  </div>
+                </td>
+                <td class="text-right py-1">
+                  <span class="text-sm font-mono text-gray-700">${(data.total.input_cost).toFixed(2)} $</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="py-1">
+                  <div class="flex items-center justify-left space-x-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
+                      <path d="M6.375 5.5h.875v1.75h-.875a.875.875 0 1 1 0-1.75ZM8.75 10.5V8.75h.875a.875.875 0 0 1 0 1.75H8.75Z" />
+                      <path fill-rule="evenodd" d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM7.25 3.75a.75.75 0 0 1 1.5 0V4h2.5a.75.75 0 0 1 0 1.5h-2.5v1.75h.875a2.375 2.375 0 1 1 0 4.75H8.75v.25a.75.75 0 0 1-1.5 0V12h-2.5a.75.75 0 0 1 0-1.5h2.5V8.75h-.875a2.375 2.375 0 1 1 0-4.75h.875v-.25Z" clip-rule="evenodd" />
+                    </svg>
+                    <span>out</span>
+                  </div>
+                </td>
+                <td class="text-right py-1">
+                  <span class="text-sm font-mono text-gray-700">${(data.total.output_cost).toFixed(2)} $</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="py-1">
+                  <div class="flex items-center justify-left space-x-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
+                      <path d="M6.375 5.5h.875v1.75h-.875a.875.875 0 1 1 0-1.75ZM8.75 10.5V8.75h.875a.875.875 0 0 1 0 1.75H8.75Z" />
+                      <path fill-rule="evenodd" d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM7.25 3.75a.75.75 0 0 1 1.5 0V4h2.5a.75.75 0 0 1 0 1.5h-2.5v1.75h.875a2.375 2.375 0 1 1 0 4.75H8.75v.25a.75.75 0 0 1-1.5 0V12h-2.5a.75.75 0 0 1 0-1.5h2.5V8.75h-.875a2.375 2.375 0 1 1 0-4.75h.875v-.25Z" clip-rule="evenodd" />
+                    </svg>
+                    <span>total</span>
+                  </div>
+                </td>
+                <td class="text-right py-1">
+                  <span class="text-sm font-mono text-gray-700">${(data.total.total_cost).toFixed(2)} $</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="py-1">
+                  <div class="flex items-center justify-left space-x-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
+                      <path fill-rule="evenodd" d="M1 8a7 7 0 1 1 14 0A7 7 0 0 1 1 8Zm7.75-4.25a.75.75 0 0 0-1.5 0V8c0 .414.336.75.75.75h3.25a.75.75 0 0 0 0-1.5h-2.5v-3.5Z" clip-rule="evenodd" />
+                    </svg>
+                    <span>time</span>
+                  </div>
+                </td>
+                <td class="text-right py-1">
+                  <span class="text-sm font-mono text-gray-700">${(data.total.time_ms / 1000).toFixed(0)} s</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
       <div class="overflow-x-auto rounded-lg shadow-lg" style="max-height: 180px; overflow-y: auto;">
