@@ -3,15 +3,117 @@ async function loadDetails(vendor, model) {
   try {
     const response = await fetch(`data/benchmarks/v0.8.0/default/${vendor}/${model}.json`);
     const data = await response.json();
-    return data.stats;
+    return data;
   } catch (error) {
     console.error('Error loading model details:', error);
-    return [];
+    return {
+      stats: [],
+      providers: {}
+    };
   }
 }
 
+// Create round distribution histogram
+function createRoundHistogram(stats, canvasId) {
+  const rounds = stats.map(stat => stat.final_round);
+  const maxRound = Math.max(...rounds);
+  const minRound = 1;
+
+  // Create bins from 1 to maxRound
+  const bins = Array.from({
+    length: maxRound
+  }, (_, i) => i + minRound);
+  const counts = bins.map(round => rounds.filter(r => r === round).length);
+  const maxCount = Math.max(...counts);
+
+  const ctx = document.getElementById(canvasId).getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: bins,
+      datasets: [{
+        data: counts,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: {
+        intersect: false,
+        mode: 'none'
+      },
+      plugins: {
+        legend: {
+          display: false
+        },
+        title: {
+          display: true,
+          text: 'Rounds'
+        }
+      },
+      scales: {
+        x: {
+          title: {
+            display: false,
+            text: 'Round'
+          }
+        },
+        y: {
+          beginAtZero: true,
+          max: maxCount + 1,
+          title: {
+            display: false,
+            text: 'Frequency'
+          },
+          ticks: {
+            stepSize: 1
+          }
+        }
+      }
+    }
+  });
+}
+
+// Create provider distribution pie chart
+function createProviderPieChart(data, canvasId) {
+  const providers = Object.keys(data.providers || {});
+  const counts = Object.values(data.providers || {});
+
+  const ctx = document.getElementById(canvasId).getContext('2d');
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: providers,
+      datasets: [{
+        data: counts,
+        borderWidth: 2,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: true,
+          position: 'bottom',
+          labels: {
+            boxWidth: 10,
+            font: {
+              size: 11
+            }
+          }
+        },
+        title: {
+          display: true,
+          text: 'Providers',
+        }
+      }
+    }
+  });
+}
+
 // Create inline detail row after clicked row
-function createDetailRow(stats, modelName) {
+function createDetailRow(stats, modelName, data) {
   const detailRow = document.createElement('tr');
   detailRow.className = 'detail-row bg-gray-50';
 
@@ -75,8 +177,19 @@ function createDetailRow(stats, modelName) {
     `;
   });
 
+  const histogramCanvasId = `histogram-${modelName.replace(/[^a-zA-Z0-9]/g, '-')}`;
+  const pieChartCanvasId = `pie-${modelName.replace(/[^a-zA-Z0-9]/g, '-')}`;
+
   detailRow.innerHTML = `
     <td colspan="12" class="p-4">
+      <div class="mb-4 flex flex-col lg:flex-row gap-4">
+        <div class="flex-1">
+          <canvas id="${histogramCanvasId}" width="400" height="200"></canvas>
+        </div>
+        <div class="w-full lg:w-80">
+          <canvas id="${pieChartCanvasId}" width="300" height="200"></canvas>
+        </div>
+      </div>
       <div class="overflow-x-auto rounded-lg shadow-lg" style="max-height: 180px; overflow-y: auto;">
         <table class="w-full table-auto">
           <thead class="bg-gray-100 sticky top-0">
@@ -186,6 +299,12 @@ function createDetailRow(stats, modelName) {
     </td>
   `;
 
+  // Add charts after DOM is updated
+  setTimeout(() => {
+    createRoundHistogram(stats, histogramCanvasId);
+    createProviderPieChart(data, pieChartCanvasId);
+  }, 0);
+
   return detailRow;
 }
 
@@ -215,8 +334,8 @@ async function loadLeaderboard() {
             document.querySelectorAll('.detail-row').forEach(dr => dr.remove());
 
             // Load and show details
-            const stats = await loadDetails(vendor, model);
-            const detailRow = createDetailRow(stats, model);
+            const data = await loadDetails(vendor, model);
+            const detailRow = createDetailRow(data.stats, model, data);
             row.insertAdjacentElement('afterend', detailRow);
           }
         }
