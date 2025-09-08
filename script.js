@@ -1,7 +1,7 @@
 // Load details for a specific model
-async function loadDetails(vendor, model) {
+async function loadDetails(vendor, model, basePath = 'data/benchmarks/v0.8.0/default') {
   try {
-    const response = await fetch(`data/benchmarks/v0.8.0/default/${vendor}/${model}.json`);
+    const response = await fetch(`${basePath}/${vendor}/${model}.json`);
     const data = await response.json();
     return data;
   } catch (error) {
@@ -406,9 +406,9 @@ function createDetailRow(stats, modelName, data) {
 }
 
 // Load and display leaderboard data
-async function loadLeaderboard() {
+async function loadLeaderboard(basePath = 'data/benchmarks/v0.8.0/default', displayMode = 'model') {
   try {
-    const response = await fetch('data/benchmarks/v0.8.0/default/leaderboard.json');
+    const response = await fetch(`${basePath}/leaderboard.json`);
     const data = await response.json();
 
     const tableBody = document.getElementById('leaderboard-body');
@@ -416,6 +416,25 @@ async function loadLeaderboard() {
     data.entries.forEach((entry, index) => {
       const row = document.createElement('tr');
       row.className = 'hover:bg-gray-50 transition-colors duration-150 lg:cursor-pointer';
+
+      // Parse data based on display mode
+      let primaryValue, secondaryValue, vendor, model;
+
+      if (displayMode === 'community') {
+        primaryValue = entry.config.author || 'Unknown Author';
+        secondaryValue = entry.config.strategy || 'Unknown Strategy';
+        // For detail loading, we still need vendor/model from config.model
+        const modelParts = entry.config.model.split('/');
+        vendor = modelParts[0];
+        model = modelParts[1];
+      } else {
+        // Parse model and vendor from config.model (format: "vendor/model")
+        const modelParts = entry.config.model.split('/');
+        vendor = modelParts[0];
+        model = modelParts[1];
+        primaryValue = model;
+        secondaryValue = vendor;
+      }
 
       // Make row clickable on lg+ screens
       row.addEventListener('click', async () => {
@@ -431,17 +450,13 @@ async function loadLeaderboard() {
             document.querySelectorAll('.detail-row').forEach(dr => dr.remove());
 
             // Load and show details
-            const data = await loadDetails(vendor, model);
-            const detailRow = createDetailRow(data.stats, model, data);
+            const data = await loadDetails(vendor, model, basePath);
+            const detailRow = createDetailRow(data.stats, displayMode === 'community' ?
+              primaryValue : model, data);
             row.insertAdjacentElement('afterend', detailRow);
           }
         }
       });
-
-      // Parse model and vendor from config.model (format: "vendor/model")
-      const modelParts = entry.config.model.split('/');
-      const vendor = modelParts[0];
-      const model = modelParts[1];
 
       // Calculate percentages
       const successRate = ((entry.calls.successful / entry.calls.total) * 100).toFixed(0);
@@ -468,8 +483,8 @@ async function loadLeaderboard() {
 
       row.innerHTML = `
         <td class="px-4 py-3 text-left text-gray-700 font-mono">${index + 1}</td>
-        <td class="px-4 py-3 text-center text-gray-700 font-mono whitespace-nowrap">${model}</td>
-        <td class="px-4 py-3 text-center text-gray-700 font-mono whitespace-nowrap hidden lg:table-cell">${vendor}</td>
+        <td class="px-4 py-3 text-center text-gray-700 font-mono whitespace-nowrap">${primaryValue}</td>
+        <td class="px-4 py-3 text-center text-gray-700 font-mono whitespace-nowrap hidden lg:table-cell">${secondaryValue}</td>
         <td class="px-4 py-3 text-center text-gray-700 font-mono">
           <div class="flex justify-center items-center">
             <span class="w-8 text-center">${avgRound}</span>
@@ -521,4 +536,13 @@ async function loadLeaderboard() {
 }
 
 // Load data when page loads
-document.addEventListener('DOMContentLoaded', loadLeaderboard);
+document.addEventListener('DOMContentLoaded', () => {
+  // Detect if this is the community page
+  const isCommunityPage = document.title.includes('Community');
+
+  if (isCommunityPage) {
+    loadLeaderboard('data/community/v0.8.0/default', 'community');
+  } else {
+    loadLeaderboard();
+  }
+});
