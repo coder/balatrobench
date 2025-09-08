@@ -11,7 +11,9 @@ BalatroBench is a static web application that displays performance leaderboards 
 ### Core Components
 
 - **index.html**: Main leaderboard page with responsive table layout using Tailwind CSS
-- **script.js**: Fetches and renders leaderboard data, with interactive expandable rows showing detailed charts and statistics
+- **community.html**: Community strategy leaderboard page with similar layout and functionality
+- **about.html**: About page with project information and metrics documentation
+- **script.js**: Shared JavaScript for all pages - fetches and renders leaderboard data, with interactive expandable rows showing detailed charts and statistics
 - **data/**: Contains benchmark results organized by version, strategy, and data type
   - `data/benchmarks/v0.8.0/default/leaderboard.json`: Primary model leaderboard data
   - `data/community/v0.8.0/default/leaderboard.json`: Community strategy leaderboard data
@@ -31,6 +33,7 @@ Models are identified by `vendor/model` format and ranked by performance metrics
 
 ### Interactive Features
 
+- **Navigation**: Top navigation bar with links between main leaderboard, community, and about pages
 - **Expandable Rows**: Click on desktop (lg+) to expand detailed view with:
   - Round distribution histogram using Chart.js
   - Provider usage pie chart
@@ -92,6 +95,16 @@ python3 -m http.server 8000
 ## Community Contributions
 
 The project accepts AI strategy submissions through a community form process. Contributors develop strategies using the `balatrollm` framework, test locally, then submit via web form for automated server validation and leaderboard inclusion.
+
+## Site Structure
+
+The application consists of three main pages:
+
+1. **Main Leaderboard** (`index.html`): Primary model performance rankings
+2. **Community** (`community.html`): Community-submitted strategy rankings  
+3. **About** (`about.html`): Project information and metrics documentation
+
+All pages share the same navigation structure and use the same `script.js` for functionality.
 
 ## Static Hosting
 
