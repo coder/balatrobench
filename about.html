@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About - BalatroBench</title>
+  <script src="https://cdn.jsdelivr.net/npm/heroicons@2.0.18/24/outline/index.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="script.js"></script>
+</head>
+
+<body class="bg-gray-50 min-h-screen py-8">
+  <div class="container mx-auto px-4">
+    <nav class="w-full bg-white border-b border-gray-200 shadow-sm mb-8">
+      <div class="container mx-auto px-4">
+        <div class="flex items-center justify-center space-x-8 py-4">
+          <a href="index.html"
+            class="px-6 py-2 text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-lg font-medium text-sm transition-colors">BalatroBench</a>
+          <a href="community.html"
+            class="px-6 py-2 text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-lg font-medium text-sm transition-colors">Community</a>
+          <a href="about.html"
+            class="px-6 py-2 bg-slate-100 text-slate-700 rounded-lg font-medium text-sm border border-slate-200">About</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="max-w-4xl mx-auto">
+      <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">What is BalatroBench?</h2>
+        <p class="text-gray-600 mb-4 leading-relaxed">
+          BalatroBench benchmarks Large Language Models playing <a href="https://www.playbalatro.com/"
+            class="text-blue-600 hover:text-blue-800">Balatro</a>, a strategic card game that combines poker hands with
+          roguelike progression. We track how different AI models perform across key metrics like rounds reached,
+          decision accuracy, and resource efficiency to understand their strategic reasoning abilities. The benchmark
+          specifically focuses on the LLM's ability to perform tool calls, measuring how effectively models can execute
+          game actions through API interactions.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Metrics Measured</h2>
+        <div class="space-y-6">
+          <ul class="text-gray-600 ml-3">
+
+            <li class="mb-6">• <strong>Main Score:</strong>
+              <ul class="text-gray-600 space-y-3 ml-6 mt-3">
+                <li class="flex items-center space-x-3">
+                  <div class="flex items-center space-x-2 text-gray-700">
+                    <span class="text-mono italic">Round</span>
+                  </div>
+                  <span>Average round reached by playing the game</span>
+                </li>
+              </ul>
+            <li class="mb-6">• <strong>Tool Calls:</strong>
+              <ul class="text-gray-600 space-y-3 ml-6 mt-3">
+                <li class="flex items-center space-x-3">
+                  <div class="flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
+                      class="w-4 h-4 text-green-600">
+                      <path fill-rule="evenodd"
+                        d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14Zm3.844-8.791a.75.75 0 0 0-1.188-.918l-3.7 4.79-1.649-1.833a.75.75 0 1 0-1.114 1.004l2.25 2.5a.75.75 0 0 0 1.15-.043l4.25-5.5Z"
+                        clip-rule="evenodd" />
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
+                      <path fill-rule="evenodd"
+                        d="M15 4.5A3.5 3.5 0 0 1 11.435 8c-.99-.019-2.093.132-2.7.913l-4.13 5.31a2.015 2.015 0 1 1-2.827-2.828l5.309-4.13c.78-.607.932-1.71.914-2.7L8 4.5a3.5 3.5 0 0 1 4.477-3.362c.325.094.39.497.15.736L10.6 3.902a.48.48 0 0 0-.033.653c.271.314.565.608.879.879a.48.48 0 0 0 .653-.033l2.027-2.027c.239-.24.642-.175.736.15.09.31.138.637.138.976ZM3.75 13a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+                        clip-rule="evenodd" />
+                      <path
+                        d="M11.5 9.5c.313 0 .62-.029.917-.084l1.962 1.962a2.121 2.121 0 0 1-3 3l-2.81-2.81 1.35-1.734c.05-.064.158-.158.426-.233.278-.078.639-.11 1.062-.102l.093.001ZM5 4l1.446 1.445a2.256 2.256 0 0 1-.047.21c-.075.268-.169.377-.233.427l-.61.474L4 5H2.655a.25.25 0 0 1-.224-.139l-1.35-2.7a.25.25 0 0 1 .047-.289l.745-.745a.25.25 0 0 1 .289-.047l2.7 1.35A.25.25 0 0 1 5 2.654V4Z" />
+                    </svg>
+                  </div>
+                  <span>Responses <strong>with</strong> valid tool calls that <strong>can</strong> be executed in the
+                    current game state.</span>
+                </li>
+                <li class="flex items-center space-x-3">
+                  <div class="flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
+                      class="w-4 h-4 text-yellow-500">
+                      <path fill-rule="evenodd"
+                        d="M6.701 2.25c.577-1 2.02-1 2.598 0l5.196 9a1.5 1.5 0 0 1-1.299 2.25H2.804a1.5 1.5 0 0 1-1.3-2.25l5.197-9ZM8 4a.75.75 0 0 1 .75.75v3a.75.75 0 1 1-1.5 0v-3A.75.75 0 0 1 8 4Zm0 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"
+                        clip-rule="evenodd" />
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
+                      <path fill-rule="evenodd"
+                        d="M15 4.5A3.5 3.5 0 0 1 11.435 8c-.99-.019-2.093.132-2.7.913l-4.13 5.31a2.015 2.015 0 1 1-2.827-2.828l5.309-4.13c.78-.607.932-1.71.914-2.7L8 4.5a3.5 3.5 0 0 1 4.477-3.362c.325.094.39.497.15.736L10.6 3.902a.48.48 0 0 0-.033.653c.271.314.565.608.879.879a.48.48 0 0 0 .653-.033l2.027-2.027c.239-.24.642-.175.736.15.09.31.138.637.138.976ZM3.75 13a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+                        clip-rule="evenodd" />
+                      <path
+                        d="M11.5 9.5c.313 0 .62-.029.917-.084l1.962 1.962a2.121 2.121 0 0 1-3 3l-2.81-2.81 1.35-1.734c.05-.064.158-.158.426-.233.278-.078.639-.11 1.062-.102l.093.001ZM5 4l1.446 1.445a2.256 2.256 0 0 1-.047.21c-.075.268-.169.377-.233.427l-.61.474L4 5H2.655a.25.25 0 0 1-.224-.139l-1.35-2.7a.25.25 0 0 1 .047-.289l.745-.745a.25.25 0 0 1 .289-.047l2.7 1.35A.25.25 0 0 1 5 2.654V4Z" />
+                    </svg>
+                  </div>
+                  <span>Responses <strong>with</strong> valid tool calls valid that <strong>cannot</strong> be
+                    executed
+                    in the current
+                    game state.</span>
+                </li>
+                <li class="flex items-center space-x-3">
+                  <div class="flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
+                      class="w-4 h-4 text-red-600">
+                      <path fill-rule="evenodd"
+                        d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14ZM8 4a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-1.5 0v-3A.75.75 0 0 1 8 4Zm0 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"
+                        clip-rule="evenodd" />
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
+                      <path fill-rule="evenodd"
+                        d="M15 4.5A3.5 3.5 0 0 1 11.435 8c-.99-.019-2.093.132-2.7.913l-4.13 5.31a2.015 2.015 0 1 1-2.827-2.828l5.309-4.13c.78-.607.932-1.71.914-2.7L8 4.5a3.5 3.5 0 0 1 4.477-3.362c.325.094.39.497.15.736L10.6 3.902a.48.48 0 0 0-.033.653c.271.314.565.608.879.879a.48.48 0 0 0 .653-.033l2.027-2.027c.239-.24.642-.175.736.15.09.31.138.637.138.976ZM3.75 13a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+                        clip-rule="evenodd" />
+                      <path
+                        d="M11.5 9.5c.313 0 .62-.029.917-.084l1.962 1.962a2.121 2.121 0 0 1-3 3l-2.81-2.81 1.35-1.734c.05-.064.158-.158.426-.233.278-.078.639-.11 1.062-.102l.093.001ZM5 4l1.446 1.445a2.256 2.256 0 0 1-.047.21c-.075.268-.169.377-.233.427l-.61.474L4 5H2.655a.25.25 0 0 1-.224-.139l-1.35-2.7a.25.25 0 0 1 .047-.289l.745-.745a.25.25 0 0 1 .289-.047l2.7 1.35A.25.25 0 0 1 5 2.654V4Z" />
+                    </svg>
+                  </div>
+                  <span>Responses <strong>without</strong> valid tool calls.</span>
+                </li>
+              </ul>
+
+            <li class="mb-6">• <strong>Token Usage:</strong>
+              <ul class="text-gray-600 space-y-3 ml-6 mt-3">
+                <li class="flex items-center space-x-3">
+                  <div class="flex items-center space-x-2">
+                    <span>In</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
+                      <path d="M8 7c3.314 0 6-1.343 6-3s-2.686-3-6-3-6 1.343-6 3 2.686 3 6 3Z" />
+                      <path
+                        d="M8 8.5c1.84 0 3.579-.37 4.914-1.037A6.33 6.33 0 0 0 14 6.78V8c0 1.657-2.686 3-6 3S2 9.657 2 8V6.78c.346.273.72.5 1.087.683C4.42 8.131 6.16 8.5 8 8.5Z" />
+                      <path
+                        d="M8 12.5c1.84 0 3.579-.37 4.914-1.037.366-.183.74-.41 1.086-.684V12c0 1.657-2.686 3-6 3s-6-1.343-6-3v-1.22c.346.273.72.5 1.087.683C4.42 12.131 6.16 12.5 8 12.5Z" />
+                    </svg>
+                    <span class="text-xs">/</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
+                      <path fill-rule="evenodd"
+                        d="M15 4.5A3.5 3.5 0 0 1 11.435 8c-.99-.019-2.093.132-2.7.913l-4.13 5.31a2.015 2.015 0 1 1-2.827-2.828l5.309-4.13c.78-.607.932-1.71.914-2.7L8 4.5a3.5 3.5 0 0 1 4.477-3.362c.325.094.39.497.15.736L10.6 3.902a.48.48 0 0 0-.033.653c.271.314.565.608.879.879a.48.48 0 0 0 .653-.033l2.027-2.027c.239-.24.642-.175.736.15.09.31.138.637.138.976ZM3.75 13a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+                        clip-rule="evenodd" />
+                      <path
+                        d="M11.5 9.5c.313 0 .62-.029.917-.084l1.962 1.962a2.121 2.121 0 0 1-3 3l-2.81-2.81 1.35-1.734c.05-.064.158-.158.426-.233.278-.078.639-.11 1.062-.102l.093.001ZM5 4l1.446 1.445a2.256 2.256 0 0 1-.047.21c-.075.268-.169.377-.233.427l-.61.474L4 5H2.655a.25.25 0 0 1-.224-.139l-1.35-2.7a.25.25 0 0 1 .047-.289l.745-.745a.25.25 0 0 1 .289-.047l2.7 1.35A.25.25 0 0 1 5 2.654V4Z" />
+                    </svg>
+                  </div>
+                  <span>&nbsp;&nbsp;&nbsp;Average input tokens per tool call</span>
+                </li>
+                <li class="flex items-center space-x-3">
+                  <div class="flex items-center space-x-2">
+                    <span>Out</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
+                      <path d="M8 7c3.314 0 6-1.343 6-3s-2.686-3-6-3-6 1.343-6 3 2.686 3 6 3Z" />
+                      <path
+                        d="M8 8.5c1.84 0 3.579-.37 4.914-1.037A6.33 6.33 0 0 0 14 6.78V8c0 1.657-2.686 3-6 3S2 9.657 2 8V6.78c.346.273.72.5 1.087.683C4.42 8.131 6.16 8.5 8 8.5Z" />
+                      <path
+                        d="M8 12.5c1.84 0 3.579-.37 4.914-1.037.366-.183.74-.41 1.086-.684V12c0 1.657-2.686 3-6 3s-6-1.343-6-3v-1.22c.346.273.72.5 1.087.683C4.42 12.131 6.16 12.5 8 12.5Z" />
+                    </svg>
+                    <span class="text-xs">/</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
+                      <path fill-rule="evenodd"
+                        d="M15 4.5A3.5 3.5 0 0 1 11.435 8c-.99-.019-2.093.132-2.7.913l-4.13 5.31a2.015 2.015 0 1 1-2.827-2.828l5.309-4.13c.78-.607.932-1.71.914-2.7L8 4.5a3.5 3.5 0 0 1 4.477-3.362c.325.094.39.497.15.736L10.6 3.902a.48.48 0 0 0-.033.653c.271.314.565.608.879.879a.48.48 0 0 0 .653-.033l2.027-2.027c.239-.24.642-.175.736.15.09.31.138.637.138.976ZM3.75 13a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+                        clip-rule="evenodd" />
+                      <path
+                        d="M11.5 9.5c.313 0 .62-.029.917-.084l1.962 1.962a2.121 2.121 0 0 1-3 3l-2.81-2.81 1.35-1.734c.05-.064.158-.158.426-.233.278-.078.639-.11 1.062-.102l.093.001ZM5 4l1.446 1.445a2.256 2.256 0 0 1-.047.21c-.075.268-.169.377-.233.427l-.61.474L4 5H2.655a.25.25 0 0 1-.224-.139l-1.35-2.7a.25.25 0 0 1 .047-.289l.745-.745a.25.25 0 0 1 .289-.047l2.7 1.35A.25.25 0 0 1 5 2.654V4Z" />
+                    </svg>
+                  </div>
+                  <span>Average output tokens per tool call (including reasoning tokens)</span>
+                </li>
+              </ul>
+            </li>
+
+            <li class="mb-6">• <strong>Performance:</strong>
+              <ul class="text-gray-600 space-y-3 ml-6 mt-3">
+                <li class="flex items-center space-x-3">
+                  <div class="flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
+                      <path fill-rule="evenodd"
+                        d="M1 8a7 7 0 1 1 14 0A7 7 0 0 1 1 8Zm7.75-4.25a.75.75 0 0 0-1.5 0V8c0 .414.336.75.75.75h3.25a.75.75 0 0 0 0-1.5h-2.5v-3.5Z"
+                        clip-rule="evenodd" />
+                    </svg>
+                    <span class="text-xs">/</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
+                      <path fill-rule="evenodd"
+                        d="M15 4.5A3.5 3.5 0 0 1 11.435 8c-.99-.019-2.093.132-2.7.913l-4.13 5.31a2.015 2.015 0 1 1-2.827-2.828l5.309-4.13c.78-.607.932-1.71.914-2.7L8 4.5a3.5 3.5 0 0 1 4.477-3.362c.325.094.39.497.15.736L10.6 3.902a.48.48 0 0 0-.033.653c.271.314.565.608.879.879a.48.48 0 0 0 .653-.033l2.027-2.027c.239-.24.642-.175.736.15.09.31.138.637.138.976ZM3.75 13a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+                        clip-rule="evenodd" />
+                      <path
+                        d="M11.5 9.5c.313 0 .62-.029.917-.084l1.962 1.962a2.121 2.121 0 0 1-3 3l-2.81-2.81 1.35-1.734c.05-.064.158-.158.426-.233.278-.078.639-.11 1.062-.102l.093.001ZM5 4l1.446 1.445a2.256 2.256 0 0 1-.047.21c-.075.268-.169.377-.233.427l-.61.474L4 5H2.655a.25.25 0 0 1-.224-.139l-1.35-2.7a.25.25 0 0 1 .047-.289l.745-.745a.25.25 0 0 1 .289-.047l2.7 1.35A.25.25 0 0 1 5 2.654V4Z" />
+                    </svg>
+                    <span class="text-xs">[s]</span>
+                  </div>
+                  <span>&nbsp;&nbsp;&nbsp;Average time per tool call in seconds</span>
+                </li>
+                <li class="flex items-center space-x-3">
+                  <div class="flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
+                      <path
+                        d="M6.375 5.5h.875v1.75h-.875a.875.875 0 1 1 0-1.75ZM8.75 10.5V8.75h.875a.875.875 0 0 1 0 1.75H8.75Z" />
+                      <path fill-rule="evenodd"
+                        d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM7.25 3.75a.75.75 0 0 1 1.5 0V4h2.5a.75.75 0 0 1 0 1.5h-2.5v1.75h.875a2.375 2.375 0 1 1 0 4.75H8.75v.25a.75.75 0 0 1-1.5 0V12h-2.5a.75.75 0 0 1 0-1.5h2.5V8.75h-.875a2.375 2.375 0 1 1 0-4.75h.875v-.25Z"
+                        clip-rule="evenodd" />
+                    </svg>
+                    <span class="text-xs">/</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
+                      <path fill-rule="evenodd"
+                        d="M15 4.5A3.5 3.5 0 0 1 11.435 8c-.99-.019-2.093.132-2.7.913l-4.13 5.31a2.015 2.015 0 1 1-2.827-2.828l5.309-4.13c.78-.607.932-1.71.914-2.7L8 4.5a3.5 3.5 0 0 1 4.477-3.362c.325.094.39.497.15.736L10.6 3.902a.48.48 0 0 0-.033.653c.271.314.565.608.879.879a.48.48 0 0 0 .653-.033l2.027-2.027c.239-.24.642-.175.736.15.09.31.138.637.138.976ZM3.75 13a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+                        clip-rule="evenodd" />
+                      <path
+                        d="M11.5 9.5c.313 0 .62-.029.917-.084l1.962 1.962a2.121 2.121 0 0 1-3 3l-2.81-2.81 1.35-1.734c.05-.064.158-.158.426-.233.278-.078.639-.11 1.062-.102l.093.001ZM5 4l1.446 1.445a2.256 2.256 0 0 1-.047.21c-.075.268-.169.377-.233.427l-.61.474L4 5H2.655a.25.25 0 0 1-.224-.139l-1.35-2.7a.25.25 0 0 1 .047-.289l.745-.745a.25.25 0 0 1 .289-.047l2.7 1.35A.25.25 0 0 1 5 2.654V4Z" />
+                    </svg>
+                    <span class="text-xs">[m$]</span>
+                  </div>
+                  <span>Average cost per tool call in milli-dollars (m$)</span>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Leaderboards</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="border border-gray-200 rounded-lg p-4">
+            <h3 class="text-lg font-semibold text-gray-700 mb-2">Model Leaderboard</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">
+              Compare performance across different LLM. Models are ranked by their average
+              final round reached, with detailed statistics on costs, speed, and reliability.
+            </p>
+            <a href="index.html" class="inline-block mt-3 text-blue-600 hover:text-blue-800 text-sm font-medium">
+              View Model Leaderboard →
+            </a>
+          </div>
+          <div class="border border-gray-200 rounded-lg p-4">
+            <h3 class="text-lg font-semibold text-gray-700 mb-2">Community Strategies</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">
+              Explore community-submitted strategies and approaches to playing Balatro with fix model.
+              You can contribute with your own strategies.
+            </p>
+            <a href="community.html" class="inline-block mt-3 text-blue-600 hover:text-blue-800 text-sm font-medium">
+              View Community Leaderboard →
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Related Projects</h2>
+        <div class="space-y-6">
+          <div class="border border-gray-200 rounded-lg p-4">
+            <h3 class="text-lg font-semibold text-gray-700 mb-2">
+              <a href="https://github.com/S1M0N38/balatrobot" class="text-blue-600 hover:text-blue-800">BalatroBot</a>
+            </h3>
+            <p class="text-gray-600 text-sm leading-relaxed">
+              The foundational Python framework that enables automated interaction with Balatro. Provides the core API
+              for game state reading, action execution, and bot development that powers all LLM players in our
+              benchmarks.
+            </p>
+          </div>
+          <div class="border border-gray-200 rounded-lg p-4">
+            <h3 class="text-lg font-semibold text-gray-700 mb-2">
+              <a href="https://github.com/S1M0N38/balatrollm" class="text-blue-600 hover:text-blue-800">BalatroLLM</a>
+            </h3>
+            <p class="text-gray-600 text-sm leading-relaxed">
+              The LLM-powered bot that generates all benchmark data displayed on this site. Uses strategy templates and
+              game state analysis to make strategic decisions, then runs multiple games to produce the performance
+              statistics you see in our leaderboards.
+            </p>
+          </div>
+          <div class="border border-gray-200 rounded-lg p-4">
+            <h3 class="text-lg font-semibold text-gray-700 mb-2">
+              <a href="https://github.com/S1M0N38/balatrobench"
+                class="text-blue-600 hover:text-blue-800">BalatroBench</a>
+            </h3>
+            <p class="text-gray-600 text-sm leading-relaxed">
+              This website repository that processes and visualizes the benchmark data. Takes raw game results from
+              BalatroLLM runs and transforms them into interactive leaderboards with detailed statistics, charts,
+              and performance analysis.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+
+</html>
