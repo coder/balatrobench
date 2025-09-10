@@ -1,0 +1,1268 @@
+{
+  "runs": 20,
+  "wins": 0,
+  "completed": 20,
+  "avg_final_round": 3.05,
+  "std_dev_final_round": 0.9445132413883327,
+  "providers": {
+    "Google": 451,
+    "Google AI Studio": 1
+  },
+  "calls": {
+    "successful": 433,
+    "error": 0,
+    "failed": 19,
+    "total": 452
+  },
+  "total": {
+    "input_tokens": 886433,
+    "output_tokens": 421007,
+    "input_cost": 1.08732459,
+    "output_cost": 4.21007,
+    "total_cost": 5.29739459,
+    "time_ms": 4735226
+  },
+  "average": {
+    "input_tokens": 1961.1349557522124,
+    "output_tokens": 931.4314159292036,
+    "input_cost": 0.0024055853761061944,
+    "output_cost": 0.009314314159292035,
+    "total_cost": 0.01171989953539823,
+    "time_ms": 10476.163716814159
+  },
+  "std_dev": {
+    "input_tokens": 178.2342859335983,
+    "output_tokens": 579.9191335817618,
+    "input_cost": 0.00040141090919134016,
+    "output_cost": 0.005799191335817618,
+    "total_cost": 0.005929863795403466,
+    "time_ms": 5393.142160912863
+  },
+  "config": {
+    "model": "google/gemini-2.5-pro",
+    "strategy": "default",
+    "deck": "Red Deck",
+    "stake": 1,
+    "seed": "OOOO155",
+    "challenge": null,
+    "version": "0.8.2",
+    "name": "Unknown Name",
+    "description": "Unknown Description",
+    "author": "BalatroBench",
+    "tags": []
+  },
+  "stats": [
+    {
+      "won": false,
+      "completed": true,
+      "ante_reached": 1,
+      "final_round": 2,
+      "providers": [
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google"
+      ],
+      "calls": {
+        "successful": 15,
+        "error": 0,
+        "failed": 1,
+        "total": 16
+      },
+      "total": {
+        "input_tokens": 30467,
+        "output_tokens": 16451,
+        "input_cost": 0.03808375,
+        "output_cost": 0.16451,
+        "total_cost": 0.20259375000000002,
+        "time_ms": 179616
+      },
+      "average": {
+        "input_tokens": 1904.1875,
+        "output_tokens": 1028.1875,
+        "input_cost": 0.002380234375,
+        "output_cost": 0.010281875,
+        "total_cost": 0.012662109375000001,
+        "time_ms": 11226.0
+      },
+      "std_dev": {
+        "input_tokens": 186.4550772527617,
+        "output_tokens": 691.2114214671707,
+        "input_cost": 0.0002330688465659521,
+        "output_cost": 0.006912114214671707,
+        "total_cost": 0.006998980859125581,
+        "time_ms": 6034.420502417775
+      }
+    },
+    {
+      "won": false,
+      "completed": true,
+      "ante_reached": 2,
+      "final_round": 4,
+      "providers": [
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google"
+      ],
+      "calls": {
+        "successful": 30,
+        "error": 0,
+        "failed": 3,
+        "total": 33
+      },
+      "total": {
+        "input_tokens": 66443,
+        "output_tokens": 35029,
+        "input_cost": 0.08167947,
+        "output_cost": 0.35029,
+        "total_cost": 0.43196947,
+        "time_ms": 387222
+      },
+      "average": {
+        "input_tokens": 2013.4242424242425,
+        "output_tokens": 1061.4848484848485,
+        "input_cost": 0.0024751354545454545,
+        "output_cost": 0.010614848484848484,
+        "total_cost": 0.01308998393939394,
+        "time_ms": 11734.0
+      },
+      "std_dev": {
+        "input_tokens": 166.33231614433618,
+        "output_tokens": 687.2152647284238,
+        "input_cost": 0.00039742502734077805,
+        "output_cost": 0.006872152647284238,
+        "total_cost": 0.006999803416374429,
+        "time_ms": 6543.622534575172
+      }
+    },
+    {
+      "won": false,
+      "completed": true,
+      "ante_reached": 2,
+      "final_round": 4,
+      "providers": [
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google"
+      ],
+      "calls": {
+        "successful": 29,
+        "error": 0,
+        "failed": 0,
+        "total": 29
+      },
+      "total": {
+        "input_tokens": 56887,
+        "output_tokens": 28269,
+        "input_cost": 0.06973447,
+        "output_cost": 0.28269,
+        "total_cost": 0.35242447,
+        "time_ms": 320627
+      },
+      "average": {
+        "input_tokens": 1961.6206896551723,
+        "output_tokens": 974.7931034482758,
+        "input_cost": 0.0024046368965517243,
+        "output_cost": 0.009747931034482758,
+        "total_cost": 0.012152567931034482,
+        "time_ms": 11056.103448275862
+      },
+      "std_dev": {
+        "input_tokens": 162.89400887718006,
+        "output_tokens": 535.1969183200799,
+        "input_cost": 0.00040734234274575,
+        "output_cost": 0.0053519691832008,
+        "total_cost": 0.005506314771784028,
+        "time_ms": 5035.553766857847
+      }
+    },
+    {
+      "won": false,
+      "completed": true,
+      "ante_reached": 2,
+      "final_round": 4,
+      "providers": [
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google"
+      ],
+      "calls": {
+        "successful": 30,
+        "error": 0,
+        "failed": 0,
+        "total": 30
+      },
+      "total": {
+        "input_tokens": 59183,
+        "output_tokens": 26845,
+        "input_cost": 0.07114559,
+        "output_cost": 0.26845,
+        "total_cost": 0.33959559,
+        "time_ms": 303324
+      },
+      "average": {
+        "input_tokens": 1972.7666666666667,
+        "output_tokens": 894.8333333333334,
+        "input_cost": 0.0023715196666666666,
+        "output_cost": 0.008948333333333334,
+        "total_cost": 0.011319853,
+        "time_ms": 10110.8
+      },
+      "std_dev": {
+        "input_tokens": 162.64233730814826,
+        "output_tokens": 359.7541385861809,
+        "input_cost": 0.000478495170000365,
+        "output_cost": 0.003597541385861809,
+        "total_cost": 0.0037866606972053432,
+        "time_ms": 3340.7599630973914
+      }
+    },
+    {
+      "won": false,
+      "completed": true,
+      "ante_reached": 1,
+      "final_round": 2,
+      "providers": [
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google"
+      ],
+      "calls": {
+        "successful": 11,
+        "error": 0,
+        "failed": 0,
+        "total": 11
+      },
+      "total": {
+        "input_tokens": 20844,
+        "output_tokens": 8886,
+        "input_cost": 0.02468072,
+        "output_cost": 0.08886,
+        "total_cost": 0.11354072,
+        "time_ms": 99555
+      },
+      "average": {
+        "input_tokens": 1894.909090909091,
+        "output_tokens": 807.8181818181819,
+        "input_cost": 0.002243701818181818,
+        "output_cost": 0.008078181818181818,
+        "total_cost": 0.010321883636363636,
+        "time_ms": 9050.454545454546
+      },
+      "std_dev": {
+        "input_tokens": 239.41071594456858,
+        "output_tokens": 382.71864814294537,
+        "input_cost": 0.0006359961344508028,
+        "output_cost": 0.003827186481429454,
+        "total_cost": 0.004092762579718674,
+        "time_ms": 3310.139856973912
+      }
+    },
+    {
+      "won": false,
+      "completed": true,
+      "ante_reached": 2,
+      "final_round": 3,
+      "providers": [
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google"
+      ],
+      "calls": {
+        "successful": 21,
+        "error": 0,
+        "failed": 0,
+        "total": 21
+      },
+      "total": {
+        "input_tokens": 39885,
+        "output_tokens": 15391,
+        "input_cost": 0.04708983,
+        "output_cost": 0.15391,
+        "total_cost": 0.20099983,
+        "time_ms": 176083
+      },
+      "average": {
+        "input_tokens": 1899.2857142857142,
+        "output_tokens": 732.9047619047619,
+        "input_cost": 0.002242372857142857,
+        "output_cost": 0.007329047619047619,
+        "total_cost": 0.009571420476190477,
+        "time_ms": 8384.904761904761
+      },
+      "std_dev": {
+        "input_tokens": 164.26629077724465,
+        "output_tokens": 340.9749117987869,
+        "input_cost": 0.0005754994285847976,
+        "output_cost": 0.0034097491179878683,
+        "total_cost": 0.0036825473025658153,
+        "time_ms": 3055.425926196901
+      }
+    },
+    {
+      "won": false,
+      "completed": true,
+      "ante_reached": 2,
+      "final_round": 4,
+      "providers": [
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google"
+      ],
+      "calls": {
+        "successful": 29,
+        "error": 0,
+        "failed": 0,
+        "total": 29
+      },
+      "total": {
+        "input_tokens": 57100,
+        "output_tokens": 25213,
+        "input_cost": 0.071375,
+        "output_cost": 0.25213,
+        "total_cost": 0.323505,
+        "time_ms": 289200
+      },
+      "average": {
+        "input_tokens": 1968.9655172413793,
+        "output_tokens": 869.4137931034483,
+        "input_cost": 0.002461206896551724,
+        "output_cost": 0.008694137931034483,
+        "total_cost": 0.011155344827586207,
+        "time_ms": 9972.413793103447
+      },
+      "std_dev": {
+        "input_tokens": 163.76692557207653,
+        "output_tokens": 428.64250149590856,
+        "input_cost": 0.00020470865696509564,
+        "output_cost": 0.004286425014959085,
+        "total_cost": 0.004344284305480857,
+        "time_ms": 3872.29784603075
+      }
+    },
+    {
+      "won": false,
+      "completed": true,
+      "ante_reached": 2,
+      "final_round": 3,
+      "providers": [
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google"
+      ],
+      "calls": {
+        "successful": 25,
+        "error": 0,
+        "failed": 7,
+        "total": 32
+      },
+      "total": {
+        "input_tokens": 63680,
+        "output_tokens": 45750,
+        "input_cost": 0.07822572,
+        "output_cost": 0.4575,
+        "total_cost": 0.53572572,
+        "time_ms": 479592
+      },
+      "average": {
+        "input_tokens": 1990.0,
+        "output_tokens": 1429.6875,
+        "input_cost": 0.00244455375,
+        "output_cost": 0.014296875,
+        "total_cost": 0.01674142875,
+        "time_ms": 14987.25
+      },
+      "std_dev": {
+        "input_tokens": 161.11806930963553,
+        "output_tokens": 1202.8783607690561,
+        "input_cost": 0.00039538035468312643,
+        "output_cost": 0.012028783607690562,
+        "total_cost": 0.012166195059262802,
+        "time_ms": 11112.301326646679
+      }
+    },
+    {
+      "won": false,
+      "completed": true,
+      "ante_reached": 2,
+      "final_round": 4,
+      "providers": [
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google"
+      ],
+      "calls": {
+        "successful": 29,
+        "error": 0,
+        "failed": 0,
+        "total": 29
+      },
+      "total": {
+        "input_tokens": 57504,
+        "output_tokens": 26432,
+        "input_cost": 0.07050572000000001,
+        "output_cost": 0.26432,
+        "total_cost": 0.33482572,
+        "time_ms": 298989
+      },
+      "average": {
+        "input_tokens": 1982.896551724138,
+        "output_tokens": 911.448275862069,
+        "input_cost": 0.0024312317241379313,
+        "output_cost": 0.009114482758620689,
+        "total_cost": 0.01154571448275862,
+        "time_ms": 10309.965517241379
+      },
+      "std_dev": {
+        "input_tokens": 163.46086137657065,
+        "output_tokens": 449.2808210436269,
+        "input_cost": 0.0004108861925857761,
+        "output_cost": 0.004492808210436268,
+        "total_cost": 0.004662014582024742,
+        "time_ms": 4249.785595287288
+      }
+    },
+    {
+      "won": false,
+      "completed": true,
+      "ante_reached": 1,
+      "final_round": 2,
+      "providers": [
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google"
+      ],
+      "calls": {
+        "successful": 15,
+        "error": 0,
+        "failed": 1,
+        "total": 16
+      },
+      "total": {
+        "input_tokens": 30813,
+        "output_tokens": 13487,
+        "input_cost": 0.03851625,
+        "output_cost": 0.13487,
+        "total_cost": 0.17338625,
+        "time_ms": 155616
+      },
+      "average": {
+        "input_tokens": 1925.8125,
+        "output_tokens": 842.9375,
+        "input_cost": 0.002407265625,
+        "output_cost": 0.008429375,
+        "total_cost": 0.010836640625,
+        "time_ms": 9726.0
+      },
+      "std_dev": {
+        "input_tokens": 196.20472938574477,
+        "output_tokens": 466.16899206904213,
+        "input_cost": 0.00024525591173218096,
+        "output_cost": 0.004661689920690422,
+        "total_cost": 0.004741419766245084,
+        "time_ms": 4330.981351456811
+      }
+    },
+    {
+      "won": false,
+      "completed": true,
+      "ante_reached": 2,
+      "final_round": 3,
+      "providers": [
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google AI Studio",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google"
+      ],
+      "calls": {
+        "successful": 24,
+        "error": 0,
+        "failed": 1,
+        "total": 25
+      },
+      "total": {
+        "input_tokens": 49990,
+        "output_tokens": 22838,
+        "input_cost": 0.0624875,
+        "output_cost": 0.22838,
+        "total_cost": 0.2908675,
+        "time_ms": 263120
+      },
+      "average": {
+        "input_tokens": 1999.6,
+        "output_tokens": 913.52,
+        "input_cost": 0.0024995,
+        "output_cost": 0.0091352,
+        "total_cost": 0.0116347,
+        "time_ms": 10524.8
+      },
+      "std_dev": {
+        "input_tokens": 193.32119214750702,
+        "output_tokens": 376.51805180274334,
+        "input_cost": 0.0002416514901843838,
+        "output_cost": 0.003765180518027434,
+        "total_cost": 0.0038915286982592074,
+        "time_ms": 4018.9278835696136
+      }
+    },
+    {
+      "won": false,
+      "completed": true,
+      "ante_reached": 2,
+      "final_round": 3,
+      "providers": [
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google"
+      ],
+      "calls": {
+        "successful": 21,
+        "error": 0,
+        "failed": 0,
+        "total": 21
+      },
+      "total": {
+        "input_tokens": 40861,
+        "output_tokens": 16092,
+        "input_cost": 0.04970197,
+        "output_cost": 0.16092,
+        "total_cost": 0.21062197,
+        "time_ms": 182224
+      },
+      "average": {
+        "input_tokens": 1945.7619047619048,
+        "output_tokens": 766.2857142857143,
+        "input_cost": 0.0023667604761904762,
+        "output_cost": 0.007662857142857143,
+        "total_cost": 0.010029617619047618,
+        "time_ms": 8677.333333333334
+      },
+      "std_dev": {
+        "input_tokens": 179.5045695133984,
+        "output_tokens": 337.80691864690147,
+        "input_cost": 0.0004697197925942252,
+        "output_cost": 0.0033780691864690147,
+        "total_cost": 0.0035445864341653523,
+        "time_ms": 2950.0591237013086
+      }
+    },
+    {
+      "won": false,
+      "completed": true,
+      "ante_reached": 2,
+      "final_round": 5,
+      "providers": [
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google"
+      ],
+      "calls": {
+        "successful": 41,
+        "error": 0,
+        "failed": 0,
+        "total": 41
+      },
+      "total": {
+        "input_tokens": 82499,
+        "output_tokens": 43578,
+        "input_cost": 0.10174947,
+        "output_cost": 0.43578,
+        "total_cost": 0.53752947,
+        "time_ms": 483697
+      },
+      "average": {
+        "input_tokens": 2012.1707317073171,
+        "output_tokens": 1062.878048780488,
+        "input_cost": 0.0024816943902439023,
+        "output_cost": 0.010628780487804877,
+        "total_cost": 0.01311047487804878,
+        "time_ms": 11797.487804878048
+      },
+      "std_dev": {
+        "input_tokens": 160.1577195203254,
+        "output_tokens": 660.6768951280933,
+        "input_cost": 0.0003633520098200145,
+        "output_cost": 0.006606768951280932,
+        "total_cost": 0.006695012603022164,
+        "time_ms": 6281.900146937833
+      }
+    },
+    {
+      "won": false,
+      "completed": true,
+      "ante_reached": 1,
+      "final_round": 2,
+      "providers": [
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google"
+      ],
+      "calls": {
+        "successful": 11,
+        "error": 0,
+        "failed": 0,
+        "total": 11
+      },
+      "total": {
+        "input_tokens": 20473,
+        "output_tokens": 8675,
+        "input_cost": 0.02421697,
+        "output_cost": 0.08675,
+        "total_cost": 0.11096697,
+        "time_ms": 100651
+      },
+      "average": {
+        "input_tokens": 1861.1818181818182,
+        "output_tokens": 788.6363636363636,
+        "input_cost": 0.002201542727272727,
+        "output_cost": 0.007886363636363636,
+        "total_cost": 0.010087906363636363,
+        "time_ms": 9150.09090909091
+      },
+      "std_dev": {
+        "input_tokens": 202.35899692468243,
+        "output_tokens": 599.3430191012944,
+        "input_cost": 0.0006060758142194903,
+        "output_cost": 0.005993430191012944,
+        "total_cost": 0.006221111885261786,
+        "time_ms": 4960.669802648538
+      }
+    },
+    {
+      "won": false,
+      "completed": true,
+      "ante_reached": 2,
+      "final_round": 3,
+      "providers": [
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google"
+      ],
+      "calls": {
+        "successful": 20,
+        "error": 0,
+        "failed": 3,
+        "total": 23
+      },
+      "total": {
+        "input_tokens": 45194,
+        "output_tokens": 17418,
+        "input_cost": 0.0564925,
+        "output_cost": 0.17418,
+        "total_cost": 0.2306725,
+        "time_ms": 206338
+      },
+      "average": {
+        "input_tokens": 1964.9565217391305,
+        "output_tokens": 757.304347826087,
+        "input_cost": 0.002456195652173913,
+        "output_cost": 0.00757304347826087,
+        "total_cost": 0.010029239130434783,
+        "time_ms": 8971.217391304348
+      },
+      "std_dev": {
+        "input_tokens": 179.69379972630958,
+        "output_tokens": 335.456599927297,
+        "input_cost": 0.00022461724965788693,
+        "output_cost": 0.0033545659992729703,
+        "total_cost": 0.003437164916294867,
+        "time_ms": 2947.4057615673073
+      }
+    },
+    {
+      "won": false,
+      "completed": true,
+      "ante_reached": 1,
+      "final_round": 2,
+      "providers": [
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google"
+      ],
+      "calls": {
+        "successful": 12,
+        "error": 0,
+        "failed": 2,
+        "total": 14
+      },
+      "total": {
+        "input_tokens": 26432,
+        "output_tokens": 10271,
+        "input_cost": 0.03304,
+        "output_cost": 0.10271,
+        "total_cost": 0.13575,
+        "time_ms": 117109
+      },
+      "average": {
+        "input_tokens": 1888.0,
+        "output_tokens": 733.6428571428571,
+        "input_cost": 0.00236,
+        "output_cost": 0.007336428571428571,
+        "total_cost": 0.009696428571428573,
+        "time_ms": 8364.92857142857
+      },
+      "std_dev": {
+        "input_tokens": 197.6702771322448,
+        "output_tokens": 333.26695401338947,
+        "input_cost": 0.000247087846415306,
+        "output_cost": 0.0033326695401338946,
+        "total_cost": 0.0034703375215872395,
+        "time_ms": 2810.5001324507166
+      }
+    },
+    {
+      "won": false,
+      "completed": true,
+      "ante_reached": 1,
+      "final_round": 2,
+      "providers": [
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google"
+      ],
+      "calls": {
+        "successful": 11,
+        "error": 0,
+        "failed": 0,
+        "total": 11
+      },
+      "total": {
+        "input_tokens": 20906,
+        "output_tokens": 8516,
+        "input_cost": 0.0261325,
+        "output_cost": 0.08516,
+        "total_cost": 0.1112925,
+        "time_ms": 97887
+      },
+      "average": {
+        "input_tokens": 1900.5454545454545,
+        "output_tokens": 774.1818181818181,
+        "input_cost": 0.002375681818181818,
+        "output_cost": 0.007741818181818182,
+        "total_cost": 0.0101175,
+        "time_ms": 8898.818181818182
+      },
+      "std_dev": {
+        "input_tokens": 228.0080540842203,
+        "output_tokens": 385.80975057191546,
+        "input_cost": 0.0002850100676052753,
+        "output_cost": 0.003858097505719155,
+        "total_cost": 0.0039449824936240215,
+        "time_ms": 3525.3914057358743
+      }
+    },
+    {
+      "won": false,
+      "completed": true,
+      "ante_reached": 1,
+      "final_round": 2,
+      "providers": [
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google"
+      ],
+      "calls": {
+        "successful": 9,
+        "error": 0,
+        "failed": 0,
+        "total": 9
+      },
+      "total": {
+        "input_tokens": 16761,
+        "output_tokens": 6828,
+        "input_cost": 0.01957697,
+        "output_cost": 0.06828,
+        "total_cost": 0.08785697,
+        "time_ms": 77592
+      },
+      "average": {
+        "input_tokens": 1862.3333333333333,
+        "output_tokens": 758.6666666666666,
+        "input_cost": 0.0021752188888888887,
+        "output_cost": 0.007586666666666666,
+        "total_cost": 0.009761885555555556,
+        "time_ms": 8621.333333333334
+      },
+      "std_dev": {
+        "input_tokens": 235.47770595111547,
+        "output_tokens": 285.92787552108314,
+        "input_cost": 0.0006793721296801269,
+        "output_cost": 0.002859278755210831,
+        "total_cost": 0.003233556777335567,
+        "time_ms": 2918.0026130899882
+      }
+    },
+    {
+      "won": false,
+      "completed": true,
+      "ante_reached": 2,
+      "final_round": 3,
+      "providers": [
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google"
+      ],
+      "calls": {
+        "successful": 21,
+        "error": 0,
+        "failed": 1,
+        "total": 22
+      },
+      "total": {
+        "input_tokens": 42601,
+        "output_tokens": 18564,
+        "input_cost": 0.05187697,
+        "output_cost": 0.18564,
+        "total_cost": 0.23751697,
+        "time_ms": 211354
+      },
+      "average": {
+        "input_tokens": 1936.409090909091,
+        "output_tokens": 843.8181818181819,
+        "input_cost": 0.002358044090909091,
+        "output_cost": 0.008438181818181819,
+        "total_cost": 0.010796225909090908,
+        "time_ms": 9607.0
+      },
+      "std_dev": {
+        "input_tokens": 166.3798462757832,
+        "output_tokens": 476.5426714879978,
+        "input_cost": 0.00045177312274508817,
+        "output_cost": 0.004765426714879978,
+        "total_cost": 0.004899535306649144,
+        "time_ms": 4383.503545491133
+      }
+    },
+    {
+      "won": false,
+      "completed": true,
+      "ante_reached": 2,
+      "final_round": 4,
+      "providers": [
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google",
+        "Google"
+      ],
+      "calls": {
+        "successful": 29,
+        "error": 0,
+        "failed": 0,
+        "total": 29
+      },
+      "total": {
+        "input_tokens": 57910,
+        "output_tokens": 26474,
+        "input_cost": 0.07101322,
+        "output_cost": 0.26474,
+        "total_cost": 0.33575322,
+        "time_ms": 305430
+      },
+      "average": {
+        "input_tokens": 1996.896551724138,
+        "output_tokens": 912.8965517241379,
+        "input_cost": 0.002448731724137931,
+        "output_cost": 0.00912896551724138,
+        "total_cost": 0.01157769724137931,
+        "time_ms": 10532.068965517241
+      },
+      "std_dev": {
+        "input_tokens": 171.81288510378008,
+        "output_tokens": 372.45904327356067,
+        "input_cost": 0.00041823515882702167,
+        "output_cost": 0.003724590432735607,
+        "total_cost": 0.0039047519667669913,
+        "time_ms": 3558.379014292829
+      }
+    }
+  ]
+}

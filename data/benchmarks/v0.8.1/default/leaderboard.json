@@ -1,5 +1,5 @@
 {
-  "generated_at": 1757527431,
+  "generated_at": 1757532399,
   "entries": [
     {
       "runs": 20,
@@ -106,6 +106,60 @@
         "seed": "OOOO155",
         "challenge": null,
         "version": "0.8.1",
+        "name": "Unknown Name",
+        "description": "Unknown Description",
+        "author": "BalatroBench",
+        "tags": []
+      }
+    },
+    {
+      "runs": 20,
+      "wins": 0,
+      "completed": 20,
+      "avg_final_round": 3.05,
+      "std_dev_final_round": 0.9445132413883327,
+      "providers": {
+        "Google": 451,
+        "Google AI Studio": 1
+      },
+      "calls": {
+        "successful": 433,
+        "error": 0,
+        "failed": 19,
+        "total": 452
+      },
+      "total": {
+        "input_tokens": 886433,
+        "output_tokens": 421007,
+        "input_cost": 1.08732459,
+        "output_cost": 4.21007,
+        "total_cost": 5.29739459,
+        "time_ms": 4735226
+      },
+      "average": {
+        "input_tokens": 1961.1349557522124,
+        "output_tokens": 931.4314159292036,
+        "input_cost": 0.0024055853761061944,
+        "output_cost": 0.009314314159292035,
+        "total_cost": 0.01171989953539823,
+        "time_ms": 10476.163716814159
+      },
+      "std_dev": {
+        "input_tokens": 178.2342859335983,
+        "output_tokens": 579.9191335817618,
+        "input_cost": 0.00040141090919134016,
+        "output_cost": 0.005799191335817618,
+        "total_cost": 0.005929863795403466,
+        "time_ms": 5393.142160912863
+      },
+      "config": {
+        "model": "google/gemini-2.5-pro",
+        "strategy": "default",
+        "deck": "Red Deck",
+        "stake": 1,
+        "seed": "OOOO155",
+        "challenge": null,
+        "version": "0.8.2",
         "name": "Unknown Name",
         "description": "Unknown Description",
         "author": "BalatroBench",
