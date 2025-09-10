@@ -54,7 +54,7 @@ function createRoundHistogram(stats, canvasId) {
       scales: {
         x: {
           title: {
-            display: false,
+            display: true,
             text: 'Round'
           }
         },
@@ -62,7 +62,7 @@ function createRoundHistogram(stats, canvasId) {
           beginAtZero: true,
           max: maxCount + 1,
           title: {
-            display: false,
+            display: true,
             text: 'Frequency'
           },
           ticks: {
