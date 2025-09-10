@@ -136,8 +136,8 @@ function createDetailRow(stats, modelName, data) {
     const avgTimeSecondsStdDev = `${(stat.std_dev.time_ms / 1000).toFixed(2)}`;
 
     // Cost per tool calls (m$)
-    const avgCost = `${(stat.average.total_cost * 1000).toFixed(3)}`;
-    const costStdDev = `${(stat.std_dev.total_cost * 1000).toFixed(3)}`;
+    const avgCost = `${(stat.average.total_cost * 1000).toFixed(2)}`;
+    const costStdDev = `${(stat.std_dev.total_cost * 1000).toFixed(2)}`;
 
     detailTableRows += `
       <tr class="hover:bg-gray-100 text-xs">
@@ -478,8 +478,8 @@ async function loadLeaderboard(basePath = 'data/benchmarks/v0.8.1/default', disp
       const avgTimeSecondsStdDev = `${(entry.std_dev.time_ms / 1000).toFixed(2)}`;
 
       // Cost per tool calls (m$)
-      const cost = `${(entry.average.total_cost * 1000).toFixed(3)}`;
-      const costStdDev = `${(entry.std_dev.total_cost * 1000).toFixed(3)}`;
+      const cost = `${(entry.average.total_cost * 1000).toFixed(2)}`;
+      const costStdDev = `${(entry.std_dev.total_cost * 1000).toFixed(2)}`;
 
       row.innerHTML = `
         <td class="px-4 py-3 text-left text-gray-700 font-mono">${index + 1}</td>
@@ -499,14 +499,14 @@ async function loadLeaderboard(basePath = 'data/benchmarks/v0.8.1/default', disp
           <div class="flex justify-center items-center">
             <span class="w-12 text-center">${avgInputTokens}</span>
             <span class="px-1 hidden xl:inline">±</span>
-            <span class="w-6 text-center hidden xl:inline">${avgInputTokensStdDev}</span>
+            <span class="w-9 text-center hidden xl:inline">${avgInputTokensStdDev}</span>
           </div>
         </td>
         <td class="px-4 py-3 text-center text-gray-700 font-mono hidden lg:table-cell">
           <div class="flex justify-center items-center">
             <span class="w-12 text-center">${avgOutputTokens}</span>
             <span class="px-1 hidden xl:inline">±</span>
-            <span class="w-6 text-center hidden xl:inline">${avgOutputTokensStdDev}</span>
+            <span class="w-9 text-center hidden xl:inline">${avgOutputTokensStdDev}</span>
           </div>
         </td>
         <td class="px-4 py-3 text-center text-gray-700 font-mono hidden md:table-cell">
