@@ -541,7 +541,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const isCommunityPage = document.title.includes('Community');
 
   if (isCommunityPage) {
-    loadLeaderboard('data/community/v0.8.0/default', 'community');
+    loadLeaderboard('data/community/v0.8.1/default', 'community');
   } else {
     loadLeaderboard();
   }
