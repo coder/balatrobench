@@ -1,6 +1,60 @@
 {
-  "generated_at": 1757522204,
+  "generated_at": 1757527431,
   "entries": [
+    {
+      "runs": 20,
+      "wins": 0,
+      "completed": 16,
+      "avg_final_round": 4.85,
+      "std_dev_final_round": 2.277463963548745,
+      "providers": {
+        "OpenAI": 770,
+        "Azure": 1
+      },
+      "calls": {
+        "successful": 737,
+        "error": 1,
+        "failed": 33,
+        "total": 771
+      },
+      "total": {
+        "input_tokens": 1686541,
+        "output_tokens": 1524415,
+        "input_cost": 0.89742425,
+        "output_cost": 15.24415,
+        "total_cost": 16.14157425,
+        "time_ms": 35910504
+      },
+      "average": {
+        "input_tokens": 2187.472114137484,
+        "output_tokens": 1977.1919584954605,
+        "input_cost": 0.001163974383916991,
+        "output_cost": 0.019771919584954604,
+        "total_cost": 0.020935893968871598,
+        "time_ms": 46576.52918287938
+      },
+      "std_dev": {
+        "input_tokens": 436.4503871634609,
+        "output_tokens": 1053.2986759539856,
+        "input_cost": 0.0005858397770650825,
+        "output_cost": 0.010532986759539856,
+        "total_cost": 0.010632784286617479,
+        "time_ms": 24515.108007318897
+      },
+      "config": {
+        "model": "openai/gpt-5",
+        "strategy": "default",
+        "deck": "Red Deck",
+        "stake": 1,
+        "seed": "OOOO155",
+        "challenge": null,
+        "version": "0.8.2",
+        "name": "Unknown Name",
+        "description": "Unknown Description",
+        "author": "BalatroBench",
+        "tags": []
+      }
+    },
     {
       "runs": 17,
       "wins": 0,
