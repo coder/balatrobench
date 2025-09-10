@@ -548,15 +548,18 @@ function createDetailRow(stats, modelName, data) {
 }
 
 // Load and display leaderboard data
-async function loadLeaderboard(basePath = 'data/benchmarks/v0.8.1/default', displayMode = 'model') {
+async function loadLeaderboard(basePath = 'data/benchmarks/v0.8.1/default', displayMode = 'model',
+  showChart = true) {
   try {
     const response = await fetch(`${basePath}/leaderboard.json`);
     const data = await response.json();
 
     const tableBody = document.getElementById('leaderboard-body');
 
-    // Create the performance bar chart
-    createPerformanceBarChart(data.entries);
+    // Create the performance bar chart (only on main leaderboard page)
+    if (showChart) {
+      createPerformanceBarChart(data.entries);
+    }
 
     data.entries.forEach((entry, index) => {
       const row = document.createElement('tr');
@@ -686,7 +689,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const isCommunityPage = document.title.includes('Community');
 
   if (isCommunityPage) {
-    loadLeaderboard('data/community/v0.8.1/default', 'community');
+    loadLeaderboard('data/community/v0.8.1/default', 'community', false);
   } else {
     loadLeaderboard();
   }
