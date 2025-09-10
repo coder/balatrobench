@@ -89,7 +89,8 @@ function createPerformanceBarChart(entries) {
   // Color mapping for vendors
   const vendorColors = {
     'openai': '#374151', // Dark grey
-    'anthropic': '#EA580C' // Dark orange
+    'anthropic': '#EA580C', // Dark orange
+    'google': '#4285f4' // Google blue
   };
 
   entries.forEach(entry => {
