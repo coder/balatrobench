@@ -289,14 +289,14 @@ function createDetailRow(stats, modelName, data) {
         <td class="px-2 py-2 text-center text-red-600 font-mono">${errorRate}%</td>
         <td class="px-4 py-2 text-center text-gray-700 font-mono">
           <div class="flex justify-center items-center">
-            <span class="w-12 text-center">${avgInputTokens}</span>
+            <span class="w-6 xl:w-12 text-center">${avgInputTokens}</span>
             <span class="px-1">±</span>
             <span class="w-9 text-center">${avgInputTokensStdDev}</span>
           </div>
         </td>
         <td class="px-4 py-2 text-center text-gray-700 font-mono">
           <div class="flex justify-center items-center">
-            <span class="w-12 text-center">${avgOutputTokens}</span>
+            <span class="w-6 xl:w-12 text-center">${avgOutputTokens}</span>
             <span class="px-1">±</span>
             <span class="w-9 text-center">${avgOutputTokensStdDev}</span>
           </div>
@@ -645,14 +645,14 @@ async function loadLeaderboard(basePath = 'data/benchmarks/v0.8.1/default', disp
         <td class="px-4 py-3 text-center text-red-600 font-mono hidden sm:table-cell">${errorRate}%</td>
         <td class="px-4 py-3 text-center text-gray-700 font-mono hidden lg:table-cell">
           <div class="flex justify-center items-center">
-            <span class="w-12 text-center">${avgInputTokens}</span>
+            <span class="w-6 xl:w-12 text-center">${avgInputTokens}</span>
             <span class="px-1 hidden xl:inline">±</span>
             <span class="w-9 text-center hidden xl:inline">${avgInputTokensStdDev}</span>
           </div>
         </td>
         <td class="px-4 py-3 text-center text-gray-700 font-mono hidden lg:table-cell">
           <div class="flex justify-center items-center">
-            <span class="w-12 text-center">${avgOutputTokens}</span>
+            <span class="w-6 xl:w-12 text-center">${avgOutputTokens}</span>
             <span class="px-1 hidden xl:inline">±</span>
             <span class="w-9 text-center hidden xl:inline">${avgOutputTokensStdDev}</span>
           </div>
