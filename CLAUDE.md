@@ -15,9 +15,9 @@ BalatroBench is a static web application that displays performance leaderboards 
 - **about.html**: About page with project information and metrics documentation
 - **script.js**: Shared JavaScript for all pages - fetches and renders leaderboard data, with interactive expandable rows showing detailed charts and statistics
 - **data/**: Contains benchmark results organized by version, strategy, and data type
-  - `data/benchmarks/v0.8.0/default/leaderboard.json`: Primary model leaderboard data
-  - `data/community/v0.8.0/default/leaderboard.json`: Community strategy leaderboard data
-  - Individual model result files in vendor subdirectories (e.g., `openai/gpt-oss-120b.json`)
+  - `data/benchmarks/v0.8.1/default/leaderboard.json`: Primary model leaderboard data
+  - `data/community/v0.8.1/default/leaderboard.json`: Community strategy leaderboard data
+  - Individual model result files in vendor subdirectories (e.g., `openai/gpt-5.json`, `google/gemini-2.5-pro.json`, `anthropic/claude-sonnet-4.json`)
 
 ### Data Structure
 
@@ -39,6 +39,8 @@ Models are identified by `vendor/model` format and ranked by performance metrics
   - Provider usage pie chart
   - Complete per-game statistics table
   - Total aggregated metrics (tokens, costs, time)
+- **Bar Charts**: Performance visualization showing average rounds reached across models
+- **Footer**: Clickable footer component with project information and navigation
 - **Responsive Design**: Columns hide/show based on screen size
 - **Dual Display Modes**: Support for both model-based and community strategy leaderboards
 
@@ -56,8 +58,15 @@ python3 -m http.server 8000
 ### Dependencies
 
 - **Tailwind CSS**: Styling framework loaded from CDN
-- **Chart.js**: Charting library for histograms and pie charts
+- **Chart.js**: Charting library for histograms, pie charts, and bar charts
 - **Heroicons**: Icon library (included but minimal usage in current implementation)
+
+### Current Models
+
+The leaderboard includes performance data for models from multiple vendors:
+- **OpenAI**: gpt-5, gpt-oss-120b, gpt-oss-20b
+- **Google**: gemini-2.5-pro
+- **Anthropic**: claude-sonnet-4
 
 ### File Structure Conventions
 
@@ -70,11 +79,12 @@ python3 -m http.server 8000
 
 ### Data Organization
 
-**Benchmark Data** (`data/benchmarks/v0.8.0/default/`):
+**Benchmark Data** (`data/benchmarks/v0.8.1/default/`):
 - `leaderboard.json`: Aggregated model performance data
 - `[vendor]/[model].json`: Detailed individual model results with per-game statistics
+- Supported vendors: `openai`, `google`, `anthropic`
 
-**Community Data** (`data/community/v0.8.0/default/`):
+**Community Data** (`data/community/v0.8.1/default/`):
 - `leaderboard.json`: Community strategy performance data
 - `[vendor]/[model].json`: Detailed strategy results
 
