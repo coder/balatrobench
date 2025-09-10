@@ -74,6 +74,148 @@ function createRoundHistogram(stats, canvasId) {
   });
 }
 
+// Create performance bar chart with error bars
+function createPerformanceBarChart(entries) {
+  const ctx = document.getElementById('performance-chart').getContext('2d');
+
+  // Extract data for chart
+  const models = [];
+  const avgRounds = [];
+  const stdDevs = [];
+  const colors = [];
+  const transparentColors = [];
+  const vendors = [];
+
+  // Color mapping for vendors
+  const vendorColors = {
+    'openai': '#374151', // Dark grey
+    'anthropic': '#EA580C' // Dark orange
+  };
+
+  entries.forEach(entry => {
+    const modelParts = entry.config.model.split('/');
+    const vendor = modelParts[0];
+    const model = modelParts[1];
+
+    models.push(model);
+    avgRounds.push(entry.avg_final_round);
+    stdDevs.push(entry.std_dev_final_round);
+    vendors.push(vendor);
+
+    const color = vendorColors[vendor] || '#6B7280';
+    colors.push(color);
+    // Add transparency to bars (70% opacity)
+    transparentColors.push(color + 'B3'); // B3 = 70% opacity in hex
+  });
+
+  // Calculate Y-axis max to include error bars
+  const maxWithError = Math.max(...avgRounds.map((avg, i) => avg + stdDevs[i]));
+  const yAxisMax = Math.ceil(maxWithError + 0.5); // Add padding
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: models,
+      datasets: [{
+        label: 'Average Final Round',
+        data: avgRounds,
+        backgroundColor: transparentColors,
+        borderColor: colors,
+        borderWidth: 1,
+        errorBars: {
+          'Average Final Round': {
+            plus: stdDevs,
+            minus: stdDevs
+          }
+        }
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: false
+        },
+        title: {
+          display: false
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const index = context.dataIndex;
+              return `${context.parsed.y.toFixed(1)} ± ${stdDevs[index].toFixed(1)}`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          title: {
+            display: false,
+            text: 'Model'
+          }
+        },
+        y: {
+          beginAtZero: true,
+          max: yAxisMax,
+          title: {
+            display: false,
+            text: 'Average Final Round'
+          }
+        }
+      },
+      elements: {
+        bar: {
+          borderRadius: 4
+        }
+      }
+    },
+    plugins: [{
+      id: 'errorBars',
+      afterDatasetsDraw: function(chart) {
+        const ctx = chart.ctx;
+        chart.data.datasets.forEach((dataset, datasetIndex) => {
+          const meta = chart.getDatasetMeta(datasetIndex);
+          meta.data.forEach((bar, index) => {
+            const x = bar.x;
+            const y = bar.y;
+            const value = dataset.data[index];
+            const stdDev = stdDevs[index];
+            const scale = chart.scales.y;
+
+            // Calculate error bar positions
+            const topY = scale.getPixelForValue(value + stdDev);
+            const bottomY = scale.getPixelForValue(value - stdDev);
+
+            // Draw error bar with vendor-specific color
+            ctx.save();
+            const vendor = vendors[index];
+            ctx.strokeStyle = vendorColors[vendor] || '#6B7280';
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+
+            // Vertical line
+            ctx.moveTo(x, topY);
+            ctx.lineTo(x, bottomY);
+
+            // Top cap
+            ctx.moveTo(x - 4, topY);
+            ctx.lineTo(x + 4, topY);
+
+            // Bottom cap
+            ctx.moveTo(x - 4, bottomY);
+            ctx.lineTo(x + 4, bottomY);
+
+            ctx.stroke();
+            ctx.restore();
+          });
+        });
+      }
+    }]
+  });
+}
+
 // Create provider distribution pie chart
 function createProviderPieChart(data, canvasId) {
   const providers = Object.keys(data.providers || {});
@@ -412,6 +554,9 @@ async function loadLeaderboard(basePath = 'data/benchmarks/v0.8.1/default', disp
     const data = await response.json();
 
     const tableBody = document.getElementById('leaderboard-body');
+
+    // Create the performance bar chart
+    createPerformanceBarChart(data.entries);
 
     data.entries.forEach((entry, index) => {
       const row = document.createElement('tr');
