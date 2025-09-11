@@ -122,7 +122,7 @@ function createPerformanceBarChart(entries) {
         data: avgRounds,
         backgroundColor: transparentColors,
         borderColor: colors,
-        borderWidth: 1,
+        borderWidth: 0,
         errorBars: {
           'Average Final Round': {
             plus: stdDevs,
@@ -168,7 +168,7 @@ function createPerformanceBarChart(entries) {
       },
       elements: {
         bar: {
-          borderRadius: 4
+          borderRadius: 10
         }
       }
     },
@@ -193,22 +193,30 @@ function createPerformanceBarChart(entries) {
             ctx.save();
             const vendor = vendors[index];
             ctx.strokeStyle = vendorColors[vendor] || '#6B7280';
+            ctx.globalAlpha = 0.5; // make error bars slightly transparent
             ctx.lineWidth = 4;
-            ctx.beginPath();
 
-            // Vertical line
+            // Draw vertical line with square caps
+            ctx.lineCap = 'butt';
+            ctx.beginPath();
             ctx.moveTo(x, topY);
             ctx.lineTo(x, bottomY);
-
-            // Top cap
-            ctx.moveTo(x - 4, topY);
-            ctx.lineTo(x + 4, topY);
-
-            // Bottom cap
-            ctx.moveTo(x - 4, bottomY);
-            ctx.lineTo(x + 4, bottomY);
-
             ctx.stroke();
+
+            // Draw rounded, wider caps at top and bottom
+            const capHalfWidth = 7; // 14px total width
+            ctx.lineCap = 'round';
+
+            ctx.beginPath();
+            ctx.moveTo(x - capHalfWidth, topY);
+            ctx.lineTo(x + capHalfWidth, topY);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(x - capHalfWidth, bottomY);
+            ctx.lineTo(x + capHalfWidth, bottomY);
+            ctx.stroke();
+
             ctx.restore();
           });
         });
