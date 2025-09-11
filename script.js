@@ -1,3 +1,37 @@
+// Theme-aware color palette for Chart.js (HSLA strings)
+const colors = {
+  light: {
+    vendors: {
+      openai: 'hsla(0, 0%, 3%, .8)', // near-black accent
+      google: 'hsla(217, 89%, 61%, .8)', // Google blue
+      anthropic: 'hsla(15, 52%, 58%, .8)' // Anthropic orange
+    },
+    grid: 'hsla(240, 5%, 89%, 1)', // zinc-200-ish
+    axis: 'hsla(240, 5%, 26%, 1)', // zinc-700-ish
+    border: 'hsla(240, 5%, 84%, 1)' // zinc-300-ish
+  },
+  dark: {
+    vendors: {
+      openai: 'hsla(0, 0%, 80%, .8)', // brighter neutral for contrast
+      google: 'hsla(217, 96%, 74%, .8)', // more saturated Google blue
+      anthropic: 'hsla(15, 64%, 70%, .8)' // more saturated Anthropic orange
+    },
+    grid: 'hsla(240, 5%, 26%, 1)', // zinc-700-ish
+    axis: 'hsla(240, 6%, 90%, 1)', // near-white text
+    border: 'hsla(240, 5%, 36%, 1)' // zinc-600-ish
+  }
+};
+
+// Utilities
+function getCurrentTheme() {
+  try {
+    return (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ?
+      'dark' : 'light';
+  } catch (_) {
+    return 'light';
+  }
+}
+
 // Load details for a specific model
 async function loadDetails(vendor, model, basePath = 'data/benchmarks/v0.8.1/default') {
   try {
@@ -13,7 +47,7 @@ async function loadDetails(vendor, model, basePath = 'data/benchmarks/v0.8.1/def
   }
 }
 
-// Create round distribution histogram
+// Create round distribution histogram (uses Chart.js defaults for fills)
 function createRoundHistogram(stats, canvasId) {
   const rounds = stats.map(stat => stat.final_round);
   const maxRound = Math.max(...rounds);
@@ -27,12 +61,15 @@ function createRoundHistogram(stats, canvasId) {
   const maxCount = Math.max(...counts);
 
   const ctx = document.getElementById(canvasId).getContext('2d');
+  const theme = getCurrentTheme();
+  const themeColors = colors[theme] || colors.light;
+
   new Chart(ctx, {
     type: 'bar',
     data: {
       labels: bins,
       datasets: [{
-        data: counts,
+        data: counts
       }]
     },
     options: {
@@ -54,19 +91,37 @@ function createRoundHistogram(stats, canvasId) {
       scales: {
         x: {
           title: {
-            display: true,
+            display: false,
             text: 'Round'
+          },
+          ticks: {
+            color: themeColors.axis
+          },
+          grid: {
+            color: themeColors.grid,
+            borderColor: themeColors.border
+          },
+          border: {
+            color: themeColors.border
           }
         },
         y: {
           beginAtZero: true,
           max: maxCount + 1,
           title: {
-            display: true,
+            display: false,
             text: 'Frequency'
           },
           ticks: {
-            stepSize: 1
+            stepSize: 1,
+            color: themeColors.axis
+          },
+          grid: {
+            color: themeColors.grid,
+            borderColor: themeColors.border
+          },
+          border: {
+            color: themeColors.border
           }
         }
       }
@@ -82,16 +137,11 @@ function createPerformanceBarChart(entries) {
   const models = [];
   const avgRounds = [];
   const stdDevs = [];
-  const colors = [];
-  const transparentColors = [];
+  const strokeColors = [];
+  const fillColors = [];
   const vendors = [];
-
-  // Color mapping for vendors
-  const vendorColors = {
-    'openai': '#374151', // Dark grey
-    'anthropic': '#EA580C', // Dark orange
-    'google': '#4285f4' // Google blue
-  };
+  const currentTheme = getCurrentTheme();
+  const themePalette = colors[currentTheme] || colors.light;
 
   entries.forEach(entry => {
     const modelParts = entry.config.model.split('/');
@@ -103,10 +153,9 @@ function createPerformanceBarChart(entries) {
     stdDevs.push(entry.std_dev_final_round);
     vendors.push(vendor);
 
-    const color = vendorColors[vendor] || '#6B7280';
-    colors.push(color);
-    // Add transparency to bars (70% opacity)
-    transparentColors.push(color + 'B3'); // B3 = 70% opacity in hex
+    const base = themePalette.vendors[vendor];
+    strokeColors.push(base);
+    fillColors.push(base);
   });
 
   // Calculate Y-axis max to include error bars
@@ -120,8 +169,8 @@ function createPerformanceBarChart(entries) {
       datasets: [{
         label: 'Average Final Round',
         data: avgRounds,
-        backgroundColor: transparentColors,
-        borderColor: colors,
+        backgroundColor: fillColors,
+        borderColor: strokeColors,
         borderWidth: 0,
         errorBars: {
           'Average Final Round': {
@@ -155,6 +204,16 @@ function createPerformanceBarChart(entries) {
           title: {
             display: false,
             text: 'Model'
+          },
+          ticks: {
+            color: themePalette.axis
+          },
+          grid: {
+            color: themePalette.grid,
+            borderColor: themePalette.border
+          },
+          border: {
+            color: themePalette.border
           }
         },
         y: {
@@ -163,6 +222,16 @@ function createPerformanceBarChart(entries) {
           title: {
             display: false,
             text: 'Average Final Round'
+          },
+          ticks: {
+            color: themePalette.axis
+          },
+          grid: {
+            color: themePalette.grid,
+            borderColor: themePalette.border
+          },
+          border: {
+            color: themePalette.border
           }
         }
       },
@@ -192,8 +261,8 @@ function createPerformanceBarChart(entries) {
             // Draw error bar with vendor-specific color
             ctx.save();
             const vendor = vendors[index];
-            ctx.strokeStyle = vendorColors[vendor] || '#6B7280';
-            ctx.globalAlpha = 0.5; // make error bars slightly transparent
+            const base = themePalette.vendors[vendor];
+            ctx.strokeStyle = base;
             ctx.lineWidth = 4;
 
             // Draw vertical line with square caps
@@ -226,18 +295,21 @@ function createPerformanceBarChart(entries) {
 }
 
 // Create provider distribution pie chart
+// Provider distribution pie chart (uses defaults for fills; borders match background)
 function createProviderPieChart(data, canvasId) {
   const providers = Object.keys(data.providers || {});
   const counts = Object.values(data.providers || {});
 
   const ctx = document.getElementById(canvasId).getContext('2d');
+  const theme = getCurrentTheme();
+  const themeColors = colors[theme] || colors.light;
   new Chart(ctx, {
     type: 'doughnut',
     data: {
       labels: providers,
       datasets: [{
         data: counts,
-        borderWidth: 2,
+        borderWidth: 1
       }]
     },
     options: {
@@ -249,6 +321,7 @@ function createProviderPieChart(data, canvasId) {
           position: 'bottom',
           labels: {
             boxWidth: 10,
+            color: themeColors.axis,
             font: {
               size: 11
             }
@@ -259,7 +332,7 @@ function createProviderPieChart(data, canvasId) {
           text: 'Providers',
         }
       }
-    }
+    },
   });
 }
 
@@ -572,7 +645,8 @@ async function loadLeaderboard(basePath = 'data/benchmarks/v0.8.1/default', disp
 
     data.entries.forEach((entry, index) => {
       const row = document.createElement('tr');
-      row.className = 'hover:bg-zinc-50 hover:dark:bg-zinc-700 transition-colors duration-150 lg:cursor-pointer';
+      row.className =
+        'hover:bg-zinc-50 hover:dark:bg-zinc-700 transition-colors duration-150 lg:cursor-pointer';
 
       // Parse data based on display mode
       let primaryValue, secondaryValue, vendor, model;
@@ -608,8 +682,11 @@ async function loadLeaderboard(basePath = 'data/benchmarks/v0.8.1/default', disp
 
             // Load and show details
             const data = await loadDetails(vendor, model, basePath);
-            const detailRow = createDetailRow(data.stats, displayMode === 'community' ?
-              primaryValue : model, data);
+            const detailRow = createDetailRow(
+              data.stats,
+              displayMode === 'community' ? primaryValue : model,
+              data
+            );
             row.insertAdjacentElement('afterend', detailRow);
           }
         }
