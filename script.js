@@ -258,7 +258,7 @@ function createProviderPieChart(data, canvasId) {
 // Create inline detail row after clicked row
 function createDetailRow(stats, modelName, data) {
   const detailRow = document.createElement('tr');
-  detailRow.className = 'detail-row bg-gray-50';
+  detailRow.className = 'detail-row bg-gray-50 dark:bg-slate-900';
 
   // Create detail table HTML
   let detailTableRows = '';
@@ -283,33 +283,33 @@ function createDetailRow(stats, modelName, data) {
     const costStdDev = `${(stat.std_dev.total_cost * 1000).toFixed(2)}`;
 
     detailTableRows += `
-      <tr class="hover:bg-gray-100 text-xs">
-        <td class="px-2 py-2 text-center text-gray-700 font-mono">${stat.final_round}</td>
-        <td class="px-2 py-2 text-center text-green-600 font-mono">${successRate}%</td>
-        <td class="px-2 py-2 text-center text-yellow-600 font-mono">${failedRate}%</td>
-        <td class="px-2 py-2 text-center text-red-600 font-mono">${errorRate}%</td>
-        <td class="px-4 py-2 text-center text-gray-700 font-mono">
+      <tr class="hover:bg-gray-100 hover:dark:bg-slate-800 text-xs">
+        <td class="px-2 py-2 text-center text-gray-700 dark:text-slate-300 font-mono">${stat.final_round}</td>
+        <td class="px-2 py-2 text-center text-green-600 dark:text-green-400 font-mono">${successRate}%</td>
+        <td class="px-2 py-2 text-center text-yellow-600 dark:text-yellow-400 font-mono">${failedRate}%</td>
+        <td class="px-2 py-2 text-center text-red-600 dark:text-red-400 font-mono">${errorRate}%</td>
+        <td class="px-4 py-2 text-center text-gray-700 dark:text-slate-300 font-mono">
           <div class="flex justify-center items-center">
             <span class="w-6 xl:w-12 text-center">${avgInputTokens}</span>
             <span class="px-1">±</span>
             <span class="w-9 text-center">${avgInputTokensStdDev}</span>
           </div>
         </td>
-        <td class="px-4 py-2 text-center text-gray-700 font-mono">
+        <td class="px-4 py-2 text-center text-gray-700 dark:text-slate-300 font-mono">
           <div class="flex justify-center items-center">
             <span class="w-6 xl:w-12 text-center">${avgOutputTokens}</span>
             <span class="px-1">±</span>
             <span class="w-9 text-center">${avgOutputTokensStdDev}</span>
           </div>
         </td>
-        <td class="px-4 py-2 text-center text-gray-700 font-mono">
+        <td class="px-4 py-2 text-center text-gray-700 dark:text-slate-300 font-mono">
           <div class="flex justify-center items-center">
             <span class="w-12 text-center">${avgTimeSeconds}</span>
             <span class="px-1">±</span>
             <span class="w-12 text-center">${avgTimeSecondsStdDev}</span>
           </div>
         </td>
-        <td class="px-4 py-2 text-center text-gray-700 font-mono">
+        <td class="px-4 py-2 text-center text-gray-700 dark:text-slate-300 font-mono">
           <div class="flex justify-center items-center">
             <span class="w-12 text-center">${avgCost}</span>
             <span class="px-1">±</span>
@@ -328,22 +328,22 @@ function createDetailRow(stats, modelName, data) {
       <div class="mb-8 pb-4 flex flex-col lg:flex-row gap-4 h-52">
         <!-- Rounds -->
         <div class="flex-1">
-          <h4 class="text-sm font-semibold text-gray-700 mb-2 text-center">Rounds</h4>
+          <h4 class="text-sm font-semibold text-gray-700 dark:text-slate-300 mb-2 text-center">Rounds</h4>
           <canvas id="${histogramCanvasId}" width="400" height="200"></canvas>
         </div>
         <!-- Providers -->
         <div>
-          <h4 class="text-sm font-semibold text-gray-700 mb-2 text-center">Providers</h4>
+          <h4 class="text-sm font-semibold text-gray-700 dark:text-slate-300 mb-2 text-center">Providers</h4>
           <canvas id="${pieChartCanvasId}" width="300" height="200"></canvas>
         </div>
         <!-- Totals -->
         <div class="min-w-36 ml-4 mr-4">
-          <h4 class="text-sm font-semibold text-gray-700 mb-2 text-center">Totals</h4>
+          <h4 class="text-sm font-semibold text-gray-700 dark:text-slate-300 mb-2 text-center">Totals</h4>
           <table class="w-full">
             <tbody>
               <tr>
                 <td class="py-1">
-                  <div class="flex items-center justify-left space-x-1">
+                  <div class="flex items-center justify-left space-x-1 text-gray-700 dark:text-slate-300">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
                       <path d="M8 7c3.314 0 6-1.343 6-3s-2.686-3-6-3-6 1.343-6 3 2.686 3 6 3Z" />
                       <path d="M8 8.5c1.84 0 3.579-.37 4.914-1.037A6.33 6.33 0 0 0 14 6.78V8c0 1.657-2.686 3-6 3S2 9.657 2 8V6.78c.346.273.72.5 1.087.683C4.42 8.131 6.16 8.5 8 8.5Z" />
@@ -353,12 +353,12 @@ function createDetailRow(stats, modelName, data) {
                   </div>
                 </td>
                 <td class="text-right py-1">
-                  <span class="text-sm font-mono text-gray-700">${(data.total.input_tokens / 1000000).toFixed(2)} M</span>
+                  <span class="text-sm font-mono text-gray-700 dark:text-slate-300">${(data.total.input_tokens / 1000000).toFixed(2)} M</span>
                 </td>
               </tr>
               <tr>
                 <td class="py-1">
-                  <div class="flex items-center justify-left space-x-1">
+                  <div class="flex items-center justify-left space-x-1 text-gray-700 dark:text-slate-300">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
                       <path d="M8 7c3.314 0 6-1.343 6-3s-2.686-3-6-3-6 1.343-6 3 2.686 3 6 3Z" />
                       <path d="M8 8.5c1.84 0 3.579-.37 4.914-1.037A6.33 6.33 0 0 0 14 6.78V8c0 1.657-2.686 3-6 3S2 9.657 2 8V6.78c.346.273.72.5 1.087.683C4.42 8.131 6.16 8.5 8 8.5Z" />
@@ -368,12 +368,12 @@ function createDetailRow(stats, modelName, data) {
                   </div>
                 </td>
                 <td class="text-right py-1">
-                  <span class="text-sm font-mono text-gray-700">${(data.total.output_tokens / 1000000).toFixed(2)} M</span>
+                  <span class="text-sm font-mono text-gray-700 dark:text-slate-300">${(data.total.output_tokens / 1000000).toFixed(2)} M</span>
                 </td>
               </tr>
               <tr>
                 <td class="py-1">
-                  <div class="flex items-center justify-left space-x-1">
+                  <div class="flex items-center justify-left space-x-1 text-gray-700 dark:text-slate-300">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
                       <path d="M6.375 5.5h.875v1.75h-.875a.875.875 0 1 1 0-1.75ZM8.75 10.5V8.75h.875a.875.875 0 0 1 0 1.75H8.75Z" />
                       <path fill-rule="evenodd" d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM7.25 3.75a.75.75 0 0 1 1.5 0V4h2.5a.75.75 0 0 1 0 1.5h-2.5v1.75h.875a2.375 2.375 0 1 1 0 4.75H8.75v.25a.75.75 0 0 1-1.5 0V12h-2.5a.75.75 0 0 1 0-1.5h2.5V8.75h-.875a2.375 2.375 0 1 1 0-4.75h.875v-.25Z" clip-rule="evenodd" />
@@ -382,12 +382,12 @@ function createDetailRow(stats, modelName, data) {
                   </div>
                 </td>
                 <td class="text-right py-1">
-                  <span class="text-sm font-mono text-gray-700">${(data.total.input_cost).toFixed(2)} $</span>
+                  <span class="text-sm font-mono text-gray-700 dark:text-slate-300">${(data.total.input_cost).toFixed(2)} $</span>
                 </td>
               </tr>
               <tr>
                 <td class="py-1">
-                  <div class="flex items-center justify-left space-x-1">
+                  <div class="flex items-center justify-left space-x-1 text-gray-700 dark:text-slate-300">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
                       <path d="M6.375 5.5h.875v1.75h-.875a.875.875 0 1 1 0-1.75ZM8.75 10.5V8.75h.875a.875.875 0 0 1 0 1.75H8.75Z" />
                       <path fill-rule="evenodd" d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM7.25 3.75a.75.75 0 0 1 1.5 0V4h2.5a.75.75 0 0 1 0 1.5h-2.5v1.75h.875a2.375 2.375 0 1 1 0 4.75H8.75v.25a.75.75 0 0 1-1.5 0V12h-2.5a.75.75 0 0 1 0-1.5h2.5V8.75h-.875a2.375 2.375 0 1 1 0-4.75h.875v-.25Z" clip-rule="evenodd" />
@@ -396,12 +396,12 @@ function createDetailRow(stats, modelName, data) {
                   </div>
                 </td>
                 <td class="text-right py-1">
-                  <span class="text-sm font-mono text-gray-700">${(data.total.output_cost).toFixed(2)} $</span>
+                  <span class="text-sm font-mono text-gray-700 dark:text-slate-300">${(data.total.output_cost).toFixed(2)} $</span>
                 </td>
               </tr>
               <tr>
                 <td class="py-1">
-                  <div class="flex items-center justify-left space-x-1">
+                  <div class="flex items-center justify-left space-x-1 text-gray-700 dark:text-slate-300">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
                       <path d="M6.375 5.5h.875v1.75h-.875a.875.875 0 1 1 0-1.75ZM8.75 10.5V8.75h.875a.875.875 0 0 1 0 1.75H8.75Z" />
                       <path fill-rule="evenodd" d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM7.25 3.75a.75.75 0 0 1 1.5 0V4h2.5a.75.75 0 0 1 0 1.5h-2.5v1.75h.875a2.375 2.375 0 1 1 0 4.75H8.75v.25a.75.75 0 0 1-1.5 0V12h-2.5a.75.75 0 0 1 0-1.5h2.5V8.75h-.875a2.375 2.375 0 1 1 0-4.75h.875v-.25Z" clip-rule="evenodd" />
@@ -410,12 +410,12 @@ function createDetailRow(stats, modelName, data) {
                   </div>
                 </td>
                 <td class="text-right py-1">
-                  <span class="text-sm font-mono text-gray-700">${(data.total.total_cost).toFixed(2)} $</span>
+                  <span class="text-sm font-mono text-gray-700 dark:text-slate-300">${(data.total.total_cost).toFixed(2)} $</span>
                 </td>
               </tr>
               <tr>
                 <td class="py-1">
-                  <div class="flex items-center justify-left space-x-1">
+                  <div class="flex items-center justify-left space-x-1 text-gray-700 dark:text-slate-300">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
                       <path fill-rule="evenodd" d="M1 8a7 7 0 1 1 14 0A7 7 0 0 1 1 8Zm7.75-4.25a.75.75 0 0 0-1.5 0V8c0 .414.336.75.75.75h3.25a.75.75 0 0 0 0-1.5h-2.5v-3.5Z" clip-rule="evenodd" />
                     </svg>
@@ -423,7 +423,7 @@ function createDetailRow(stats, modelName, data) {
                   </div>
                 </td>
                 <td class="text-right py-1">
-                  <span class="text-sm font-mono text-gray-700">${(data.total.time_ms / 1000).toFixed(0)} s</span>
+                  <span class="text-sm font-mono text-gray-700 dark:text-slate-300">${(data.total.time_ms / 1000).toFixed(0)} s</span>
                 </td>
               </tr>
             </tbody>
@@ -432,14 +432,14 @@ function createDetailRow(stats, modelName, data) {
       </div>
       <div class="overflow-x-auto rounded-lg shadow-lg" style="max-height: 180px; overflow-y: auto;">
         <table class="w-full table-auto">
-          <thead class="bg-gray-100 sticky top-0">
-            <tr class="text-xs border-b border-gray-300">
+          <thead class="bg-gray-100 dark:bg-slate-800 sticky top-0">
+            <tr class="text-xs border-b border-slate-300 dark:border-slate-700">
               <!-- Stats Section -->
-              <th class="px-2 py-3 text-center font-semibold text-gray-700">Round</th>
+              <th class="px-2 py-3 text-center font-semibold text-gray-700 dark:text-slate-300">Round</th>
               <!-- Tool Calls Section -->
-              <th class="px-2 py-3 text-center font-semibold text-gray-700 relative before:absolute before:left-0 before:top-0 before:bottom-0 before:w-0.5 before:bg-gray-300">
+              <th class="px-2 py-3 text-center font-semibold text-gray-700 dark:text-slate-300 relative before:absolute before:left-0 before:top-0 before:bottom-0 before:w-px before:bg-slate-300 before:dark:bg-slate-700">
                 <div class="flex items-center justify-center space-x-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3 text-green-600">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3 text-green-600 dark:text-green-400">
                     <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14Zm3.844-8.791a.75.75 0 0 0-1.188-.918l-3.7 4.79-1.649-1.833a.75.75 0 1 0-1.114 1.004l2.25 2.5a.75.75 0 0 0 1.15-.043l4.25-5.5Z" clip-rule="evenodd" />
                   </svg>
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
@@ -448,9 +448,9 @@ function createDetailRow(stats, modelName, data) {
                   </svg>
                 </div>
               </th>
-              <th class="px-2 py-3 text-center font-semibold text-gray-700">
+              <th class="px-2 py-3 text-center font-semibold text-gray-700 dark:text-slate-300">
                 <div class="flex items-center justify-center space-x-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3 text-yellow-500">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3 text-yellow-500 dark:text-yellow-400">
                     <path fill-rule="evenodd" d="M6.701 2.25c.577-1 2.02-1 2.598 0l5.196 9a1.5 1.5 0 0 1-1.299 2.25H2.804a1.5 1.5 0 0 1-1.3-2.25l5.197-9ZM8 4a.75.75 0 0 1 .75.75v3a.75.75 0 1 1-1.5 0v-3A.75.75 0 0 1 8 4Zm0 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clip-rule="evenodd" />
                   </svg>
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
@@ -459,9 +459,9 @@ function createDetailRow(stats, modelName, data) {
                   </svg>
                 </div>
               </th>
-              <th class="px-2 py-3 text-center font-semibold text-gray-700">
+              <th class="px-2 py-3 text-center font-semibold text-gray-700 dark:text-slate-300">
                 <div class="flex items-center justify-center space-x-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3 text-red-600">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3 text-red-600 dark:text-red-400">
                     <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14ZM8 4a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-1.5 0v-3A.75.75 0 0 1 8 4Zm0 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clip-rule="evenodd" />
                   </svg>
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
@@ -471,7 +471,7 @@ function createDetailRow(stats, modelName, data) {
                 </div>
               </th>
               <!-- Tokens Section -->
-              <th class="px-4 py-3 text-center font-semibold text-gray-700 relative before:absolute before:left-0 before:top-0 before:bottom-0 before:w-0.5 before:bg-gray-300">
+              <th class="px-4 py-3 text-center font-semibold text-gray-700 dark:text-slate-300 relative before:absolute before:left-0 before:top-0 before:bottom-0 before:w-px before:bg-slate-300 before:dark:bg-slate-700">
                 <div class="flex items-center justify-center space-x-1">
                   <span>In</span>
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
@@ -486,7 +486,7 @@ function createDetailRow(stats, modelName, data) {
                   </svg>
                 </div>
               </th>
-              <th class="px-4 py-3 text-center font-semibold text-gray-700">
+              <th class="px-4 py-3 text-center font-semibold text-gray-700 dark:text-slate-300">
                 <div class="flex items-center justify-center space-x-1">
                   <span>Out</span>
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
@@ -502,7 +502,7 @@ function createDetailRow(stats, modelName, data) {
                 </div>
               </th>
               <!-- Performance Section -->
-              <th class="px-4 py-3 text-center font-semibold text-gray-700 relative before:absolute before:left-0 before:top-0 before:bottom-0 before:w-0.5 before:bg-gray-300">
+              <th class="px-4 py-3 text-center font-semibold text-gray-700 dark:text-slate-300 relative before:absolute before:left-0 before:top-0 before:bottom-0 before:w-px before:bg-slate-300 before:dark:bg-slate-700">
                 <div class="flex items-center justify-center space-x-1">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
                     <path fill-rule="evenodd" d="M1 8a7 7 0 1 1 14 0A7 7 0 0 1 1 8Zm7.75-4.25a.75.75 0 0 0-1.5 0V8c0 .414.336.75.75.75h3.25a.75.75 0 0 0 0-1.5h-2.5v-3.5Z" clip-rule="evenodd" />
@@ -515,7 +515,7 @@ function createDetailRow(stats, modelName, data) {
                   <span class="text-xs">[s]</span>
                 </div>
               </th>
-              <th class="px-4 py-3 text-center font-semibold text-gray-700">
+              <th class="px-4 py-3 text-center font-semibold text-gray-700 dark:text-slate-300">
                 <div class="flex items-center justify-center space-x-1">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
                     <path d="M6.375 5.5h.875v1.75h-.875a.875.875 0 1 1 0-1.75ZM8.75 10.5V8.75h.875a.875.875 0 0 1 0 1.75H8.75Z" />
@@ -531,7 +531,7 @@ function createDetailRow(stats, modelName, data) {
               </th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-200 text-sm">
+          <tbody class="divide-y-[0.5px] divide-slate-200 dark:divide-slate-700 text-sm">
             ${detailTableRows}
           </tbody>
         </table>
@@ -564,7 +564,7 @@ async function loadLeaderboard(basePath = 'data/benchmarks/v0.8.1/default', disp
 
     data.entries.forEach((entry, index) => {
       const row = document.createElement('tr');
-      row.className = 'hover:bg-gray-50 transition-colors duration-150 lg:cursor-pointer';
+      row.className = 'hover:bg-gray-50 hover:dark:bg-slate-800 transition-colors duration-150 lg:cursor-pointer';
 
       // Parse data based on display mode
       let primaryValue, secondaryValue, vendor, model;
@@ -631,41 +631,41 @@ async function loadLeaderboard(basePath = 'data/benchmarks/v0.8.1/default', disp
       const costStdDev = `${(entry.std_dev.total_cost * 1000).toFixed(2)}`;
 
       row.innerHTML = `
-        <td class="px-4 py-3 text-left text-gray-700 font-mono">${index + 1}</td>
-        <td class="px-4 py-3 text-center text-gray-700 font-mono whitespace-nowrap">${primaryValue}</td>
-        <td class="px-4 py-3 text-center text-gray-700 font-mono whitespace-nowrap hidden xl:table-cell">${secondaryValue}</td>
-        <td class="px-4 py-3 text-center text-gray-700 font-mono">
+        <td class="px-4 py-3 text-left text-gray-700 dark:text-slate-300 font-mono">${index + 1}</td>
+        <td class="px-4 py-3 text-center text-gray-700 dark:text-slate-300 font-mono whitespace-nowrap">${primaryValue}</td>
+        <td class="px-4 py-3 text-center text-gray-700 dark:text-slate-300 font-mono whitespace-nowrap hidden xl:table-cell">${secondaryValue}</td>
+        <td class="px-4 py-3 text-center text-gray-700 dark:text-slate-300 font-mono">
           <div class="flex justify-center items-center">
             <span class="w-8 text-center">${avgRound}</span>
             <span class="px-1">±</span>
             <span class="w-8 text-center">${avgRoundStdDev}</span>
           </div>
         </td>
-        <td class="px-4 py-3 text-center text-green-600 font-mono hidden sm:table-cell">${successRate}%</td>
-        <td class="px-4 py-3 text-center text-yellow-600 font-mono hidden sm:table-cell">${failureRate}%</td>
-        <td class="px-4 py-3 text-center text-red-600 font-mono hidden sm:table-cell">${errorRate}%</td>
-        <td class="px-4 py-3 text-center text-gray-700 font-mono hidden lg:table-cell">
+        <td class="px-4 py-3 text-center text-green-600 dark:text-green-400 font-mono hidden sm:table-cell">${successRate}%</td>
+        <td class="px-4 py-3 text-center text-yellow-600 dark:text-yellow-400 font-mono hidden sm:table-cell">${failureRate}%</td>
+        <td class="px-4 py-3 text-center text-red-600 dark:text-red-400 font-mono hidden sm:table-cell">${errorRate}%</td>
+        <td class="px-4 py-3 text-center text-gray-700 dark:text-slate-300 font-mono hidden lg:table-cell">
           <div class="flex justify-center items-center">
             <span class="w-6 xl:w-12 text-center">${avgInputTokens}</span>
             <span class="px-1 hidden xl:inline">±</span>
             <span class="w-9 text-center hidden xl:inline">${avgInputTokensStdDev}</span>
           </div>
         </td>
-        <td class="px-4 py-3 text-center text-gray-700 font-mono hidden lg:table-cell">
+        <td class="px-4 py-3 text-center text-gray-700 dark:text-slate-300 font-mono hidden lg:table-cell">
           <div class="flex justify-center items-center">
             <span class="w-6 xl:w-12 text-center">${avgOutputTokens}</span>
             <span class="px-1 hidden xl:inline">±</span>
             <span class="w-9 text-center hidden xl:inline">${avgOutputTokensStdDev}</span>
           </div>
         </td>
-        <td class="px-4 py-3 text-center text-gray-700 font-mono hidden md:table-cell">
+        <td class="px-4 py-3 text-center text-gray-700 dark:text-slate-300 font-mono hidden md:table-cell">
           <div class="flex justify-center items-center">
             <span class="w-12 text-center">${avgTimeSeconds}</span>
             <span class="px-1 hidden xl:inline">±</span>
             <span class="w-12 text-center hidden xl:inline">${avgTimeSecondsStdDev}</span>
           </div>
         </td>
-        <td class="px-4 py-3 text-center text-gray-700 font-mono hidden md:table-cell">
+        <td class="px-4 py-3 text-center text-gray-700 dark:text-slate-300 font-mono hidden md:table-cell">
           <div class="flex justify-center items-center">
             <span class="w-12 text-center">${cost}</span>
             <span class="px-1 hidden xl:inline">±</span>
