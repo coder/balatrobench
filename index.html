@@ -11,7 +11,8 @@
 </head>
 
 <body class="bg-zinc-50 dark:bg-zinc-800 min-h-screen pb-8">
-  <nav class="w-full bg-white dark:bg-zinc-800 border-b border-zinc-200 dark:border-zinc-800 shadow-sm dark:shadow-md dark:ring-1 dark:ring-white/5 mb-8">
+  <nav
+    class="w-full bg-white dark:bg-zinc-800 border-b border-zinc-200 dark:border-zinc-800 shadow-sm dark:shadow-md dark:ring-1 dark:ring-white/5 mb-8">
     <div class="container mx-auto px-2 xl:px-4">
       <div class="flex items-center justify-center space-x-8 py-4">
         <a href="index.html" aria-current="page"
@@ -25,25 +26,31 @@
   </nav>
   <div class="container mx-auto px-4">
     <!-- Performance Bar Chart -->
-    <div class="bg-white dark:bg-zinc-800 rounded-lg shadow-lg dark:shadow-2xl dark:ring-1 dark:ring-white/5 mb-8 p-6 hidden lg:block">
+    <div
+      class="bg-white dark:bg-zinc-800 rounded-lg shadow-lg dark:shadow-2xl dark:ring-1 dark:ring-white/5 mb-8 p-6 hidden lg:block">
       <h2 class="text-xl font-semibold text-zinc-800 dark:text-zinc-100 mb-4 text-center">BalatroBench</h2>
       <div class="relative w-full" style="height: 250px;">
         <canvas id="performance-chart" class="w-full h-full"></canvas>
       </div>
     </div>
 
-    <div class="overflow-x-auto bg-white dark:bg-zinc-800 rounded-lg shadow-lg dark:shadow-2xl dark:ring-1 dark:ring-white/5">
+    <div
+      class="overflow-x-auto bg-white dark:bg-zinc-800 rounded-lg shadow-lg dark:shadow-2xl dark:ring-1 dark:ring-white/5">
       <table id="leaderboard" class="w-full table-auto">
         <thead class="bg-zinc-100 dark:bg-zinc-800">
           <tr class="border-b border-zinc-200 dark:border-zinc-700">
             <!-- Rank Section -->
-            <th class="px-4 py-3 text-left text-sm font-semibold text-zinc-700 dark:text-zinc-300 border-r-2 border-zinc-300 dark:border-zinc-700">#</th>
+            <th
+              class="px-4 py-3 text-left text-sm font-semibold text-zinc-700 dark:text-zinc-300 border-r-2 border-zinc-300 dark:border-zinc-700">
+              #</th>
             <!-- Model Section -->
             <th class="px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300">Model</th>
-            <th class="px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden xl:table-cell">
+            <th
+              class="px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden xl:table-cell">
               Vendor</th>
             <!-- Stats Section -->
-            <th class="px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 border-l-2 border-zinc-300 dark:border-zinc-700">
+            <th
+              class="px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 border-l-2 border-zinc-300 dark:border-zinc-700">
               Round</th>
             <!-- Tool Calls Section -->
             <th
@@ -64,7 +71,8 @@
                 </svg>
               </div>
             </th>
-            <th class="px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden sm:table-cell">
+            <th
+              class="px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden sm:table-cell">
               <div class="flex items-center justify-center space-x-1">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
                   class="w-4 h-4 text-yellow-500 dark:text-yellow-400">
@@ -81,7 +89,8 @@
                 </svg>
               </div>
             </th>
-            <th class="px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden sm:table-cell">
+            <th
+              class="px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden sm:table-cell">
               <div class="flex items-center justify-center space-x-1">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
                   class="w-4 h-4 text-red-600 dark:text-red-400">
@@ -120,7 +129,8 @@
                 </svg>
               </div>
             </th>
-            <th class="px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden lg:table-cell">
+            <th
+              class="px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden lg:table-cell">
               <div class="flex items-center justify-center space-x-1">
                 <span>Out</span>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
@@ -160,7 +170,8 @@
                 <span class="text-xs">[s]</span>
               </div>
             </th>
-            <th class="px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden md:table-cell">
+            <th
+              class="px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden md:table-cell">
               <div class="flex items-center justify-center space-x-1">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
                   <path
