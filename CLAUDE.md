@@ -13,7 +13,7 @@ BalatroBench is a static web application that displays performance leaderboards 
 - **index.html**: Main leaderboard page with responsive table layout using Tailwind CSS
 - **community.html**: Community strategy leaderboard page with similar layout and functionality
 - **about.html**: About page with project information and metrics documentation
-- **script.js**: Shared JavaScript for all pages - fetches and renders leaderboard data, with interactive expandable rows showing detailed charts and statistics
+- **script.js**: Shared JavaScript for all pages - fetches and renders leaderboard data, with theme-aware Chart.js integration, interactive expandable rows, and detailed statistics visualization
 - **data/**: Contains benchmark results organized by version, strategy, and data type
   - `data/benchmarks/v0.8.1/default/leaderboard.json`: Primary model leaderboard data
   - `data/community/v0.8.1/default/leaderboard.json`: Community strategy leaderboard data
@@ -34,14 +34,15 @@ Models are identified by `vendor/model` format and ranked by performance metrics
 ### Interactive Features
 
 - **Navigation**: Top navigation bar with links between main leaderboard, community, and about pages
+- **Dark Mode Support**: Automatic dark mode detection with theme-aware charts and styling
 - **Expandable Rows**: Click on desktop (lg+) to expand detailed view with:
-  - Round distribution histogram using Chart.js
-  - Provider usage pie chart
+  - Round distribution histogram using Chart.js with theme-aware colors
+  - Provider usage pie chart with vendor-specific color scheme
   - Complete per-game statistics table
   - Total aggregated metrics (tokens, costs, time)
-- **Bar Charts**: Performance visualization showing average rounds reached across models
+- **Bar Charts**: Performance visualization showing average rounds reached across models with error bars
 - **Footer**: Clickable footer component with project information and navigation
-- **Responsive Design**: Columns hide/show based on screen size
+- **Responsive Design**: Columns hide/show based on screen size using Tailwind breakpoints
 - **Dual Display Modes**: Support for both model-based and community strategy leaderboards
 
 ## Development Commands
@@ -57,8 +58,8 @@ python3 -m http.server 8000
 
 ### Dependencies
 
-- **Tailwind CSS**: Styling framework loaded from CDN
-- **Chart.js**: Charting library for histograms, pie charts, and bar charts
+- **Tailwind CSS**: Styling framework loaded from CDN with dark mode support
+- **Chart.js**: Charting library for histograms, pie charts, and bar charts with theme-aware color schemes
 - **Heroicons**: Icon library (included but minimal usage in current implementation)
 
 ### Current Models
@@ -74,6 +75,15 @@ The leaderboard includes performance data for models from multiple vendors:
 - JavaScript: 2-space indentation, 100 character line limit
 - HTML: 2-space indentation, 120 character line limit
 - JSON: 2-space indentation
+
+### Theme System
+
+The application supports automatic dark mode detection with:
+- **Theme Detection**: Uses `prefers-color-scheme` media query for automatic switching
+- **Color Schemes**: Vendor-specific colors (OpenAI: black/gray, Google: blue, Anthropic: orange)
+- **Chart Integration**: Theme-aware Chart.js color palettes with HSLA color strings
+- **Responsive Charts**: All charts (histograms, pie charts, bar charts) adapt to light/dark themes
+- **Grid and Axis**: Theme-appropriate grid lines and axis colors for optimal readability
 
 ## Data Management
 
