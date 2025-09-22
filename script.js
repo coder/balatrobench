@@ -2,7 +2,7 @@
 const colors = {
   light: {
     vendors: {
-      openai: 'hsla(0, 0%, 3%, .8)', // near-black accent
+      openai: 'hsla(0, 0%, 25%, .8)', // near-black accent
       google: 'hsla(217, 89%, 61%, .8)', // Google blue
       anthropic: 'hsla(15, 52%, 58%, .8)' // Anthropic orange
     },
@@ -12,7 +12,7 @@ const colors = {
   },
   dark: {
     vendors: {
-      openai: 'hsla(0, 0%, 80%, .8)', // brighter neutral for contrast
+      openai: 'hsla(0, 0%, 50%, .8)', // brighter neutral for contrast
       google: 'hsla(217, 96%, 74%, .8)', // more saturated Google blue
       anthropic: 'hsla(15, 64%, 70%, .8)' // more saturated Anthropic orange
     },
