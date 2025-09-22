@@ -32,8 +32,12 @@ function getCurrentTheme() {
   }
 }
 
+// Global state for main leaderboard chart
+let performanceChart = null;
+const DEFAULT_BENCHMARK_VERSION = 'v0.10.0';
+
 // Load details for a specific model
-async function loadDetails(vendor, model, basePath = 'data/benchmarks/v0.8.1/default') {
+async function loadDetails(vendor, model, basePath = 'data/benchmarks/v0.10.0/default') {
   try {
     const response = await fetch(`${basePath}/${vendor}/${model}.json`);
     const data = await response.json();
@@ -162,7 +166,10 @@ function createPerformanceBarChart(entries) {
   const maxWithError = Math.max(...avgRounds.map((avg, i) => avg + stdDevs[i]));
   const yAxisMax = Math.ceil(maxWithError + 0.5); // Add padding
 
-  new Chart(ctx, {
+  if (performanceChart) {
+    performanceChart.destroy();
+  }
+  performanceChart = new Chart(ctx, {
     type: 'bar',
     data: {
       labels: models,
@@ -337,7 +344,7 @@ function createProviderPieChart(data, canvasId) {
 }
 
 // Create inline detail row after clicked row
-function createDetailRow(stats, modelName, data) {
+function createDetailRow(stats, modelName, data, vendor, model, basePath) {
   const detailRow = document.createElement('tr');
   detailRow.className = 'detail-row bg-zinc-50 dark:bg-zinc-800';
 
@@ -626,17 +633,55 @@ function createDetailRow(stats, modelName, data) {
     createProviderPieChart(data, pieChartCanvasId);
   }, 0);
 
+  // Make each per-run row clickable to open Run Viewer (if runs mapping exists)
+  const perRunTable = detailRow.querySelector('table.table-auto');
+  const tbody = perRunTable ? perRunTable.querySelector('tbody') : null;
+  if (tbody) {
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    const runs = Array.isArray(data.runs) ? data.runs : null;
+    if (runs && runs.length > 0 && rows.length > 0) {
+      const count = Math.min(runs.length, rows.length);
+      for (let i = 0; i < count; i++) {
+        const tr = rows[i];
+        tr.classList.add('cursor-pointer');
+        tr.title = 'Open run viewer';
+        tr.setAttribute('role', 'button');
+        tr.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          const runId = runs[i];
+          if (!runId) return;
+          // Simple availability check before opening the viewer
+          const reqId = '00001';
+          const probeUrl =
+            `${basePath}/${vendor}/${model}/${runId}/request-${reqId}/tool_call.json`;
+          const exists = await fetchJsonSafe(probeUrl);
+          if (!exists) return; // Data missing: do not open the card
+
+          openRunViewer({
+            basePath,
+            vendor,
+            model,
+            runId,
+            startIndex: 1
+          });
+        });
+      }
+    }
+  }
+
   return detailRow;
 }
 
 // Load and display leaderboard data
-async function loadLeaderboard(basePath = 'data/benchmarks/v0.8.1/default', displayMode = 'model',
+async function loadLeaderboard(basePath = 'data/benchmarks/v0.10.0/default', displayMode = 'model',
   showChart = true) {
   try {
     const response = await fetch(`${basePath}/leaderboard.json`);
     const data = await response.json();
 
     const tableBody = document.getElementById('leaderboard-body');
+    // Clear previous rows if reloading
+    tableBody.innerHTML = '';
 
     // Create the performance bar chart (only on main leaderboard page)
     if (showChart) {
@@ -685,7 +730,10 @@ async function loadLeaderboard(basePath = 'data/benchmarks/v0.8.1/default', disp
             const detailRow = createDetailRow(
               data.stats,
               displayMode === 'community' ? primaryValue : model,
-              data
+              data,
+              vendor,
+              model,
+              basePath
             );
             row.insertAdjacentElement('afterend', detailRow);
           }
@@ -777,6 +825,201 @@ document.addEventListener('DOMContentLoaded', () => {
   if (isCommunityPage) {
     loadLeaderboard('data/community/v0.8.1/default', 'community', false);
   } else {
-    loadLeaderboard();
+    initBenchmarkVersionSelector();
   }
 });
+
+// ===== Run Viewer (modal) =====
+function formatRequestId(n) {
+  return String(n).padStart(5, '0');
+}
+async function fetchTextSafe(url) {
+  try {
+    const r = await fetch(url);
+    if (!r.ok) return null;
+    return await r.text();
+  } catch {
+    return null;
+  }
+}
+async function fetchJsonSafe(url) {
+  try {
+    const r = await fetch(url);
+    if (!r.ok) return null;
+    return await r.json();
+  } catch {
+    return null;
+  }
+}
+
+function openRunViewer({
+  basePath,
+  vendor,
+  model,
+  runId,
+  startIndex = 1
+}) {
+  const state = {
+    basePath,
+    vendor,
+    model,
+    runId,
+    index: startIndex,
+    overlay: null,
+    keyHandler: null
+  };
+  const overlay = document.createElement('div');
+  overlay.className = 'fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-2 sm:p-4';
+  overlay.innerHTML = `
+    <div class="relative w-full max-w-7xl max-h-[95vh] bg-white dark:bg-zinc-800 rounded-lg shadow-2xl ring-1 ring-white/10 overflow-hidden">
+      <div class="flex items-center justify-between px-4 py-2 border-b border-zinc-200 dark:border-zinc-700">
+        <div class="text-sm text-zinc-600 dark:text-zinc-300 font-mono truncate" id="run-title"></div>
+        <button id="run-close" class="p-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700" aria-label="Close">✕</button>
+      </div>
+      <div class="p-3 space-y-3">
+        <div class="flex flex-col lg:flex-row gap-3">
+          <div class="lg:w-1/2 w-full bg-zinc-50 dark:bg-zinc-900 rounded-md overflow-hidden flex items-center justify-center h-[45vh] lg:h-[45vh] p-2">
+            <img id="run-screenshot" class="max-h-full max-w-full object-contain" alt="Screenshot" />
+          </div>
+          <div class="lg:w-1/2 w-full flex flex-col">
+            <pre id="run-reasoning" class="h-[45vh] lg:h-[45vh] bg-zinc-50 dark:bg-zinc-900 rounded-md p-3 text-xs text-zinc-800 dark:text-zinc-200 whitespace-pre-wrap overflow-auto"></pre>
+          </div>
+        </div>
+        <div>
+          <div id="run-tool" class="bg-zinc-50 dark:bg-zinc-900 rounded-md p-3 text-xs text-zinc-800 dark:text-zinc-200 overflow-auto h-[25vh] lg:h-[25vh]"></div>
+        </div>
+        <div class="flex items-center justify-center gap-4 py-1">
+          <button id="run-prev" class="px-3 py-1.5 rounded bg-white/80 dark:bg-zinc-700/80 hover:bg-white dark:hover:bg-zinc-700 border border-zinc-200 dark:border-zinc-600" title="Previous (← or h)" aria-label="Previous">◀</button>
+          <button id="run-next" class="px-3 py-1.5 rounded bg-white/80 dark:bg-zinc-700/80 hover:bg-white dark:hover:bg-zinc-700 border border-zinc-200 dark:border-zinc-600" title="Next (→ or l)" aria-label="Next">▶</button>
+        </div>
+      </div>
+    </div>`;
+
+  document.body.appendChild(overlay);
+  document.body.style.overflow = 'hidden';
+  state.overlay = overlay;
+
+  overlay.querySelector('#run-close').addEventListener('click', () => closeRunViewer(state));
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeRunViewer(state);
+  });
+  overlay.querySelector('#run-prev').addEventListener('click', () => navigateRun(state, -1));
+  overlay.querySelector('#run-next').addEventListener('click', () => navigateRun(state, +1));
+
+  state.keyHandler = (e) => {
+    if (e.key === 'Escape') return closeRunViewer(state);
+    if (e.key === 'ArrowLeft' || e.key === 'h') return navigateRun(state, -1);
+    if (e.key === 'ArrowRight' || e.key === 'l') return navigateRun(state, +1);
+  };
+  window.addEventListener('keydown', state.keyHandler);
+
+  loadAndRenderRequest(state);
+}
+
+async function loadAndRenderRequest(state) {
+  const {
+    basePath,
+    vendor,
+    model,
+    runId,
+    index,
+    overlay
+  } = state;
+  const reqId = formatRequestId(index);
+  const runBase = `${basePath}/${vendor}/${model}/${runId}/request-${reqId}`;
+
+  overlay.querySelector('#run-title').textContent =
+    `${vendor}/${model} • ${runId} • request-${reqId}`;
+
+  const [reasoning, toolcall] = await Promise.all([
+    fetchTextSafe(`${runBase}/reasoning.md`),
+    fetchJsonSafe(`${runBase}/tool_call.json`)
+  ]);
+
+  const imgEl = overlay.querySelector('#run-screenshot');
+  imgEl.src = `${runBase}/screenshot.avif`;
+  imgEl.onerror = () => {
+    imgEl.onerror = null;
+    imgEl.src = `${runBase}/screenshot.png`;
+  };
+
+  overlay.querySelector('#run-reasoning').textContent = reasoning || '(No reasoning.md)';
+
+  const toolDiv = overlay.querySelector('#run-tool');
+  if (!toolcall) {
+    toolDiv.textContent = '(No tool_call.json)';
+  } else {
+    const tc = Array.isArray(toolcall) ? toolcall[0] : toolcall;
+    const name = tc && tc.function && tc.function.name ? tc.function.name : '(unknown)';
+    let argsRaw = tc && tc.function ? tc.function.arguments : '';
+    let argsPretty = '';
+    if (typeof argsRaw === 'string') {
+      try {
+        argsPretty = JSON.stringify(JSON.parse(argsRaw), null, 2);
+      } catch {
+        argsPretty = argsRaw;
+      }
+    } else if (argsRaw && typeof argsRaw === 'object') {
+      try {
+        argsPretty = JSON.stringify(argsRaw, null, 2);
+      } catch {
+        argsPretty = String(argsRaw);
+      }
+    }
+    toolDiv.innerHTML = `
+      <div class="space-y-2">
+        <div><span class="font-semibold">Function:</span> <span id="fn-name" class="font-mono"></span></div>
+        <div>
+          <div class="font-semibold mb-1">Arguments:</div>
+          <pre id="fn-args" class="whitespace-pre-wrap"></pre>
+        </div>
+      </div>`;
+    toolDiv.querySelector('#fn-name').textContent = name;
+    toolDiv.querySelector('#fn-args').textContent = argsPretty || '';
+  }
+}
+
+async function navigateRun(state, delta) {
+  const old = state.index;
+  state.index = Math.max(1, old + delta);
+  const reqId = formatRequestId(state.index);
+  const probe =
+    `${state.basePath}/${state.vendor}/${state.model}/${state.runId}/request-${reqId}/tool_call.json`;
+  const ok = await fetchJsonSafe(probe);
+  if (!ok) {
+    state.index = old;
+    return;
+  }
+  loadAndRenderRequest(state);
+}
+
+function closeRunViewer(state) {
+  window.removeEventListener('keydown', state.keyHandler);
+  document.body.style.overflow = '';
+  state.overlay.remove();
+}
+
+function initBenchmarkVersionSelector() {
+  const sel = document.getElementById('version-select');
+  const tableEl = document.getElementById('leaderboard-body');
+  if (!sel) {
+    // Fallback to default if selector missing, only if table exists on page
+    if (tableEl) {
+      loadLeaderboard(`data/benchmarks/${DEFAULT_BENCHMARK_VERSION}/default`, 'model', true);
+    }
+    return;
+  }
+
+  const applyVersion = (version) => {
+    const basePath = `data/benchmarks/${version}/default`;
+    const tbody = document.getElementById('leaderboard-body');
+    if (tbody) tbody.innerHTML = '';
+    loadLeaderboard(basePath, 'model', true);
+  };
+
+  // Initial load from current selection
+  applyVersion(sel.value || DEFAULT_BENCHMARK_VERSION);
+
+  // Reload on change
+  sel.addEventListener('change', () => applyVersion(sel.value));
+}
