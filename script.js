@@ -4,7 +4,8 @@ const colors = {
     vendors: {
       openai: 'hsla(0, 0%, 25%, .8)', // near-black accent
       google: 'hsla(217, 89%, 61%, .8)', // Google blue
-      anthropic: 'hsla(15, 52%, 58%, .8)' // Anthropic orange
+      anthropic: 'hsla(15, 52%, 58%, .8)', // Anthropic orange
+      'x-ai': 'hsla(270, 70%, 50%, .8)' // X-AI purple
     },
     grid: 'hsla(240, 5%, 89%, 1)', // zinc-200-ish
     axis: 'hsla(240, 5%, 26%, 1)', // zinc-700-ish
@@ -14,7 +15,8 @@ const colors = {
     vendors: {
       openai: 'hsla(0, 0%, 50%, .8)', // brighter neutral for contrast
       google: 'hsla(217, 96%, 74%, .8)', // more saturated Google blue
-      anthropic: 'hsla(15, 64%, 70%, .8)' // more saturated Anthropic orange
+      anthropic: 'hsla(15, 64%, 70%, .8)', // more saturated Anthropic orange
+      'x-ai': 'hsla(270, 80%, 70%, .8)' // brighter X-AI purple for dark mode
     },
     grid: 'hsla(240, 5%, 26%, 1)', // zinc-700-ish
     axis: 'hsla(240, 6%, 90%, 1)', // near-white text
