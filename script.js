@@ -38,10 +38,10 @@ function getCurrentTheme() {
 
 // Global state for main leaderboard chart
 let performanceChart = null;
-const DEFAULT_BENCHMARK_VERSION = 'v0.10.0';
+const DEFAULT_BENCHMARK_VERSION = 'v0.11.0';
 
 // Load details for a specific model
-async function loadDetails(vendor, model, basePath = 'data/benchmarks/v0.10.0/default') {
+async function loadDetails(vendor, model, basePath = 'data/benchmarks/v0.11.0/default') {
   try {
     const response = await fetch(`${basePath}/${vendor}/${model}.json`);
     const data = await response.json();
@@ -677,7 +677,7 @@ function createDetailRow(stats, modelName, data, vendor, model, basePath) {
 }
 
 // Load and display leaderboard data
-async function loadLeaderboard(basePath = 'data/benchmarks/v0.10.0/default', displayMode = 'model',
+async function loadLeaderboard(basePath = 'data/benchmarks/v0.11.0/default', displayMode = 'model',
   showChart = true) {
   try {
     const response = await fetch(`${basePath}/leaderboard.json`);
