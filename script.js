@@ -909,22 +909,23 @@ function openRunViewer({
   const overlay = document.createElement('div');
   overlay.className = 'fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-2 sm:p-4';
   overlay.innerHTML = `
-    <div class="relative w-full max-w-7xl max-h-[95vh] bg-white dark:bg-zinc-800 rounded-lg shadow-2xl ring-1 ring-white/10 overflow-hidden">
+    <div class="relative w-full max-w-5xl max-h-[95vh] bg-white dark:bg-zinc-800 rounded-lg shadow-2xl ring-1 ring-white/10 overflow-hidden">
       <div class="flex items-center justify-between px-4 py-2 border-b border-zinc-200 dark:border-zinc-700">
         <div class="text-sm text-zinc-600 dark:text-zinc-300 font-mono truncate" id="run-title"></div>
         <button id="run-close" class="p-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700" aria-label="Close">✕</button>
       </div>
       <div class="p-3 space-y-3">
         <div class="flex flex-col lg:flex-row gap-3">
-          <div class="lg:w-1/2 w-full bg-zinc-50 dark:bg-zinc-900 rounded-md overflow-hidden flex items-center justify-center h-[45vh] lg:h-[45vh] p-2">
-            <img id="run-screenshot" class="max-h-full max-w-full object-contain" alt="Screenshot" />
+          <div class="lg:w-1/2 w-full bg-zinc-50 dark:bg-zinc-900 rounded-md overflow-hidden flex items-center justify-center h-96">
+            <img id="run-screenshot" class="max-h-full max-w-full object-contain p-2" alt="Screenshot" />
           </div>
           <div class="lg:w-1/2 w-full flex flex-col">
-            <pre id="run-reasoning" class="h-[45vh] lg:h-[45vh] bg-zinc-50 dark:bg-zinc-900 rounded-md p-3 text-xs text-zinc-800 dark:text-zinc-200 whitespace-pre-wrap overflow-auto"></pre>
+            <pre id="run-reasoning" class="h-96 bg-zinc-50 dark:bg-zinc-900 rounded-md p-3 text-xs text-zinc-800 dark:text-zinc-200 whitespace-pre-wrap overflow-auto"></pre>
           </div>
         </div>
-        <div>
-          <div id="run-tool" class="bg-zinc-50 dark:bg-zinc-900 rounded-md p-3 text-xs text-zinc-800 dark:text-zinc-200 overflow-auto h-[25vh] lg:h-[25vh]"></div>
+        <div class="flex flex-col h-[25vh] lg:h-[25vh] gap-2">
+          <div id="run-tool-name" class="bg-zinc-50 dark:bg-zinc-900 rounded-md p-3 text-sm font-mono text-zinc-800 dark:text-zinc-200 flex items-center"></div>
+          <div id="run-tool-args" class="bg-zinc-50 dark:bg-zinc-900 rounded-md p-3 text-xs text-zinc-800 dark:text-zinc-200 overflow-auto flex-1"></div>
         </div>
         <div class="flex items-center justify-center gap-4 py-1">
           <button id="run-prev" class="px-3 py-1.5 rounded bg-white/80 dark:bg-zinc-700/80 hover:bg-white dark:hover:bg-zinc-700 border border-zinc-200 dark:border-zinc-600" title="Previous (← or h)" aria-label="Previous">◀</button>
@@ -983,9 +984,11 @@ async function loadAndRenderRequest(state) {
 
   overlay.querySelector('#run-reasoning').textContent = reasoning || '(No reasoning.md)';
 
-  const toolDiv = overlay.querySelector('#run-tool');
+  const toolNameDiv = overlay.querySelector('#run-tool-name');
+  const toolArgsDiv = overlay.querySelector('#run-tool-args');
   if (!toolcall) {
-    toolDiv.textContent = '(No tool_call.json)';
+    toolNameDiv.textContent = '(No tool_call.json)';
+    toolArgsDiv.textContent = '';
   } else {
     const tc = Array.isArray(toolcall) ? toolcall[0] : toolcall;
     const name = tc && tc.function && tc.function.name ? tc.function.name : '(unknown)';
@@ -1004,16 +1007,8 @@ async function loadAndRenderRequest(state) {
         argsPretty = String(argsRaw);
       }
     }
-    toolDiv.innerHTML = `
-      <div class="space-y-2">
-        <div><span class="font-semibold">Function:</span> <span id="fn-name" class="font-mono"></span></div>
-        <div>
-          <div class="font-semibold mb-1">Arguments:</div>
-          <pre id="fn-args" class="whitespace-pre-wrap"></pre>
-        </div>
-      </div>`;
-    toolDiv.querySelector('#fn-name').textContent = name;
-    toolDiv.querySelector('#fn-args').textContent = argsPretty || '';
+    toolNameDiv.textContent = name;
+    toolArgsDiv.innerHTML = `<pre class="whitespace-pre-wrap">${argsPretty || ''}</pre>`;
   }
 }
 
