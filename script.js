@@ -38,10 +38,10 @@ function getCurrentTheme() {
 
 // Global state for main leaderboard chart
 let performanceChart = null;
-const DEFAULT_BENCHMARK_VERSION = 'v0.11.0';
+let DEFAULT_BENCHMARK_VERSION = null; // Must be set from manifest
 
 // Load details for a specific model
-async function loadDetails(vendor, model, basePath = 'data/benchmarks/v0.11.0/default') {
+async function loadDetails(vendor, model, basePath = 'data/benchmarks/v0.12.0/default') {
   try {
     const response = await fetch(`${basePath}/${vendor}/${model}.json`);
     const data = await response.json();
@@ -55,7 +55,7 @@ async function loadDetails(vendor, model, basePath = 'data/benchmarks/v0.11.0/de
   }
 }
 
-// Create round distribution histogram (uses Chart.js defaults for fills)
+// Create round distribution histogram with stacked bars by seed
 function createRoundHistogram(stats, canvasId) {
   const rounds = stats.map(stat => stat.final_round);
   const maxRound = Math.max(...rounds);
@@ -65,39 +65,74 @@ function createRoundHistogram(stats, canvasId) {
   const bins = Array.from({
     length: maxRound
   }, (_, i) => i + minRound);
-  const counts = bins.map(round => rounds.filter(r => r === round).length);
-  const maxCount = Math.max(...counts);
 
+  // Extract unique seeds and sort them for consistent ordering
+  const seeds = [...new Set(stats.map(stat => stat.seed || 'Unknown'))].sort();
+
+  // Create a color palette for seeds using theme-aware colors
   const ctx = document.getElementById(canvasId).getContext('2d');
   const theme = getCurrentTheme();
   const themeColors = colors[theme] || colors.light;
+
+  // Generate seed colors - use HSL with variations for distinction
+  const seedColors = {};
+  const hueStep = 360 / Math.max(seeds.length, 1);
+  seeds.forEach((seed, index) => {
+    const hue = (index * hueStep) % 360;
+    const saturation = 60 + (index % 3) * 10; // Vary saturation
+    const lightness = theme === 'dark' ? 55 : 45;
+    seedColors[seed] = `hsla(${hue}, ${saturation}%, ${lightness}%, 0.8)`;
+  });
+
+  // Create datasets - one per seed
+  const datasets = seeds.map(seed => {
+    const counts = bins.map(round => {
+      return stats.filter(s => s.final_round === round && (s.seed || 'Unknown') === seed)
+        .length;
+    });
+
+    return {
+      label: seed,
+      data: counts,
+      backgroundColor: seedColors[seed],
+      borderColor: seedColors[seed],
+      borderWidth: 0
+    };
+  });
 
   new Chart(ctx, {
     type: 'bar',
     data: {
       labels: bins,
-      datasets: [{
-        data: counts
-      }]
+      datasets: datasets
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       interaction: {
         intersect: false,
-        mode: 'none'
+        mode: 'index'
       },
       plugins: {
         legend: {
-          display: false
+          display: true,
+          position: 'bottom',
+          labels: {
+            boxWidth: 10,
+            color: themeColors.axis,
+            font: {
+              size: 11
+            }
+          }
         },
         title: {
           display: false,
-          text: 'Rounds'
+          text: 'Rounds by Seed'
         }
       },
       scales: {
         x: {
+          stacked: true,
           title: {
             display: false,
             text: 'Round'
@@ -114,14 +149,13 @@ function createRoundHistogram(stats, canvasId) {
           }
         },
         y: {
+          stacked: true,
           beginAtZero: true,
-          max: maxCount + 1,
           title: {
             display: false,
             text: 'Frequency'
           },
           ticks: {
-            stepSize: 1,
             color: themeColors.axis
           },
           grid: {
@@ -677,7 +711,7 @@ function createDetailRow(stats, modelName, data, vendor, model, basePath) {
 }
 
 // Load and display leaderboard data
-async function loadLeaderboard(basePath = 'data/benchmarks/v0.11.0/default', displayMode = 'model',
+async function loadLeaderboard(basePath = 'data/benchmarks/v0.12.0/default', displayMode = 'model',
   showChart = true) {
   try {
     const response = await fetch(`${basePath}/leaderboard.json`);
@@ -773,7 +807,7 @@ async function loadLeaderboard(basePath = 'data/benchmarks/v0.11.0/default', dis
         <td class="px-4 py-3 text-center text-zinc-700 dark:text-zinc-300 font-mono whitespace-nowrap hidden xl:table-cell">${secondaryValue}</td>
         <td class="px-4 py-3 text-center text-zinc-700 dark:text-zinc-300 font-mono">
           <div class="flex justify-center items-center">
-            <span class="w-8 text-center">${avgRound}</span>
+            <span class="w-10 text-center">${avgRound}</span>
             <span class="px-1">±</span>
             <span class="w-8 text-center">${avgRoundStdDev}</span>
           </div>
@@ -1003,16 +1037,47 @@ function closeRunViewer(state) {
   state.overlay.remove();
 }
 
-function initBenchmarkVersionSelector() {
+// Load version manifest and populate version selector
+async function loadVersionManifest() {
+  const response = await fetch('data/benchmarks/manifest.json');
+  if (!response.ok) {
+    throw new Error(`Failed to load version manifest: ${response.status} ${response.statusText}`);
+  }
+
+  const data = await response.json();
+  const versions = data.versions || [];
+
+  // Set DEFAULT_BENCHMARK_VERSION to the latest version (required)
+  const latestVersion = versions.find(v => v.latest);
+  if (!latestVersion) {
+    throw new Error('Manifest must contain a version marked with "latest": true');
+  }
+
+  DEFAULT_BENCHMARK_VERSION = latestVersion.version;
+  return versions;
+}
+
+// Populate version selector with options from manifest
+async function initBenchmarkVersionSelector() {
   const sel = document.getElementById('version-select');
   const tableEl = document.getElementById('leaderboard-body');
   if (!sel) {
-    // Fallback to default if selector missing, only if table exists on page
-    if (tableEl) {
-      loadLeaderboard(`data/benchmarks/${DEFAULT_BENCHMARK_VERSION}/default`, 'model', true);
-    }
-    return;
+    throw new Error('Version selector element not found');
   }
+
+  // Load versions from manifest (will throw if latest not found or manifest missing)
+  const versions = await loadVersionManifest();
+
+  // Populate select options
+  versions.forEach(versionObj => {
+    const option = document.createElement('option');
+    option.value = versionObj.version;
+    option.textContent = versionObj.label;
+    if (versionObj.latest) {
+      option.selected = true;
+    }
+    sel.appendChild(option);
+  });
 
   const applyVersion = (version) => {
     const basePath = `data/benchmarks/${version}/default`;
