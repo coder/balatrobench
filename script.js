@@ -410,6 +410,7 @@ function createDetailRow(stats, modelName, data, vendor, model, basePath) {
 
     detailTableRows += `
       <tr class="hover:bg-zinc-100 hover:dark:bg-zinc-700 text-xs">
+        <td class="px-2 py-2 text-center text-zinc-700 dark:text-zinc-300 font-mono">${stat.seed || 'Unknown'}</td>
         <td class="px-2 py-2 text-center text-zinc-700 dark:text-zinc-300 font-mono">${stat.final_round}</td>
         <td class="px-2 py-2 text-center text-green-600 dark:text-green-400 font-mono">${successRate}%</td>
         <td class="px-2 py-2 text-center text-yellow-600 dark:text-yellow-400 font-mono">${failedRate}%</td>
@@ -450,7 +451,7 @@ function createDetailRow(stats, modelName, data, vendor, model, basePath) {
   const pieChartCanvasId = `pie-${modelName.replace(/[^a-zA-Z0-9]/g, '-')}`;
 
   detailRow.innerHTML = `
-    <td colspan="12" class="p-4">
+    <td colspan="13" class="p-4">
       <div class="mb-8 pb-4 flex flex-col lg:flex-row gap-4 h-52">
         <!-- Rounds -->
         <div class="flex-1">
@@ -561,7 +562,8 @@ function createDetailRow(stats, modelName, data, vendor, model, basePath) {
           <thead class="bg-zinc-100 dark:bg-zinc-800 sticky top-0">
             <tr class="text-xs border-b border-zinc-300 dark:border-zinc-700">
               <!-- Stats Section -->
-              <th class="px-2 py-3 text-center font-semibold text-zinc-700 dark:text-zinc-300">Round</th>
+              <th class="px-2 py-3 text-center font-semibold text-zinc-700 dark:text-zinc-300">Seed</th>
+              <th class="px-2 py-3 text-center font-semibold text-zinc-700 dark:text-zinc-300 relative before:absolute before:left-0 before:top-0 before:bottom-0 before:w-px before:bg-zinc-300 before:dark:bg-zinc-700">Round</th>
               <!-- Tool Calls Section -->
               <th class="px-2 py-3 text-center font-semibold text-zinc-700 dark:text-zinc-300 relative before:absolute before:left-0 before:top-0 before:bottom-0 before:w-px before:bg-zinc-300 before:dark:bg-zinc-700">
                 <div class="flex items-center justify-center space-x-1">
