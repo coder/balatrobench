@@ -39,11 +39,46 @@ function getCurrentTheme() {
 // Global state for main leaderboard chart
 let performanceChart = null;
 let DEFAULT_BENCHMARK_VERSION = null; // Must be set from manifest
+let PAGE_TYPE = null; // 'main' or 'community'
 
-// Load details for a specific model
-async function loadDetails(vendor, model, basePath = 'data/benchmarks/v0.12.0/default') {
+// Detect which page we're on
+function detectPageType() {
+  const pageTitle = document.title;
+  if (pageTitle.includes('Community')) {
+    return 'community';
+  }
+  return 'main';
+}
+
+// Get data paths based on page type and version
+function getDataPaths(version) {
+  if (PAGE_TYPE === 'community') {
+    return {
+      manifestPath: 'data/benchmarks/strategies/manifest.json',
+      leaderboardPath: `data/benchmarks/strategies/${version}/openai/gpt-oss-20b/leaderboard.json`,
+      detailBasePath: `data/benchmarks/strategies/${version}/openai/gpt-oss-20b/default`
+    };
+  } else {
+    return {
+      manifestPath: 'data/benchmarks/models/manifest.json',
+      leaderboardPath: `data/benchmarks/models/${version}/default/leaderboard.json`,
+      detailBasePath: `data/benchmarks/models/${version}/default`
+    };
+  }
+}
+
+// Load details for a specific model/strategy
+async function loadDetails(vendor, model, basePath, strategy = null) {
   try {
-    const response = await fetch(`${basePath}/${vendor}/${model}.json`);
+    let detailPath;
+    if (PAGE_TYPE === 'community' && strategy) {
+      // For strategies: load from strategy/stats.json
+      detailPath = `${basePath}/${strategy}/stats.json`;
+    } else {
+      // For models: load from vendor/model.json
+      detailPath = `${basePath}/${vendor}/${model}.json`;
+    }
+    const response = await fetch(detailPath);
     const data = await response.json();
     return data;
   } catch (error) {
@@ -382,7 +417,7 @@ function createProviderPieChart(data, canvasId) {
 }
 
 // Create inline detail row after clicked row
-function createDetailRow(stats, modelName, data, vendor, model, basePath) {
+function createDetailRow(stats, modelName, data, vendor, model, basePath, strategy = null) {
   const detailRow = document.createElement('tr');
   detailRow.className = 'detail-row bg-zinc-50 dark:bg-zinc-800';
 
@@ -692,16 +727,28 @@ function createDetailRow(stats, modelName, data, vendor, model, basePath) {
           if (!runId) return;
           // Simple availability check before opening the viewer
           const reqId = '00001';
-          const probeUrl =
-            `${basePath}/${vendor}/${model}/${runId}/request-${reqId}/tool_call.json`;
+          let probeUrl;
+          if (PAGE_TYPE === 'community' && strategy) {
+            // For strategies: probe at basePath/model/runId/request-*.json
+            probeUrl =
+              `${basePath}/${model}/${runId}/request-${reqId}/tool_call.json`;
+          } else {
+            // For models: probe at basePath/vendor/model/runId/request-*.json
+            probeUrl =
+              `${basePath}/${vendor}/${model}/${runId}/request-${reqId}/tool_call.json`;
+          }
           const exists = await fetchJsonSafe(probeUrl);
-          if (!exists) return; // Data missing: do not open the card
+          if (!exists) {
+            console.warn('Run data not found at:', probeUrl);
+            return; // Data missing: do not open the card
+          }
 
           openRunViewer({
-            basePath,
+            basePath: basePath,
             vendor,
             model,
             runId,
+            strategy,
             startIndex: 1
           });
         });
@@ -713,10 +760,10 @@ function createDetailRow(stats, modelName, data, vendor, model, basePath) {
 }
 
 // Load and display leaderboard data
-async function loadLeaderboard(basePath = 'data/benchmarks/v0.12.0/default', displayMode = 'model',
+async function loadLeaderboard(leaderboardPath, detailBasePath, displayMode = 'model',
   showChart = true) {
   try {
-    const response = await fetch(`${basePath}/leaderboard.json`);
+    const response = await fetch(leaderboardPath);
     const data = await response.json();
 
     const tableBody = document.getElementById('leaderboard-body');
@@ -736,18 +783,17 @@ async function loadLeaderboard(basePath = 'data/benchmarks/v0.12.0/default', dis
       // Parse data based on display mode
       let primaryValue, secondaryValue, vendor, model;
 
+      // Parse model and vendor from config.model (format: "vendor/model")
+      const modelParts = entry.config.model.split('/');
+      vendor = modelParts[0];
+      model = modelParts[1];
+
       if (displayMode === 'community') {
-        primaryValue = entry.config.author || 'Unknown Author';
-        secondaryValue = entry.config.strategy || 'Unknown Strategy';
-        // For detail loading, we still need vendor/model from config.model
-        const modelParts = entry.config.model.split('/');
-        vendor = modelParts[0];
-        model = modelParts[1];
+        // For strategies: show strategy name as primary, author as secondary
+        primaryValue = entry.strategy.name;
+        secondaryValue = entry.strategy.author;
       } else {
-        // Parse model and vendor from config.model (format: "vendor/model")
-        const modelParts = entry.config.model.split('/');
-        vendor = modelParts[0];
-        model = modelParts[1];
+        // For models: show model name as primary, vendor as secondary
         primaryValue = model;
         secondaryValue = vendor;
       }
@@ -766,14 +812,16 @@ async function loadLeaderboard(basePath = 'data/benchmarks/v0.12.0/default', dis
             document.querySelectorAll('.detail-row').forEach(dr => dr.remove());
 
             // Load and show details
-            const data = await loadDetails(vendor, model, basePath);
+            const strategy = displayMode === 'community' ? entry.config.strategy : null;
+            const data = await loadDetails(vendor, model, detailBasePath, strategy);
             const detailRow = createDetailRow(
               data.stats,
               displayMode === 'community' ? primaryValue : model,
               data,
               vendor,
               model,
-              basePath
+              detailBasePath,
+              strategy
             );
             row.insertAdjacentElement('afterend', detailRow);
           }
@@ -859,14 +907,11 @@ async function loadLeaderboard(basePath = 'data/benchmarks/v0.12.0/default', dis
 
 // Load data when page loads
 document.addEventListener('DOMContentLoaded', () => {
-  // Detect if this is the community page
-  const isCommunityPage = document.title.includes('Community');
+  // Detect page type
+  PAGE_TYPE = detectPageType();
 
-  if (isCommunityPage) {
-    loadLeaderboard('data/community/v0.8.1/default', 'community', false);
-  } else {
-    initBenchmarkVersionSelector();
-  }
+  // Initialize version selector for both pages
+  initBenchmarkVersionSelector();
 });
 
 // ===== Run Viewer (modal) =====
@@ -897,6 +942,7 @@ function openRunViewer({
   vendor,
   model,
   runId,
+  strategy = null,
   startIndex = 1
 }) {
   const state = {
@@ -904,6 +950,7 @@ function openRunViewer({
     vendor,
     model,
     runId,
+    strategy,
     index: startIndex,
     overlay: null,
     keyHandler: null
@@ -963,11 +1010,19 @@ async function loadAndRenderRequest(state) {
     vendor,
     model,
     runId,
+    strategy,
     index,
     overlay
   } = state;
   const reqId = formatRequestId(index);
-  const runBase = `${basePath}/${vendor}/${model}/${runId}/request-${reqId}`;
+  let runBase;
+  if (PAGE_TYPE === 'community' && strategy) {
+    // For strategies: construct path as basePath/model/runId/request-*
+    runBase = `${basePath}/${model}/${runId}/request-${reqId}`;
+  } else {
+    // For models: construct path as basePath/vendor/model/runId/request-*
+    runBase = `${basePath}/${vendor}/${model}/${runId}/request-${reqId}`;
+  }
 
   overlay.querySelector('#run-title').textContent =
     `${vendor}/${model} • ${runId} • request-${reqId}`;
@@ -1018,8 +1073,16 @@ async function navigateRun(state, delta) {
   const old = state.index;
   state.index = Math.max(1, old + delta);
   const reqId = formatRequestId(state.index);
-  const probe =
-    `${state.basePath}/${state.vendor}/${state.model}/${state.runId}/request-${reqId}/tool_call.json`;
+  let probe;
+  if (PAGE_TYPE === 'community' && state.strategy) {
+    // For strategies: construct path as basePath/model/runId/request-*
+    probe =
+      `${state.basePath}/${state.model}/${state.runId}/request-${reqId}/tool_call.json`;
+  } else {
+    // For models: construct path as basePath/vendor/model/runId/request-*
+    probe =
+      `${state.basePath}/${state.vendor}/${state.model}/${state.runId}/request-${reqId}/tool_call.json`;
+  }
   const ok = await fetchJsonSafe(probe);
   if (!ok) {
     state.index = old;
@@ -1035,8 +1098,8 @@ function closeRunViewer(state) {
 }
 
 // Load version manifest and populate version selector
-async function loadVersionManifest() {
-  const response = await fetch('data/benchmarks/manifest.json');
+async function loadVersionManifest(manifestPath) {
+  const response = await fetch(manifestPath);
   if (!response.ok) {
     throw new Error(`Failed to load version manifest: ${response.status} ${response.statusText}`);
   }
@@ -1057,19 +1120,20 @@ async function loadVersionManifest() {
 // Populate version selector with options from manifest
 async function initBenchmarkVersionSelector() {
   const sel = document.getElementById('version-select');
-  const tableEl = document.getElementById('leaderboard-body');
   if (!sel) {
     throw new Error('Version selector element not found');
   }
 
+  const paths = getDataPaths(DEFAULT_BENCHMARK_VERSION);
+
   // Load versions from manifest (will throw if latest not found or manifest missing)
-  const versions = await loadVersionManifest();
+  const versions = await loadVersionManifest(paths.manifestPath);
 
   // Populate select options
   versions.forEach(versionObj => {
     const option = document.createElement('option');
     option.value = versionObj.version;
-    option.textContent = versionObj.label;
+    option.textContent = versionObj.label || versionObj.version;
     if (versionObj.latest) {
       option.selected = true;
     }
@@ -1077,10 +1141,12 @@ async function initBenchmarkVersionSelector() {
   });
 
   const applyVersion = (version) => {
-    const basePath = `data/benchmarks/${version}/default`;
+    const paths = getDataPaths(version);
     const tbody = document.getElementById('leaderboard-body');
     if (tbody) tbody.innerHTML = '';
-    loadLeaderboard(basePath, 'model', true);
+    const displayMode = PAGE_TYPE === 'community' ? 'community' : 'model';
+    const showChart = PAGE_TYPE === 'main';
+    loadLeaderboard(paths.leaderboardPath, paths.detailBasePath, displayMode, showChart);
   };
 
   // Initial load from current selection
