@@ -1,8 +1,18 @@
 {
+  "permissions": {
+    "allow": [
+      "Read(data/benchmarks/**)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__get-library-docs",
+      "Bash(find:*)",
+      "Bash(tree:*)",
+      "Bash(cat:*)"
+    ]
+  },
   "hooks": {
     "PostToolUse": [
       {
-        "matcher": "Write|Edit|MultiEdit",
+        "matcher": "Write|Edit",
         "hooks": [
           {
             "type": "command",
