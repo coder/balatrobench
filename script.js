@@ -56,7 +56,7 @@ function getDataPaths(version) {
     return {
       manifestPath: 'data/benchmarks/strategies/manifest.json',
       leaderboardPath: `data/benchmarks/strategies/${version}/openai/gpt-oss-20b/leaderboard.json`,
-      detailBasePath: `data/benchmarks/strategies/${version}/openai/gpt-oss-20b/default`
+      detailBasePath: `data/benchmarks/strategies/${version}/openai/gpt-oss-20b`
     };
   } else {
     return {
@@ -729,9 +729,9 @@ function createDetailRow(stats, modelName, data, vendor, model, basePath, strate
           const reqId = '00001';
           let probeUrl;
           if (PAGE_TYPE === 'community' && strategy) {
-            // For strategies: probe at basePath/model/runId/request-*.json
+            // For strategies: probe at basePath/strategy/model/runId/request-*.json
             probeUrl =
-              `${basePath}/${model}/${runId}/request-${reqId}/tool_call.json`;
+              `${basePath}/${strategy}/${model}/${runId}/request-${reqId}/tool_call.json`;
           } else {
             // For models: probe at basePath/vendor/model/runId/request-*.json
             probeUrl =
@@ -789,9 +789,9 @@ async function loadLeaderboard(leaderboardPath, detailBasePath, displayMode = 'm
       model = modelParts[1];
 
       if (displayMode === 'community') {
-        // For strategies: show strategy name as primary, author as secondary
-        primaryValue = entry.strategy.name;
-        secondaryValue = entry.strategy.author;
+        // For strategies: show author as primary, strategy name as secondary
+        primaryValue = entry.strategy.author;
+        secondaryValue = entry.strategy.name;
       } else {
         // For models: show model name as primary, vendor as secondary
         primaryValue = model;
@@ -1017,8 +1017,8 @@ async function loadAndRenderRequest(state) {
   const reqId = formatRequestId(index);
   let runBase;
   if (PAGE_TYPE === 'community' && strategy) {
-    // For strategies: construct path as basePath/model/runId/request-*
-    runBase = `${basePath}/${model}/${runId}/request-${reqId}`;
+    // For strategies: construct path as basePath/strategy/model/runId/request-*
+    runBase = `${basePath}/${strategy}/${model}/${runId}/request-${reqId}`;
   } else {
     // For models: construct path as basePath/vendor/model/runId/request-*
     runBase = `${basePath}/${vendor}/${model}/${runId}/request-${reqId}`;
@@ -1075,9 +1075,9 @@ async function navigateRun(state, delta) {
   const reqId = formatRequestId(state.index);
   let probe;
   if (PAGE_TYPE === 'community' && state.strategy) {
-    // For strategies: construct path as basePath/model/runId/request-*
+    // For strategies: construct path as basePath/strategy/model/runId/request-*
     probe =
-      `${state.basePath}/${state.model}/${state.runId}/request-${reqId}/tool_call.json`;
+      `${state.basePath}/${state.strategy}/${state.model}/${state.runId}/request-${reqId}/tool_call.json`;
   } else {
     // For models: construct path as basePath/vendor/model/runId/request-*
     probe =
