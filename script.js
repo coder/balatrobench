@@ -559,13 +559,13 @@ function createDetailRow(stats, modelName, data, vendor, model, basePath) {
       </div>
       <div class="overflow-x-auto rounded-lg shadow-lg" style="max-height: 180px; overflow-y: auto;">
         <table class="w-full table-auto">
-          <thead class="bg-zinc-100 dark:bg-zinc-800 sticky top-0">
-            <tr class="text-xs border-b border-zinc-300 dark:border-zinc-700">
+          <thead class="bg-zinc-100 dark:bg-zinc-700 sticky top-0">
+            <tr class="text-xs border-b border-zinc-300 dark:border-zinc-600">
               <!-- Stats Section -->
               <th class="px-2 py-3 text-center font-semibold text-zinc-700 dark:text-zinc-300">Seed</th>
-              <th class="px-2 py-3 text-center font-semibold text-zinc-700 dark:text-zinc-300 relative before:absolute before:left-0 before:top-0 before:bottom-0 before:w-px before:bg-zinc-300 before:dark:bg-zinc-700">Round</th>
+              <th class="px-2 py-3 text-center font-semibold text-zinc-700 dark:text-zinc-300 relative before:absolute before:left-0 before:top-0 before:bottom-0 before:w-[2px] before:bg-zinc-300 before:dark:bg-zinc-600">Round</th>
               <!-- Tool Calls Section -->
-              <th class="px-2 py-3 text-center font-semibold text-zinc-700 dark:text-zinc-300 relative before:absolute before:left-0 before:top-0 before:bottom-0 before:w-px before:bg-zinc-300 before:dark:bg-zinc-700">
+              <th class="px-2 py-3 text-center font-semibold text-zinc-700 dark:text-zinc-300 relative before:absolute before:left-0 before:top-0 before:bottom-0 before:w-[2px] before:bg-zinc-300 before:dark:bg-zinc-600">
                 <div class="flex items-center justify-center space-x-1">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3 text-green-600 dark:text-green-400">
                     <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14Zm3.844-8.791a.75.75 0 0 0-1.188-.918l-3.7 4.79-1.649-1.833a.75.75 0 1 0-1.114 1.004l2.25 2.5a.75.75 0 0 0 1.15-.043l4.25-5.5Z" clip-rule="evenodd" />
@@ -599,7 +599,7 @@ function createDetailRow(stats, modelName, data, vendor, model, basePath) {
                 </div>
               </th>
               <!-- Tokens Section -->
-              <th class="px-4 py-3 text-center font-semibold text-zinc-700 dark:text-zinc-300 relative before:absolute before:left-0 before:top-0 before:bottom-0 before:w-px before:bg-zinc-300 before:dark:bg-zinc-700">
+              <th class="px-4 py-3 text-center font-semibold text-zinc-700 dark:text-zinc-300 relative before:absolute before:left-0 before:top-0 before:bottom-0 before:w-[2px] before:bg-zinc-300 before:dark:bg-zinc-600">
                 <div class="flex items-center justify-center space-x-1">
                   <span>In</span>
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
@@ -630,7 +630,7 @@ function createDetailRow(stats, modelName, data, vendor, model, basePath) {
                 </div>
               </th>
               <!-- Performance Section -->
-              <th class="px-4 py-3 text-center font-semibold text-zinc-700 dark:text-zinc-300 relative before:absolute before:left-0 before:top-0 before:bottom-0 before:w-px before:bg-zinc-300 before:dark:bg-zinc-700">
+              <th class="px-4 py-3 text-center font-semibold text-zinc-700 dark:text-zinc-300 relative before:absolute before:left-0 before:top-0 before:bottom-0 before:w-[2px] before:bg-zinc-300 before:dark:bg-zinc-600">
                 <div class="flex items-center justify-center space-x-1">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
                     <path fill-rule="evenodd" d="M1 8a7 7 0 1 1 14 0A7 7 0 0 1 1 8Zm7.75-4.25a.75.75 0 0 0-1.5 0V8c0 .414.336.75.75.75h3.25a.75.75 0 0 0 0-1.5h-2.5v-3.5Z" clip-rule="evenodd" />
@@ -659,7 +659,7 @@ function createDetailRow(stats, modelName, data, vendor, model, basePath) {
               </th>
             </tr>
           </thead>
-          <tbody class="divide-y-[0.5px] divide-zinc-200 dark:divide-zinc-700 text-sm">
+          <tbody class="divide-y divide-zinc-200 dark:divide-zinc-600 text-sm">
             ${detailTableRows}
           </tbody>
         </table>
@@ -912,7 +912,7 @@ function openRunViewer({
   overlay.className = 'fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-2 sm:p-4';
   overlay.innerHTML = `
     <div class="relative w-full max-w-5xl max-h-[95vh] bg-white dark:bg-zinc-800 rounded-lg shadow-2xl ring-1 ring-white/10 overflow-hidden">
-      <div class="flex items-center justify-between px-4 py-2 border-b border-zinc-200 dark:border-zinc-700">
+      <div class="flex items-center justify-between px-4 py-2 border-b border-zinc-200 dark:border-zinc-600">
         <div class="text-sm text-zinc-600 dark:text-zinc-300 font-mono truncate" id="run-title"></div>
         <button id="run-close" class="p-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700" aria-label="Close">✕</button>
       </div>
