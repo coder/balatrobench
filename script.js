@@ -191,7 +191,9 @@ function createRoundHistogram(stats, canvasId) {
             text: 'Frequency'
           },
           ticks: {
-            color: themeColors.axis
+            color: themeColors.axis,
+            precision: 0,
+            stepSize: 1
           },
           grid: {
             color: themeColors.grid,
