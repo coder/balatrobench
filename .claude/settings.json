@@ -1,7 +1,7 @@
 {
   "permissions": {
     "allow": [
-      "Read(data/benchmarks/**)",
+      "Read(benchmarks/**)",
       "mcp__context7__resolve-library-id",
       "mcp__context7__get-library-docs",
       "Bash(find:*)",

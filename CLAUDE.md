@@ -14,9 +14,9 @@ BalatroBench is a static web application that displays performance leaderboards 
 - **community.html**: Community strategy leaderboard page with similar layout and functionality
 - **about.html**: About page with project information and metrics documentation
 - **script.js**: Shared JavaScript for all pages - fetches and renders leaderboard data, with theme-aware Chart.js integration, interactive expandable rows, and detailed statistics visualization
-- **data/**: Contains benchmark results organized by version, strategy, and data type
-  - `data/benchmarks/v0.8.1/default/leaderboard.json`: Primary model leaderboard data
-  - `data/community/v0.8.1/default/leaderboard.json`: Community strategy leaderboard data
+- **benchmarks/**: Contains benchmark results organized by version, strategy, and data type
+  - `benchmarks/models/v0.14.1/default/leaderboard.json`: Primary model leaderboard data
+  - `benchmarks/strategies/v0.13.2/openai/gpt-oss-20b/leaderboard.json`: Community strategy leaderboard data
   - Individual model result files in vendor subdirectories (e.g., `openai/gpt-5.json`, `google/gemini-2.5-pro.json`, `anthropic/claude-sonnet-4.json`)
 
 ### Data Structure
@@ -89,14 +89,14 @@ The application supports automatic dark mode detection with:
 
 ### Data Organization
 
-**Benchmark Data** (`data/benchmarks/v0.8.1/default/`):
+**Benchmark Data** (`benchmarks/models/v0.14.1/default/`):
 - `leaderboard.json`: Aggregated model performance data
 - `[vendor]/[model].json`: Detailed individual model results with per-game statistics
-- Supported vendors: `openai`, `google`, `anthropic`
+- Supported vendors: `openai`, `google`, `anthropic`, `x-ai`, `deepseek`
 
-**Community Data** (`data/community/v0.8.1/default/`):
+**Community Data** (`benchmarks/strategies/v0.13.2/openai/gpt-oss-20b/`):
 - `leaderboard.json`: Community strategy performance data
-- `[vendor]/[model].json`: Detailed strategy results
+- `[strategy]/stats.json`: Detailed strategy results
 
 ### Result Format
 

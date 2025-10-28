@@ -41,6 +41,10 @@ let performanceChart = null;
 let DEFAULT_BENCHMARK_VERSION = null; // Must be set from manifest
 let PAGE_TYPE = null; // 'main' or 'community'
 
+// Data source configuration
+const IS_DEV = new URLSearchParams(window.location.search).has('dev');
+const DATA_BASE_URL = IS_DEV ? '' : 'http://balatrobench.b-cdn.net';
+
 // Detect which page we're on
 function detectPageType() {
   const pageTitle = document.title;
@@ -54,15 +58,15 @@ function detectPageType() {
 function getDataPaths(version) {
   if (PAGE_TYPE === 'community') {
     return {
-      manifestPath: 'data/benchmarks/strategies/manifest.json',
-      leaderboardPath: `data/benchmarks/strategies/${version}/openai/gpt-oss-20b/leaderboard.json`,
-      detailBasePath: `data/benchmarks/strategies/${version}/openai/gpt-oss-20b`
+      manifestPath: `${DATA_BASE_URL}/benchmarks/strategies/manifest.json`,
+      leaderboardPath: `${DATA_BASE_URL}/benchmarks/strategies/${version}/openai/gpt-oss-20b/leaderboard.json`,
+      detailBasePath: `${DATA_BASE_URL}/benchmarks/strategies/${version}/openai/gpt-oss-20b`
     };
   } else {
     return {
-      manifestPath: 'data/benchmarks/models/manifest.json',
-      leaderboardPath: `data/benchmarks/models/${version}/default/leaderboard.json`,
-      detailBasePath: `data/benchmarks/models/${version}/default`
+      manifestPath: `${DATA_BASE_URL}/benchmarks/models/manifest.json`,
+      leaderboardPath: `${DATA_BASE_URL}/benchmarks/models/${version}/default/leaderboard.json`,
+      detailBasePath: `${DATA_BASE_URL}/benchmarks/models/${version}/default`
     };
   }
 }
@@ -1035,11 +1039,26 @@ async function loadAndRenderRequest(state) {
   ]);
 
   const imgEl = overlay.querySelector('#run-screenshot');
-  imgEl.src = `${runBase}/screenshot.avif`;
-  imgEl.onerror = () => {
-    imgEl.onerror = null;
-    imgEl.src = `${runBase}/screenshot.png`;
+  // Try formats in order: webp -> png -> avif
+  const formats = ['webp', 'png', 'avif'];
+  let formatIndex = 0;
+
+  const tryNextFormat = () => {
+    if (formatIndex < formats.length) {
+      imgEl.src = `${runBase}/screenshot.${formats[formatIndex]}`;
+      formatIndex++;
+    }
   };
+
+  imgEl.onerror = () => {
+    if (formatIndex < formats.length) {
+      tryNextFormat();
+    } else {
+      imgEl.onerror = null;
+    }
+  };
+
+  tryNextFormat();
 
   overlay.querySelector('#run-reasoning').textContent = reasoning || '(No reasoning.md)';
 
