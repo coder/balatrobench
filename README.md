@@ -23,3 +23,13 @@ python3 -m http.server 8000
 ```
 
 Then visit [http://localhost:8000](http://localhost:8000)
+
+### Local Testing
+
+To test with local benchmark data, symlink the `balatrobot/benchmarks` directory:
+
+```bash
+ln -s ../balatrobot/benchmarks benchmarks
+```
+
+Then in `config.js`, comment/uncomment to switch environment to `development`.
