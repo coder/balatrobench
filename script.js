@@ -41,9 +41,9 @@ let performanceChart = null;
 let DEFAULT_BENCHMARK_VERSION = null; // Must be set from manifest
 let PAGE_TYPE = null; // 'main' or 'community'
 
-// Data source configuration
-const IS_DEV = new URLSearchParams(window.location.search).has('dev');
-const DATA_BASE_URL = IS_DEV ? '' : 'http://balatrobench.b-cdn.net';
+// Data source configuration - using CONFIG from config.js
+const DATA_BASE_URL = window.CONFIG ? window.CONFIG.getData() : '';
+const IS_DEV = window.CONFIG ? window.CONFIG.environment === 'development' : false;
 
 // Detect which page we're on
 function detectPageType() {
