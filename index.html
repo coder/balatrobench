@@ -5,6 +5,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BalatroBench</title>
+  <meta name="description" content="Leaderboard benchmarking LLMs playing Balatro: rounds, tool-call reliability, cost, and speed.">
+  <link rel="canonical" href="https://coder.github.io/balatrobench/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="BalatroBench">
+  <meta property="og:description" content="Leaderboard benchmarking LLMs playing Balatro: rounds, tool-call reliability, cost, and speed.">
+  <meta property="og:url" content="https://coder.github.io/balatrobench/">
+  <meta property="og:image" content="https://github.com/user-attachments/assets/33a52df0-a7f8-4784-a640-0212267ed199">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="BalatroBench">
+  <meta name="twitter:description" content="Leaderboard benchmarking LLMs playing Balatro: rounds, tool-call reliability, cost, and speed.">
+  <meta name="twitter:image" content="https://github.com/user-attachments/assets/33a52df0-a7f8-4784-a640-0212267ed199">
+  <link rel="preconnect" href="https://balatrobench.b-cdn.net" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="config.js"></script>
@@ -14,6 +28,7 @@
 </head>
 
 <body class="bg-zinc-50 dark:bg-zinc-800 min-h-screen pb-8">
+  <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 bg-white dark:bg-zinc-700 text-zinc-800 dark:text-zinc-100 px-3 py-2 rounded">Skip to main content</a>
   <nav
     class="w-full bg-white dark:bg-zinc-800 border-b border-zinc-200 dark:border-zinc-600 shadow-sm dark:shadow-md dark:ring-1 dark:ring-white/5 mb-8">
     <div class="container mx-auto px-2 xl:px-4">
@@ -27,7 +42,7 @@
       </div>
     </div>
   </nav>
-  <div class="container mx-auto px-4">
+  <div id="main" class="container mx-auto px-4" role="main">
     <!-- Performance Bar Chart -->
     <div
       class="bg-white dark:bg-zinc-800 rounded-lg shadow-lg dark:shadow-2xl dark:ring-1 dark:ring-white/5 mb-8 p-6 hidden lg:block">
@@ -40,23 +55,24 @@
     <div
       class="overflow-x-auto bg-white dark:bg-zinc-800 rounded-lg shadow-lg dark:shadow-2xl dark:ring-1 dark:ring-white/5">
       <table id="leaderboard" class="w-full table-auto">
+        <caption class="sr-only">Model leaderboard with rounds, tool-call reliability, tokens, time, and cost</caption>
         <thead class="bg-zinc-100 dark:bg-zinc-700">
           <tr class="border-b border-zinc-200 dark:border-zinc-600">
             <!-- Rank Section -->
-            <th
+            <th scope="col"
               class="px-4 py-3 text-left text-sm font-semibold text-zinc-700 dark:text-zinc-300 border-r-2 border-zinc-300 dark:border-zinc-600">
               #</th>
             <!-- Model Section -->
-            <th class="px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300">Model</th>
-            <th
+            <th scope="col" class="px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300">Model</th>
+            <th scope="col"
               class="px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden xl:table-cell">
               Vendor</th>
             <!-- Stats Section -->
-            <th
+            <th scope="col" aria-label="Average final round"
               class="px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 border-l-2 border-zinc-300 dark:border-zinc-600">
               Round</th>
             <!-- Tool Calls Section -->
-            <th
+            <th scope="col" aria-label="Valid tool calls executable in state"
               class="px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden sm:table-cell border-l-2 border-zinc-300 dark:border-zinc-600">
               <div class="flex items-center justify-center space-x-1">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
@@ -74,7 +90,7 @@
                 </svg>
               </div>
             </th>
-            <th
+            <th scope="col" aria-label="Valid tool calls not executable in state"
               class="px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden sm:table-cell">
               <div class="flex items-center justify-center space-x-1">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
@@ -92,7 +108,7 @@
                 </svg>
               </div>
             </th>
-            <th
+            <th scope="col" aria-label="Responses without valid tool calls"
               class="px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden sm:table-cell">
               <div class="flex items-center justify-center space-x-1">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
@@ -111,7 +127,7 @@
               </div>
             </th>
             <!-- Tokens Section -->
-            <th
+            <th scope="col" aria-label="Average input tokens"
               class="px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden lg:table-cell border-l-2 border-zinc-300 dark:border-zinc-600">
               <div class="flex items-center justify-center space-x-1">
                 <span>In</span>
@@ -132,7 +148,7 @@
                 </svg>
               </div>
             </th>
-            <th
+            <th scope="col" aria-label="Average output tokens"
               class="px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden lg:table-cell">
               <div class="flex items-center justify-center space-x-1">
                 <span>Out</span>
@@ -154,7 +170,7 @@
               </div>
             </th>
             <!-- Performance Section -->
-            <th
+            <th scope="col" aria-label="Average time per tool call"
               class="px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden md:table-cell border-l-2 border-zinc-300 dark:border-zinc-600">
               <div class="flex items-center justify-center space-x-1">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
@@ -173,7 +189,7 @@
                 <span class="text-xs">[s]</span>
               </div>
             </th>
-            <th
+            <th scope="col" aria-label="Average cost per tool call"
               class="px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden md:table-cell">
               <div class="flex items-center justify-center space-x-1">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
@@ -213,7 +229,7 @@
     <div class="container mx-auto px-4">
       <div class="flex items-center justify-center space-x-2 text-zinc-400 dark:text-zinc-500">
         <span class="text-sm">Brought to you by</span>
-        <a href="https://coder.com/" target="_blank" class="inline-block transition-colors hover:opacity-75">
+        <a href="https://coder.com/" target="_blank" rel="noopener" class="inline-block transition-colors hover:opacity-75">
           <?xml version="1.0" encoding="UTF-8"?>
           <svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1320.81 200"
             viewBox="0 0 1200 200" class="h-3 fill-zinc-400 dark:fill-zinc-500">
