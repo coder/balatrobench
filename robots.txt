@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://coder.github.io/balatrobench/sitemap.xml
+
