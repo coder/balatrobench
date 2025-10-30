@@ -708,11 +708,15 @@ function createDetailRow(stats, modelName, data, vendor, model, basePath, strate
     </td>
   `;
 
-  // Add charts after DOM is updated
-  setTimeout(() => {
-    createRoundHistogram(stats, histogramCanvasId);
-    createProviderPieChart(data, pieChartCanvasId);
-  }, 0);
+  // Prepare chart initialization to be called after the row is inserted into the DOM
+  detailRow._initCharts = () => {
+    try {
+      createRoundHistogram(stats, histogramCanvasId);
+      createProviderPieChart(data, pieChartCanvasId);
+    } catch (e) {
+      console.error('Failed to initialize detail charts', e);
+    }
+  };
 
   // Make each per-run row clickable to open Run Viewer (if runs mapping exists)
   const perRunTable = detailRow.querySelector('table.table-auto');
@@ -776,9 +780,9 @@ async function loadLeaderboard(leaderboardPath, detailBasePath, displayMode = 'm
     // Clear previous rows if reloading
     tableBody.innerHTML = '';
 
-    // Create the performance bar chart (only on main leaderboard page)
+    // Create the performance bar chart (only on main leaderboard page) immediately
     if (showChart) {
-      createPerformanceBarChart(data.entries);
+      try { createPerformanceBarChart(data.entries); } catch (_) {}
     }
 
     data.entries.forEach((entry, index) => {
@@ -830,6 +834,9 @@ async function loadLeaderboard(leaderboardPath, detailBasePath, displayMode = 'm
               strategy
             );
             row.insertAdjacentElement('afterend', detailRow);
+            if (typeof detailRow._initCharts === 'function') {
+              detailRow._initCharts();
+            }
           }
         }
       });
@@ -1161,6 +1168,16 @@ async function initBenchmarkVersionSelector() {
     sel.appendChild(option);
   });
 
+  // Respect ?version= query param if present
+  try {
+    const url = new URL(window.location.href);
+    const urlVersion = url.searchParams.get('version');
+    if (urlVersion && versions.some(v => v.version === urlVersion)) {
+      sel.value = urlVersion;
+    }
+  } catch (_) {}
+
+
   const applyVersion = (version) => {
     const paths = getDataPaths(version);
     const tbody = document.getElementById('leaderboard-body');
@@ -1174,5 +1191,12 @@ async function initBenchmarkVersionSelector() {
   applyVersion(sel.value || DEFAULT_BENCHMARK_VERSION);
 
   // Reload on change
-  sel.addEventListener('change', () => applyVersion(sel.value));
+  sel.addEventListener('change', () => {
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.set('version', sel.value);
+      window.history.replaceState({}, '', url.toString());
+    } catch (_) {}
+    applyVersion(sel.value);
+  });
 }
