@@ -759,7 +759,9 @@ function createDetailRow(stats, modelName, data, vendor, model, basePath, strate
             model,
             runId,
             strategy,
-            startIndex: 1
+            startIndex: 1,
+            runs: runs,
+            runIndex: i
           });
         });
       }
@@ -782,7 +784,9 @@ async function loadLeaderboard(leaderboardPath, detailBasePath, displayMode = 'm
 
     // Create the performance bar chart (only on main leaderboard page) immediately
     if (showChart) {
-      try { createPerformanceBarChart(data.entries); } catch (_) {}
+      try {
+        createPerformanceBarChart(data.entries);
+      } catch (_) {}
     }
 
     data.entries.forEach((entry, index) => {
@@ -956,7 +960,9 @@ function openRunViewer({
   model,
   runId,
   strategy = null,
-  startIndex = 1
+  startIndex = 1,
+  runs = [],
+  runIndex = 0
 }) {
   const state = {
     basePath,
@@ -965,33 +971,129 @@ function openRunViewer({
     runId,
     strategy,
     index: startIndex,
+    runs,
+    runIndex,
+    requestIndices: {
+      [runId]: startIndex
+    },
+    totalRequests: {},
     overlay: null,
     keyHandler: null
   };
   const overlay = document.createElement('div');
-  overlay.className = 'fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-2 sm:p-4';
+  overlay.className = 'fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4';
   overlay.innerHTML = `
-    <div class="relative w-full max-w-5xl max-h-[95vh] bg-white dark:bg-zinc-800 rounded-lg shadow-2xl ring-1 ring-white/10 overflow-hidden">
+    <div class="relative w-full h-full bg-white dark:bg-zinc-800 rounded-lg shadow-2xl ring-1 ring-white/10 overflow-hidden flex flex-col">
       <div class="flex items-center justify-between px-4 py-2 border-b border-zinc-200 dark:border-zinc-600">
         <div class="text-sm text-zinc-600 dark:text-zinc-300 font-mono truncate" id="run-title"></div>
-        <button id="run-close" class="p-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700" aria-label="Close">✕</button>
+        <div class="flex items-center gap-2">
+          <button id="run-help" class="p-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300" aria-label="Help">?</button>
+          <button id="run-close" class="p-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300" aria-label="Close">✕</button>
+        </div>
       </div>
-      <div class="p-3 space-y-3">
-        <div class="flex flex-col lg:flex-row gap-3">
-          <div class="lg:w-1/2 w-full bg-zinc-50 dark:bg-zinc-900 rounded-md overflow-hidden flex items-center justify-center h-96">
-            <img id="run-screenshot" class="max-h-full max-w-full object-contain p-2" alt="Screenshot" />
+      <!-- Help Popup -->
+      <div id="run-help-popup" class="hidden absolute top-14 right-4 z-10 bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-600 rounded-lg shadow-xl p-5 w-96">
+        <h3 class="text-base font-bold text-zinc-700 dark:text-zinc-300 mb-4">Keyboard Navigation</h3>
+        <div class="space-y-4">
+          <!-- Horizontal Section -->
+          <div>
+            <div class="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-2">Horizontal (Requests)</div>
+            <div class="space-y-1.5">
+              <div class="flex items-center gap-3">
+                <div class="flex items-center gap-1.5 min-w-[80px]">
+                  <kbd class="font-mono bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded text-xs font-semibold text-zinc-700 dark:text-zinc-300 border border-zinc-300 dark:border-zinc-700">←</kbd>
+                  <span class="text-xs text-zinc-400 dark:text-zinc-500">or</span>
+                  <kbd class="font-mono bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded text-xs font-semibold text-zinc-700 dark:text-zinc-300 border border-zinc-300 dark:border-zinc-700">h</kbd>
+                </div>
+                <span class="text-sm text-zinc-600 dark:text-zinc-400">Previous request</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="flex items-center gap-1.5 min-w-[80px]">
+                  <kbd class="font-mono bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded text-xs font-semibold text-zinc-700 dark:text-zinc-300 border border-zinc-300 dark:border-zinc-700">→</kbd>
+                  <span class="text-xs text-zinc-400 dark:text-zinc-500">or</span>
+                  <kbd class="font-mono bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded text-xs font-semibold text-zinc-700 dark:text-zinc-300 border border-zinc-300 dark:border-zinc-700">l</kbd>
+                </div>
+                <span class="text-sm text-zinc-600 dark:text-zinc-400">Next request</span>
+              </div>
+            </div>
           </div>
-          <div class="lg:w-1/2 w-full flex flex-col">
-            <pre id="run-reasoning" class="h-96 bg-zinc-50 dark:bg-zinc-900 rounded-md p-3 text-xs text-zinc-800 dark:text-zinc-200 whitespace-pre-wrap overflow-auto"></pre>
+
+          <!-- Vertical Section -->
+          <div>
+            <div class="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-2">Vertical (Runs)</div>
+            <div class="space-y-1.5">
+              <div class="flex items-center gap-3">
+                <div class="flex items-center gap-1.5 min-w-[80px]">
+                  <kbd class="font-mono bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded text-xs font-semibold text-zinc-700 dark:text-zinc-300 border border-zinc-300 dark:border-zinc-700">↑</kbd>
+                  <span class="text-xs text-zinc-400 dark:text-zinc-500">or</span>
+                  <kbd class="font-mono bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded text-xs font-semibold text-zinc-700 dark:text-zinc-300 border border-zinc-300 dark:border-zinc-700">k</kbd>
+                </div>
+                <span class="text-sm text-zinc-600 dark:text-zinc-400">Previous run</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="flex items-center gap-1.5 min-w-[80px]">
+                  <kbd class="font-mono bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded text-xs font-semibold text-zinc-700 dark:text-zinc-300 border border-zinc-300 dark:border-zinc-700">↓</kbd>
+                  <span class="text-xs text-zinc-400 dark:text-zinc-500">or</span>
+                  <kbd class="font-mono bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded text-xs font-semibold text-zinc-700 dark:text-zinc-300 border border-zinc-300 dark:border-zinc-700">j</kbd>
+                </div>
+                <span class="text-sm text-zinc-600 dark:text-zinc-400">Next run</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Other Section -->
+          <div class="border-t border-zinc-200 dark:border-zinc-700 pt-3">
+            <div class="space-y-1.5">
+              <div class="flex items-center gap-3">
+                <kbd class="font-mono bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded text-xs font-semibold text-zinc-700 dark:text-zinc-300 border border-zinc-300 dark:border-zinc-700 min-w-[80px] text-center">Esc</kbd>
+                <span class="text-sm text-zinc-600 dark:text-zinc-400">Close viewer</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <kbd class="font-mono bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded text-xs font-semibold text-zinc-700 dark:text-zinc-300 border border-zinc-300 dark:border-zinc-700 min-w-[80px] text-center">?</kbd>
+                <span class="text-sm text-zinc-600 dark:text-zinc-400">Toggle this help</span>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="flex flex-col h-[25vh] lg:h-[25vh] gap-2">
-          <div id="run-tool-name" class="bg-zinc-50 dark:bg-zinc-900 rounded-md p-3 text-sm font-mono text-zinc-800 dark:text-zinc-200 flex items-center"></div>
-          <div id="run-tool-args" class="bg-zinc-50 dark:bg-zinc-900 rounded-md p-3 text-xs text-zinc-800 dark:text-zinc-200 overflow-auto flex-1"></div>
+      </div>
+      <div class="p-4 flex-1 flex flex-col overflow-hidden">
+        <!-- Row 1: Context Files (3 columns) - Dynamic height -->
+        <div class="grid grid-cols-3 gap-4 flex-1 mb-4 min-h-0">
+          <!-- Strategy -->
+          <div class="flex flex-col min-h-0">
+            <h3 class="text-xs font-semibold text-zinc-600 dark:text-zinc-400 mb-2 px-2 text-center">STRATEGY.md</h3>
+            <pre id="run-strategy" class="flex-1 min-h-0 bg-zinc-50 dark:bg-zinc-900 rounded-md p-3 text-xs text-zinc-800 dark:text-zinc-200 whitespace-pre-wrap overflow-auto"></pre>
+          </div>
+          <!-- Gamestate -->
+          <div class="flex flex-col min-h-0">
+            <h3 class="text-xs font-semibold text-zinc-600 dark:text-zinc-400 mb-2 px-2 text-center">GAMESTATE.md</h3>
+            <pre id="run-gamestate" class="flex-1 min-h-0 bg-zinc-50 dark:bg-zinc-900 rounded-md p-3 text-xs text-zinc-800 dark:text-zinc-200 whitespace-pre-wrap overflow-auto"></pre>
+          </div>
+          <!-- Memory -->
+          <div class="flex flex-col min-h-0">
+            <h3 class="text-xs font-semibold text-zinc-600 dark:text-zinc-400 mb-2 px-2 text-center">MEMORY.md</h3>
+            <pre id="run-memory" class="flex-1 min-h-0 bg-zinc-50 dark:bg-zinc-900 rounded-md p-3 text-xs text-zinc-800 dark:text-zinc-200 whitespace-pre-wrap overflow-auto"></pre>
+          </div>
         </div>
-        <div class="flex items-center justify-center gap-4 py-1">
-          <button id="run-prev" class="px-3 py-1.5 rounded bg-white/80 dark:bg-zinc-700/80 hover:bg-white dark:hover:bg-zinc-700 border border-zinc-200 dark:border-zinc-600" title="Previous (← or h)" aria-label="Previous">◀</button>
-          <button id="run-next" class="px-3 py-1.5 rounded bg-white/80 dark:bg-zinc-700/80 hover:bg-white dark:hover:bg-zinc-700 border border-zinc-200 dark:border-zinc-600" title="Next (→ or l)" aria-label="Next">▶</button>
+
+        <!-- Separator -->
+        <div class="border-t border-zinc-300 dark:border-zinc-600 mb-4"></div>
+
+        <!-- Row 2: Main Content - Fixed height to fit screenshot -->
+        <div class="flex gap-4 mb-4" style="height: 384px;">
+          <!-- Screenshot Column -->
+          <div class="flex items-center justify-center px-4 rounded-md" style="flex: 0 0 auto;">
+            <img id="run-screenshot" class="max-h-full object-contain rounded-md" alt="Screenshot" style="max-width: 512px;" />
+          </div>
+          <!-- Reasoning + Tool Call Column -->
+          <div class="flex flex-col flex-1" style="height: 384px; gap: 12px;">
+            <pre id="run-reasoning" class="flex-1 min-h-0 bg-zinc-50 dark:bg-zinc-900 rounded-md p-3 text-xs text-zinc-800 dark:text-zinc-200 font-mono italic whitespace-pre-wrap overflow-auto"></pre>
+            <div id="run-tool-call" class="flex-shrink-0 bg-zinc-50 dark:bg-zinc-900 rounded-md px-3 py-2 text-xs font-mono text-zinc-800 dark:text-zinc-200 overflow-x-auto whitespace-nowrap text-center"></div>
+          </div>
+          <!-- Stats Column (narrower) -->
+          <div class="flex flex-col" style="flex: 0 0 200px;">
+            <div id="run-stats" class="p-3 text-xs text-zinc-800 dark:text-zinc-200 overflow-auto"></div>
+          </div>
         </div>
       </div>
     </div>`;
@@ -1000,21 +1102,69 @@ function openRunViewer({
   document.body.style.overflow = 'hidden';
   state.overlay = overlay;
 
+  const helpPopup = overlay.querySelector('#run-help-popup');
+  const toggleHelp = () => {
+    helpPopup.classList.toggle('hidden');
+  };
+
   overlay.querySelector('#run-close').addEventListener('click', () => closeRunViewer(state));
+  overlay.querySelector('#run-help').addEventListener('click', toggleHelp);
   overlay.addEventListener('click', (e) => {
     if (e.target === overlay) closeRunViewer(state);
   });
-  overlay.querySelector('#run-prev').addEventListener('click', () => navigateRun(state, -1));
-  overlay.querySelector('#run-next').addEventListener('click', () => navigateRun(state, +1));
 
   state.keyHandler = (e) => {
     if (e.key === 'Escape') return closeRunViewer(state);
+    if (e.key === '?') {
+      e.preventDefault();
+      return toggleHelp();
+    }
     if (e.key === 'ArrowLeft' || e.key === 'h') return navigateRun(state, -1);
     if (e.key === 'ArrowRight' || e.key === 'l') return navigateRun(state, +1);
+    if (e.key === 'ArrowUp' || e.key === 'k') return navigateRunVertical(state, -1);
+    if (e.key === 'ArrowDown' || e.key === 'j') return navigateRunVertical(state, +1);
   };
   window.addEventListener('keydown', state.keyHandler);
 
   loadAndRenderRequest(state);
+}
+
+async function discoverTotalRequests(state) {
+  const {
+    basePath,
+    vendor,
+    model,
+    runId,
+    strategy
+  } = state;
+
+  // Binary search to find the last valid request
+  let low = 1;
+  let high = 1000; // Assume max 1000 requests
+  let maxFound = 1;
+
+  // First, find upper bound
+  while (low <= high) {
+    const mid = Math.floor((low + high) / 2);
+    const reqId = formatRequestId(mid);
+
+    let probeUrl;
+    if (PAGE_TYPE === 'community' && strategy) {
+      probeUrl = `${basePath}/${strategy}/${model}/${runId}/request-${reqId}/tool_call.json`;
+    } else {
+      probeUrl = `${basePath}/${vendor}/${model}/${runId}/request-${reqId}/tool_call.json`;
+    }
+
+    const exists = await fetchJsonSafe(probeUrl);
+    if (exists) {
+      maxFound = mid;
+      low = mid + 1;
+    } else {
+      high = mid - 1;
+    }
+  }
+
+  return maxFound;
 }
 
 async function loadAndRenderRequest(state) {
@@ -1037,13 +1187,32 @@ async function loadAndRenderRequest(state) {
     runBase = `${basePath}/${vendor}/${model}/${runId}/request-${reqId}`;
   }
 
-  overlay.querySelector('#run-title').textContent =
-    `${vendor}/${model} • ${runId} • request-${reqId}`;
-
-  const [reasoning, toolcall] = await Promise.all([
+  const [reasoning, toolcall, strategyMd, gamestateMd, memoryMd, metadata] = await Promise.all([
     fetchTextSafe(`${runBase}/reasoning.md`),
-    fetchJsonSafe(`${runBase}/tool_call.json`)
+    fetchJsonSafe(`${runBase}/tool_call.json`),
+    fetchTextSafe(`${runBase}/strategy.md`),
+    fetchTextSafe(`${runBase}/gamestate.md`),
+    fetchTextSafe(`${runBase}/memory.md`),
+    fetchJsonSafe(`${runBase}/metadata.json`)
   ]);
+
+  // Discover total requests for this run if not cached
+  if (!state.totalRequests[runId]) {
+    state.totalRequests[runId] = await discoverTotalRequests(state);
+  }
+  const totalRequests = state.totalRequests[runId];
+
+  // Build title: [vendor/model] • [seed] • Run [X/Y] • Request [N/Total]
+  const seed = metadata?.balatro_seed || 'Unknown';
+  const runNumber = state.runs && state.runs.length > 0 ? state.runIndex + 1 : null;
+  const totalRuns = state.runs ? state.runs.length : null;
+
+  let title = `${vendor}/${model} • ${seed}`;
+  if (runNumber !== null && totalRuns !== null) {
+    title += ` • Run ${runNumber}/${totalRuns}`;
+  }
+  title += ` • Request ${index}/${totalRequests}`;
+  overlay.querySelector('#run-title').textContent = title;
 
   const imgEl = overlay.querySelector('#run-screenshot');
   // Try formats in order: webp -> png -> avif
@@ -1067,33 +1236,159 @@ async function loadAndRenderRequest(state) {
 
   tryNextFormat();
 
+  overlay.querySelector('#run-strategy').textContent = strategyMd || '(No strategy.md)';
+  overlay.querySelector('#run-gamestate').textContent = gamestateMd || '(No gamestate.md)';
+  overlay.querySelector('#run-memory').textContent = memoryMd || '(No memory.md)';
   overlay.querySelector('#run-reasoning').textContent = reasoning || '(No reasoning.md)';
 
-  const toolNameDiv = overlay.querySelector('#run-tool-name');
-  const toolArgsDiv = overlay.querySelector('#run-tool-args');
+  const toolCallDiv = overlay.querySelector('#run-tool-call');
   if (!toolcall) {
-    toolNameDiv.textContent = '(No tool_call.json)';
-    toolArgsDiv.textContent = '';
+    toolCallDiv.textContent = '(No tool_call.json)';
   } else {
     const tc = Array.isArray(toolcall) ? toolcall[0] : toolcall;
     const name = tc && tc.function && tc.function.name ? tc.function.name : '(unknown)';
     let argsRaw = tc && tc.function ? tc.function.arguments : '';
-    let argsPretty = '';
+
+    // Parse arguments and remove reasoning field
+    let argsObj = {};
     if (typeof argsRaw === 'string') {
       try {
-        argsPretty = JSON.stringify(JSON.parse(argsRaw), null, 2);
+        argsObj = JSON.parse(argsRaw);
       } catch {
-        argsPretty = argsRaw;
+        argsObj = {};
       }
     } else if (argsRaw && typeof argsRaw === 'object') {
-      try {
-        argsPretty = JSON.stringify(argsRaw, null, 2);
-      } catch {
-        argsPretty = String(argsRaw);
-      }
+      argsObj = argsRaw;
     }
-    toolNameDiv.textContent = name;
-    toolArgsDiv.innerHTML = `<pre class="whitespace-pre-wrap">${argsPretty || ''}</pre>`;
+
+    // Remove reasoning field if it exists
+    if (argsObj && typeof argsObj === 'object') {
+      delete argsObj.reasoning;
+    }
+
+    // Format as single-line JSON
+    let argsString = '{}';
+    try {
+      argsString = JSON.stringify(argsObj);
+    } catch {
+      argsString = '{}';
+    }
+
+    // Display as function_name(arguments)
+    toolCallDiv.textContent = `${name}(${argsString})`;
+  }
+
+  // Render stats from metadata.json
+  const statsDiv = overlay.querySelector('#run-stats');
+  if (metadata) {
+    // Database icon SVG
+    const databaseIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
+      <path d="M8 7c3.314 0 6-1.343 6-3s-2.686-3-6-3-6 1.343-6 3 2.686 3 6 3Z" />
+      <path d="M8 8.5c1.84 0 3.579-.37 4.914-1.037A6.33 6.33 0 0 0 14 6.78V8c0 1.657-2.686 3-6 3S2 9.657 2 8V6.78c.346.273.72.5 1.087.683C4.42 8.131 6.16 8.5 8 8.5Z" />
+      <path d="M8 12.5c1.84 0 3.579-.37 4.914-1.037.366-.183.74-.41 1.086-.684V12c0 1.657-2.686 3-6 3s-6-1.343-6-3v-1.22c.346.273.72.5 1.087.683C4.42 12.131 6.16 12.5 8 12.5Z" />
+    </svg>`;
+
+    // Dollar icon SVG
+    const dollarIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
+      <path d="M6.375 5.5h.875v1.75h-.875a.875.875 0 1 1 0-1.75ZM8.75 10.5V8.75h.875a.875.875 0 0 1 0 1.75H8.75Z" />
+      <path fill-rule="evenodd" d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM7.25 3.75a.75.75 0 0 1 1.5 0V4h2.5a.75.75 0 0 1 0 1.5h-2.5v1.75h.875a2.375 2.375 0 1 1 0 4.75H8.75v.25a.75.75 0 0 1-1.5 0V12h-2.5a.75.75 0 0 1 0-1.5h2.5V8.75h-.875a2.375 2.375 0 1 1 0-4.75h.875v-.25Z" clip-rule="evenodd" />
+    </svg>`;
+
+    let statsHtml = '<div>';
+    statsHtml += '<table class="w-full"><tbody>';
+
+    // Tokens
+    statsHtml += `<tr>
+      <td class="py-1">
+        <div class="flex items-center justify-left space-x-1 text-zinc-700 dark:text-zinc-300">
+          ${databaseIcon}
+          <span>prompt</span>
+        </div>
+      </td>
+      <td class="text-right py-1">
+        <span class="text-xs font-mono text-zinc-700 dark:text-zinc-300">${(metadata.tokens.prompt / 1000).toFixed(1)} K</span>
+      </td>
+    </tr>`;
+
+    statsHtml += `<tr>
+      <td class="py-1">
+        <div class="flex items-center justify-left space-x-1 text-zinc-700 dark:text-zinc-300">
+          ${databaseIcon}
+          <span>completion</span>
+        </div>
+      </td>
+      <td class="text-right py-1">
+        <span class="text-xs font-mono text-zinc-700 dark:text-zinc-300">${(metadata.tokens.completion / 1000).toFixed(1)} K</span>
+      </td>
+    </tr>`;
+
+    statsHtml += `<tr>
+      <td class="py-1">
+        <div class="flex items-center justify-left space-x-1 text-zinc-700 dark:text-zinc-300">
+          ${databaseIcon}
+          <span>reasoning</span>
+        </div>
+      </td>
+      <td class="text-right py-1">
+        <span class="text-xs font-mono text-zinc-700 dark:text-zinc-300">${(metadata.tokens.reasoning / 1000).toFixed(1)} K</span>
+      </td>
+    </tr>`;
+
+    statsHtml += `<tr>
+      <td class="py-1">
+        <div class="flex items-center justify-left space-x-1 text-zinc-700 dark:text-zinc-300">
+          ${databaseIcon}
+          <span>total</span>
+        </div>
+      </td>
+      <td class="text-right py-1">
+        <span class="text-xs font-mono text-zinc-700 dark:text-zinc-300 font-semibold">${(metadata.tokens.total / 1000).toFixed(1)} K</span>
+      </td>
+    </tr>`;
+
+    // Add vertical space between tokens and cost
+    statsHtml += `<tr><td colspan="2" class="py-2"></td></tr>`;
+
+    // Cost
+    statsHtml += `<tr>
+      <td class="py-1">
+        <div class="flex items-center justify-left space-x-1 text-zinc-700 dark:text-zinc-300">
+          ${dollarIcon}
+          <span>prompt</span>
+        </div>
+      </td>
+      <td class="text-right py-1">
+        <span class="text-xs font-mono text-zinc-700 dark:text-zinc-300">$${metadata.cost.prompt_usd.toFixed(4)}</span>
+      </td>
+    </tr>`;
+
+    statsHtml += `<tr>
+      <td class="py-1">
+        <div class="flex items-center justify-left space-x-1 text-zinc-700 dark:text-zinc-300">
+          ${dollarIcon}
+          <span>completion</span>
+        </div>
+      </td>
+      <td class="text-right py-1">
+        <span class="text-xs font-mono text-zinc-700 dark:text-zinc-300">$${metadata.cost.completion_usd.toFixed(4)}</span>
+      </td>
+    </tr>`;
+
+    statsHtml += `<tr>
+      <td class="py-1">
+        <div class="flex items-center justify-left space-x-1 text-zinc-700 dark:text-zinc-300">
+          ${dollarIcon}
+          <span>total</span>
+        </div>
+      </td>
+      <td class="text-right py-1">
+        <span class="text-xs font-mono text-zinc-700 dark:text-zinc-300 font-semibold">$${metadata.cost.total_usd.toFixed(4)}</span>
+      </td>
+    </tr>`;
+
+    statsHtml += '</tbody></table>';
+    statsHtml += '</div>';
+    statsDiv.innerHTML = statsHtml;
   }
 }
 
@@ -1116,6 +1411,30 @@ async function navigateRun(state, delta) {
     state.index = old;
     return;
   }
+  loadAndRenderRequest(state);
+}
+
+async function navigateRunVertical(state, delta) {
+  // Check if we have runs array
+  if (!state.runs || state.runs.length === 0) return;
+
+  // Calculate new run index with boundary checking (no wrapping)
+  const newRunIndex = state.runIndex + delta;
+  if (newRunIndex < 0 || newRunIndex >= state.runs.length) {
+    return; // At boundary, do nothing
+  }
+
+  // Save current request index for current run
+  state.requestIndices[state.runId] = state.index;
+
+  // Update to new run
+  state.runIndex = newRunIndex;
+  state.runId = state.runs[newRunIndex];
+
+  // Restore or initialize request index for new run (default to 1)
+  state.index = state.requestIndices[state.runId] || 1;
+
+  // Render the new run
   loadAndRenderRequest(state);
 }
 
