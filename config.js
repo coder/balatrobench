@@ -5,8 +5,8 @@
 
 const CONFIG = {
   // Current active environment - change this to switch environments
-  environment: 'development',
-  // environment: 'production',
+  // environment: 'development',
+  environment: 'production',
 
   // Environment configurations
   environments: {
