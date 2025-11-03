@@ -866,9 +866,9 @@ async function loadLeaderboard(leaderboardPath, detailBasePath, displayMode = 'm
       model = modelParts[1];
 
       if (displayMode === 'community') {
-        // For strategies: show author as primary, strategy name as secondary
-        primaryValue = entry.strategy.author;
-        secondaryValue = entry.strategy.name;
+        // For strategies: show strategy name as primary, author as secondary
+        primaryValue = entry.strategy.name;
+        secondaryValue = entry.strategy.author;
       } else {
         // For models: show model name as primary, vendor as secondary
         primaryValue = model;
