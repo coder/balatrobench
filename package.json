@@ -1,0 +1,23 @@
+{
+  "name": "balatrobench",
+  "version": "1.0.0",
+  "description": "Performance leaderboards for LLMs playing Balatro",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:ui": "playwright test --ui",
+    "serve": "python3 -m http.server 8000"
+  },
+  "keywords": [
+    "balatro",
+    "llm",
+    "benchmark",
+    "leaderboard"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.48.0"
+  }
+}

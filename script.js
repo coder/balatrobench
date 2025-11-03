@@ -54,6 +54,46 @@ function detectPageType() {
   return 'main';
 }
 
+/**
+ * Build request path based on page type (model vs community strategy)
+ * @param {string} basePath - Base path for data
+ * @param {string} vendor - Model vendor (e.g., 'openai', 'google')
+ * @param {string} model - Model identifier
+ * @param {string} runId - Run identifier
+ * @param {string} requestId - Request identifier (formatted)
+ * @param {string|null} strategy - Strategy name (for community page only)
+ * @param {string} filename - File to fetch (e.g., 'tool_call.json')
+ * @returns {string} Complete path to request file
+ */
+function buildRequestPath(basePath, vendor, model, runId, requestId, strategy = null, filename =
+  'tool_call.json') {
+  if (PAGE_TYPE === 'community' && strategy) {
+    // For strategies: basePath/strategy/model/runId/request-{requestId}/filename
+    return `${basePath}/${strategy}/${model}/${runId}/request-${requestId}/${filename}`;
+  } else {
+    // For models: basePath/vendor/model/runId/request-{requestId}/filename
+    return `${basePath}/${vendor}/${model}/${runId}/request-${requestId}/${filename}`;
+  }
+}
+
+/**
+ * Build base path for a run's request files
+ * @param {string} basePath - Base path for data
+ * @param {string} vendor - Model vendor
+ * @param {string} model - Model identifier
+ * @param {string} runId - Run identifier
+ * @param {string} requestId - Request identifier (formatted)
+ * @param {string|null} strategy - Strategy name (for community page only)
+ * @returns {string} Base path for request files (without filename)
+ */
+function buildRequestBasePath(basePath, vendor, model, runId, requestId, strategy = null) {
+  if (PAGE_TYPE === 'community' && strategy) {
+    return `${basePath}/${strategy}/${model}/${runId}/request-${requestId}`;
+  } else {
+    return `${basePath}/${vendor}/${model}/${runId}/request-${requestId}`;
+  }
+}
+
 // Get data paths based on page type and version
 function getDataPaths(version) {
   if (PAGE_TYPE === 'community') {
@@ -118,7 +158,9 @@ function createRoundHistogram(stats, canvasId) {
   const hueStep = 360 / Math.max(seeds.length, 1);
   seeds.forEach((seed, index) => {
     const hue = (index * hueStep) % 360;
-    const saturation = 60 + (index % 3) * 10; // Vary saturation
+    // Base saturation of 60% with cycle of 60%, 70%, 80% to add variation between adjacent colors
+    const saturation = 60 + (index % 3) * 10;
+    // Lighter colors for dark mode (55%) vs darker for light mode (45%) for optimal contrast
     const lightness = theme === 'dark' ? 55 : 45;
     seedColors[seed] = `hsla(${hue}, ${saturation}%, ${lightness}%, 0.8)`;
   });
@@ -243,7 +285,8 @@ function createPerformanceBarChart(entries) {
 
   // Calculate Y-axis max to include error bars
   const maxWithError = Math.max(...avgRounds.map((avg, i) => avg + stdDevs[i]));
-  const yAxisMax = Math.ceil(maxWithError + 0.5); // Add padding
+  // Add 0.5 padding above highest error bar, then round up to next integer for clean axis labels
+  const yAxisMax = Math.ceil(maxWithError + 0.5);
 
   if (performanceChart) {
     performanceChart.destroy();
@@ -349,6 +392,7 @@ function createPerformanceBarChart(entries) {
             const vendor = vendors[index];
             const base = themePalette.vendors[vendor];
             ctx.strokeStyle = base;
+            // 4px line width for error bars provides good visibility without overwhelming the chart
             ctx.lineWidth = 4;
 
             // Draw vertical line with square caps
@@ -358,8 +402,8 @@ function createPerformanceBarChart(entries) {
             ctx.lineTo(x, bottomY);
             ctx.stroke();
 
-            // Draw rounded, wider caps at top and bottom
-            const capHalfWidth = 7; // 14px total width
+            // Draw rounded, wider caps at top and bottom (7px from center = 14px total cap width)
+            const capHalfWidth = 7;
             ctx.lineCap = 'round';
 
             ctx.beginPath();
@@ -735,18 +779,9 @@ function createDetailRow(stats, modelName, data, vendor, model, basePath, strate
           e.stopPropagation();
           const runId = runs[i];
           if (!runId) return;
-          // Simple availability check before opening the viewer
+          // Probe first request (00001) to verify run data exists before opening viewer
           const reqId = '00001';
-          let probeUrl;
-          if (PAGE_TYPE === 'community' && strategy) {
-            // For strategies: probe at basePath/strategy/model/runId/request-*.json
-            probeUrl =
-              `${basePath}/${strategy}/${model}/${runId}/request-${reqId}/tool_call.json`;
-          } else {
-            // For models: probe at basePath/vendor/model/runId/request-*.json
-            probeUrl =
-              `${basePath}/${vendor}/${model}/${runId}/request-${reqId}/tool_call.json`;
-          }
+          const probeUrl = buildRequestPath(basePath, vendor, model, runId, reqId, strategy);
           const exists = await fetchJsonSafe(probeUrl);
           if (!exists) {
             console.warn('Run data not found at:', probeUrl);
@@ -786,7 +821,9 @@ async function loadLeaderboard(leaderboardPath, detailBasePath, displayMode = 'm
     if (showChart) {
       try {
         createPerformanceBarChart(data.entries);
-      } catch (_) {}
+      } catch (_) {
+        // Chart creation failure is non-critical; leaderboard table still functional
+      }
     }
 
     data.entries.forEach((entry, index) => {
@@ -937,19 +974,21 @@ function formatRequestId(n) {
 }
 async function fetchTextSafe(url) {
   try {
-    const r = await fetch(url);
-    if (!r.ok) return null;
-    return await r.text();
+    const response = await fetch(url);
+    if (!response.ok) return null;
+    return await response.text();
   } catch {
+    // Network errors or invalid response handled gracefully by returning null
     return null;
   }
 }
 async function fetchJsonSafe(url) {
   try {
-    const r = await fetch(url);
-    if (!r.ok) return null;
-    return await r.json();
+    const response = await fetch(url);
+    if (!response.ok) return null;
+    return await response.json();
   } catch {
+    // Network errors, invalid JSON, or invalid response handled gracefully by returning null
     return null;
   }
 }
@@ -1140,21 +1179,15 @@ async function discoverTotalRequests(state) {
 
   // Binary search to find the last valid request
   let low = 1;
-  let high = 1000; // Assume max 1000 requests
+  // Upper bound of 1000 requests per run covers typical game lengths
+  let high = 1000;
   let maxFound = 1;
 
   // First, find upper bound
   while (low <= high) {
     const mid = Math.floor((low + high) / 2);
     const reqId = formatRequestId(mid);
-
-    let probeUrl;
-    if (PAGE_TYPE === 'community' && strategy) {
-      probeUrl = `${basePath}/${strategy}/${model}/${runId}/request-${reqId}/tool_call.json`;
-    } else {
-      probeUrl = `${basePath}/${vendor}/${model}/${runId}/request-${reqId}/tool_call.json`;
-    }
-
+    const probeUrl = buildRequestPath(basePath, vendor, model, runId, reqId, strategy);
     const exists = await fetchJsonSafe(probeUrl);
     if (exists) {
       maxFound = mid;
@@ -1178,14 +1211,7 @@ async function loadAndRenderRequest(state) {
     overlay
   } = state;
   const reqId = formatRequestId(index);
-  let runBase;
-  if (PAGE_TYPE === 'community' && strategy) {
-    // For strategies: construct path as basePath/strategy/model/runId/request-*
-    runBase = `${basePath}/${strategy}/${model}/${runId}/request-${reqId}`;
-  } else {
-    // For models: construct path as basePath/vendor/model/runId/request-*
-    runBase = `${basePath}/${vendor}/${model}/${runId}/request-${reqId}`;
-  }
+  const runBase = buildRequestBasePath(basePath, vendor, model, runId, reqId, strategy);
 
   const [reasoning, toolcall, strategyMd, gamestateMd, memoryMd, metadata] = await Promise.all([
     fetchTextSafe(`${runBase}/reasoning.md`),
@@ -1255,6 +1281,7 @@ async function loadAndRenderRequest(state) {
       try {
         argsObj = JSON.parse(argsRaw);
       } catch {
+        // Invalid JSON defaults to empty object
         argsObj = {};
       }
     } else if (argsRaw && typeof argsRaw === 'object') {
@@ -1271,6 +1298,7 @@ async function loadAndRenderRequest(state) {
     try {
       argsString = JSON.stringify(argsObj);
     } catch {
+      // Stringify failure defaults to empty object string
       argsString = '{}';
     }
 
@@ -1396,16 +1424,14 @@ async function navigateRun(state, delta) {
   const old = state.index;
   state.index = Math.max(1, old + delta);
   const reqId = formatRequestId(state.index);
-  let probe;
-  if (PAGE_TYPE === 'community' && state.strategy) {
-    // For strategies: construct path as basePath/strategy/model/runId/request-*
-    probe =
-      `${state.basePath}/${state.strategy}/${state.model}/${state.runId}/request-${reqId}/tool_call.json`;
-  } else {
-    // For models: construct path as basePath/vendor/model/runId/request-*
-    probe =
-      `${state.basePath}/${state.vendor}/${state.model}/${state.runId}/request-${reqId}/tool_call.json`;
-  }
+  const probe = buildRequestPath(
+    state.basePath,
+    state.vendor,
+    state.model,
+    state.runId,
+    reqId,
+    state.strategy
+  );
   const ok = await fetchJsonSafe(probe);
   if (!ok) {
     state.index = old;
@@ -1494,7 +1520,9 @@ async function initBenchmarkVersionSelector() {
     if (urlVersion && versions.some(v => v.version === urlVersion)) {
       sel.value = urlVersion;
     }
-  } catch (_) {}
+  } catch (_) {
+    // Invalid URL or query param parsing failure is non-critical; use default version
+  }
 
 
   const applyVersion = (version) => {
@@ -1515,7 +1543,9 @@ async function initBenchmarkVersionSelector() {
       const url = new URL(window.location.href);
       url.searchParams.set('version', sel.value);
       window.history.replaceState({}, '', url.toString());
-    } catch (_) {}
+    } catch (_) {
+      // URL update failure is non-critical; version change still applied
+    }
     applyVersion(sel.value);
   });
 }
