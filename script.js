@@ -202,7 +202,7 @@ function createRoundHistogram(stats, canvasId) {
             boxWidth: 10,
             color: themeColors.axis,
             font: {
-              size: 14,
+              size: 12,
               family: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Courier New, monospace'
             }
           }
@@ -222,7 +222,7 @@ function createRoundHistogram(stats, canvasId) {
           ticks: {
             color: themeColors.axis,
             font: {
-              size: 14,
+              size: 12,
               family: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Courier New, monospace'
             }
           },
@@ -246,7 +246,7 @@ function createRoundHistogram(stats, canvasId) {
             precision: 0,
             stepSize: 1,
             font: {
-              size: 14,
+              size: 12,
               family: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Courier New, monospace'
             }
           },
@@ -330,11 +330,11 @@ function createPerformanceBarChart(entries) {
         },
         tooltip: {
           titleFont: {
-            size: 14,
+            size: 12,
             family: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Courier New, monospace'
           },
           bodyFont: {
-            size: 14,
+            size: 12,
             family: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Courier New, monospace'
           },
           callbacks: {
@@ -354,7 +354,7 @@ function createPerformanceBarChart(entries) {
           ticks: {
             color: themePalette.axis,
             font: {
-              size: 14,
+              size: 12,
               family: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Courier New, monospace'
             }
           },
@@ -376,7 +376,7 @@ function createPerformanceBarChart(entries) {
           ticks: {
             color: themePalette.axis,
             font: {
-              size: 14,
+              size: 12,
               family: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Courier New, monospace'
             }
           },
@@ -478,7 +478,7 @@ function createProviderPieChart(data, canvasId) {
             boxWidth: 10,
             color: themeColors.axis,
             font: {
-              size: 14,
+              size: 12,
               family: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Courier New, monospace'
             }
           }
