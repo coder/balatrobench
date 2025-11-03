@@ -12,217 +12,619 @@ const {
  * to show/hide content and adjust layouts for optimal mobile and desktop
  * experiences.
  *
- * Note: Tests verify layout behavior, not pixel-perfect positioning.
+ * Tests are organized by BREAKPOINT (viewport size) to make it easy to
+ * verify all behaviors at each screen size according to RESPONSIVE_DESIGN.md
+ *
+ * Breakpoints:
+ * - Mobile: < 640px (shows core metrics only)
+ * - sm: 640px+ (adds reliability metrics)
+ * - md: 768px+ (adds efficiency metrics)
+ * - lg: 1024px+ (adds resource metrics)
+ * - xl: 1280px+ (adds attribution on main page)
  */
 
-test.describe('Responsive design', () => {
+/**
+ * Helper function to check if a column header is visible by aria-label
+ */
+async function isColumnVisible(page, ariaLabel) {
+  const locator = page.locator(`th[aria-label="${ariaLabel}"]`);
+  const count = await locator.count();
+  if (count === 0) return false;
+  return await locator.first().isVisible();
+}
+
+/**
+ * Helper function to check if a column header exists but is hidden
+ */
+async function isColumnHidden(page, ariaLabel) {
+  const locator = page.locator(`th[aria-label="${ariaLabel}"]`);
+  const count = await locator.count();
+  if (count === 0) return true; // Not in DOM = hidden
+  return await locator.first().isHidden();
+}
+
+test.describe('Mobile viewport (< 640px)', () => {
   /**
-   * Test: Performance chart is hidden on mobile screens
-   * Verifies that the main bar chart only displays on large screens (lg+)
+   * Column visibility tests
    */
-  test('performance chart hidden on mobile', async ({
+  test('main page shows only core columns', async ({
     page
   }) => {
-    // Set mobile viewport (below lg breakpoint: 1024px)
     await page.setViewportSize({
       width: 375,
       height: 667
     });
-
-    // Navigate to the main leaderboard
     await page.goto('/');
-
-    // Wait for data to load
     await page.waitForSelector('tbody tr');
 
-    // The performance chart should not be visible on mobile
-    // Check if the chart container is hidden
-    const chartContainer = page.locator('#performance-chart').locator('..');
+    // Verify core columns are visible
+    const rankHeader = page.locator('th:has-text("#")');
+    const modelHeader = page.locator('th:has-text("Model")');
+    const roundHeader = page.locator('th:has-text("Round")');
 
-    // The container may exist but should be hidden via CSS
+    await expect(rankHeader).toBeVisible();
+    await expect(modelHeader).toBeVisible();
+    await expect(roundHeader).toBeVisible();
+
+    // Verify all other columns are hidden
+    expect(await isColumnHidden(page, 'Vendor')).toBe(true);
+    expect(await isColumnHidden(page, 'Valid tool calls executable in state')).toBe(true);
+    expect(await isColumnHidden(page, 'Valid tool calls not executable in state')).toBe(
+      true);
+    expect(await isColumnHidden(page, 'Responses without valid tool calls')).toBe(true);
+    expect(await isColumnHidden(page, 'Average input tokens')).toBe(true);
+    expect(await isColumnHidden(page, 'Average output tokens')).toBe(true);
+    expect(await isColumnHidden(page, 'Average time per tool call')).toBe(true);
+    expect(await isColumnHidden(page, 'Average cost per tool call')).toBe(true);
+  });
+
+  test('community page shows only core columns', async ({
+    page
+  }) => {
+    await page.setViewportSize({
+      width: 375,
+      height: 667
+    });
+    await page.goto('/community.html');
+    await page.waitForSelector('tbody tr');
+
+    // Verify core columns are visible
+    const rankHeader = page.locator('th:has-text("#")');
+    const strategyHeader = page.locator('th:has-text("Strategy")');
+    const roundHeader = page.locator('th:has-text("Round")');
+
+    await expect(rankHeader).toBeVisible();
+    await expect(strategyHeader).toBeVisible();
+    await expect(roundHeader).toBeVisible();
+
+    // Verify all other columns are hidden
+    expect(await isColumnHidden(page, 'Author')).toBe(true);
+    expect(await isColumnHidden(page, 'Valid tool calls executable in state')).toBe(true);
+    expect(await isColumnHidden(page, 'Valid tool calls not executable in state')).toBe(
+      true);
+    expect(await isColumnHidden(page, 'Responses without valid tool calls')).toBe(true);
+    expect(await isColumnHidden(page, 'Average input tokens')).toBe(true);
+    expect(await isColumnHidden(page, 'Average output tokens')).toBe(true);
+    expect(await isColumnHidden(page, 'Average time per tool call')).toBe(true);
+    expect(await isColumnHidden(page, 'Average cost per tool call')).toBe(true);
+  });
+
+  /**
+   * Performance chart visibility
+   */
+  test('main page - performance chart hidden', async ({
+    page
+  }) => {
+    await page.setViewportSize({
+      width: 375,
+      height: 667
+    });
+    await page.goto('/');
+    await page.waitForSelector('tbody tr');
+
+    const chartContainer = page.locator('#performance-chart').locator('..');
     const isVisible = await chartContainer.isVisible();
     expect(isVisible).toBe(false);
   });
 
-  test('performance chart visible on desktop', async ({
+  test('community page - no performance chart', async ({
     page
   }) => {
-    // Set desktop viewport (lg breakpoint: 1024px+)
-    await page.setViewportSize({
-      width: 1280,
-      height: 720
-    });
-
-    // Navigate to the main leaderboard
-    await page.goto('/');
-
-    // Wait for data to load
-    await page.waitForSelector('tbody tr');
-
-    // The performance chart should be visible on desktop
-    const chartCanvas = page.locator('#performance-chart');
-    await expect(chartCanvas).toBeVisible();
-  });
-
-  /**
-   * Test: Expandable rows are disabled on mobile
-   * Verifies that clicking rows on mobile screens doesn't expand details
-   */
-  test('expandable rows disabled on mobile', async ({
-    page
-  }) => {
-    // Set mobile viewport
     await page.setViewportSize({
       width: 375,
       height: 667
     });
-
-    // Navigate to the main leaderboard
-    await page.goto('/');
-
-    // Wait for table rows to load
+    await page.goto('/community.html');
     await page.waitForSelector('tbody tr');
 
-    // Click the first row
+    const chartCanvas = page.locator('#performance-chart');
+    const count = await chartCanvas.count();
+    expect(count).toBe(0);
+  });
+
+  /**
+   * Expandable rows behavior
+   */
+  test('main page - expandable rows disabled', async ({
+    page
+  }) => {
+    await page.setViewportSize({
+      width: 375,
+      height: 667
+    });
+    await page.goto('/');
+    await page.waitForSelector('tbody tr');
+
     const firstRow = page.locator('tbody tr').first();
     await firstRow.click();
-
-    // Wait a moment
     await page.waitForTimeout(500);
 
-    // Detail rows should not appear on mobile
     const detailRows = page.locator('tr.detail-row');
     const detailRowCount = await detailRows.count();
-
-    // No detail rows should be visible on mobile
     expect(detailRowCount).toBe(0);
   });
 
-  test('expandable rows work on desktop', async ({
+  test('community page - expandable rows disabled', async ({
     page
   }) => {
-    // Set desktop viewport
-    await page.setViewportSize({
-      width: 1280,
-      height: 720
-    });
-
-    // Navigate to the main leaderboard
-    await page.goto('/');
-
-    // Wait for table rows to load
-    await page.waitForSelector('tbody tr');
-
-    // Click the first row
-    await page.locator('tbody tr').first().click();
-
-    // Wait for detail row to appear
-    await page.waitForSelector('tr.detail-row', {
-      timeout: 5000
-    });
-
-    // Verify detail row is visible
-    const detailRow = page.locator('tr.detail-row').first();
-    await expect(detailRow).toBeVisible();
-  });
-
-  /**
-   * Test: Table columns adapt to screen size
-   * Verifies that certain columns are hidden on smaller screens
-   */
-  test('some table columns hidden on mobile', async ({
-    page
-  }) => {
-    // Set mobile viewport
     await page.setViewportSize({
       width: 375,
       height: 667
     });
-
-    // Navigate to the main leaderboard
-    await page.goto('/');
-
-    // Wait for table to load
+    await page.goto('/community.html');
     await page.waitForSelector('tbody tr');
 
-    // Check the number of visible columns
-    // On mobile, some columns should be hidden via Tailwind responsive classes
-    const visibleCells = page.locator('tbody tr:first-child td:visible');
-    const visibleCount = await visibleCells.count();
+    const firstRow = page.locator('tbody tr').first();
+    await firstRow.click();
+    await page.waitForTimeout(500);
 
-    // Mobile should show fewer columns than desktop
-    // Exact count depends on implementation, but should be less than full set
-    expect(visibleCount).toBeGreaterThan(0);
-    expect(visibleCount).toBeLessThan(15); // Full desktop has many columns
-  });
-
-  test('all relevant table columns visible on desktop', async ({
-    page
-  }) => {
-    // Set desktop viewport
-    await page.setViewportSize({
-      width: 1280,
-      height: 720
-    });
-
-    // Navigate to the main leaderboard
-    await page.goto('/');
-
-    // Wait for table to load
-    await page.waitForSelector('tbody tr');
-
-    // Check the number of visible columns
-    const visibleCells = page.locator('tbody tr:first-child td:visible');
-    const visibleCount = await visibleCells.count();
-
-    // Desktop should show more columns
-    expect(visibleCount).toBeGreaterThan(3);
+    const detailRows = page.locator('tr.detail-row');
+    const detailRowCount = await detailRows.count();
+    expect(detailRowCount).toBe(0);
   });
 
   /**
-   * Test: Navigation works on all screen sizes
-   * Verifies that the navigation bar is accessible on mobile and desktop
+   * Navigation
    */
-  test('navigation accessible on mobile', async ({
+  test('main page - navigation accessible', async ({
     page
   }) => {
-    // Set mobile viewport
     await page.setViewportSize({
       width: 375,
       height: 667
     });
-
-    // Navigate to the main leaderboard
     await page.goto('/');
 
-    // Verify navigation is present and functional
     const nav = page.locator('nav');
     await expect(nav).toBeVisible();
 
-    // Verify navigation links work on mobile
     await page.getByRole('link', {
       name: 'Community'
     }).click();
     await expect(page).toHaveURL(/community\.html/);
   });
 
-  test('navigation accessible on desktop', async ({
+  test('community page - navigation accessible', async ({
     page
   }) => {
-    // Set desktop viewport
+    await page.setViewportSize({
+      width: 375,
+      height: 667
+    });
+    await page.goto('/community.html');
+
+    const nav = page.locator('nav');
+    await expect(nav).toBeVisible();
+
+    await page.getByRole('link', {
+      name: 'BalatroBench'
+    }).click();
+    await expect(page).toHaveURL(/\/$|index\.html/);
+  });
+
+  /**
+   * Footer
+   */
+  test('main page - footer visible', async ({
+    page
+  }) => {
+    await page.setViewportSize({
+      width: 375,
+      height: 667
+    });
+    await page.goto('/');
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+
+    const footer = page.locator('footer');
+    await expect(footer).toBeVisible();
+  });
+
+  test('community page - footer visible', async ({
+    page
+  }) => {
+    await page.setViewportSize({
+      width: 375,
+      height: 667
+    });
+    await page.goto('/community.html');
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+
+    const footer = page.locator('footer');
+    await expect(footer).toBeVisible();
+  });
+});
+
+test.describe('sm breakpoint (640px+)', () => {
+  /**
+   * Column visibility tests
+   */
+  test('main page shows tool call columns', async ({
+    page
+  }) => {
+    await page.setViewportSize({
+      width: 640,
+      height: 667
+    });
+    await page.goto('/');
+    await page.waitForSelector('tbody tr');
+
+    // Tool call columns should now be visible
+    expect(await isColumnVisible(page, 'Valid tool calls executable in state')).toBe(
+      true);
+    expect(await isColumnVisible(page, 'Valid tool calls not executable in state')).toBe(
+      true);
+    expect(await isColumnVisible(page, 'Responses without valid tool calls')).toBe(true);
+
+    // Token and vendor columns should still be hidden
+    expect(await isColumnHidden(page, 'Average input tokens')).toBe(true);
+    expect(await isColumnHidden(page, 'Average output tokens')).toBe(true);
+    expect(await isColumnHidden(page, 'Vendor')).toBe(true);
+  });
+
+  test('community page shows tool call columns', async ({
+    page
+  }) => {
+    await page.setViewportSize({
+      width: 640,
+      height: 667
+    });
+    await page.goto('/community.html');
+    await page.waitForSelector('tbody tr');
+
+    // Tool call columns should now be visible
+    expect(await isColumnVisible(page, 'Valid tool calls executable in state')).toBe(
+      true);
+    expect(await isColumnVisible(page, 'Valid tool calls not executable in state')).toBe(
+      true);
+    expect(await isColumnVisible(page, 'Responses without valid tool calls')).toBe(true);
+
+    // Token and author columns should still be hidden
+    expect(await isColumnHidden(page, 'Average input tokens')).toBe(true);
+    expect(await isColumnHidden(page, 'Average output tokens')).toBe(true);
+    expect(await isColumnHidden(page, 'Author')).toBe(true);
+  });
+});
+
+test.describe('md breakpoint (768px+)', () => {
+  /**
+   * Column visibility tests
+   */
+  test('main page shows time and cost columns', async ({
+    page
+  }) => {
+    await page.setViewportSize({
+      width: 768,
+      height: 1024
+    });
+    await page.goto('/');
+    await page.waitForSelector('tbody tr');
+
+    // Time and cost columns should now be visible
+    expect(await isColumnVisible(page, 'Average time per tool call')).toBe(true);
+    expect(await isColumnVisible(page, 'Average cost per tool call')).toBe(true);
+
+    // Tool call columns should still be visible
+    expect(await isColumnVisible(page, 'Valid tool calls executable in state')).toBe(
+      true);
+
+    // Token and vendor columns should still be hidden
+    expect(await isColumnHidden(page, 'Average input tokens')).toBe(true);
+    expect(await isColumnHidden(page, 'Average output tokens')).toBe(true);
+    expect(await isColumnHidden(page, 'Vendor')).toBe(true);
+  });
+
+  test('community page shows time and cost columns', async ({
+    page
+  }) => {
+    await page.setViewportSize({
+      width: 768,
+      height: 1024
+    });
+    await page.goto('/community.html');
+    await page.waitForSelector('tbody tr');
+
+    // Time and cost columns should now be visible
+    expect(await isColumnVisible(page, 'Average time per tool call')).toBe(true);
+    expect(await isColumnVisible(page, 'Average cost per tool call')).toBe(true);
+
+    // Tool call columns should still be visible
+    expect(await isColumnVisible(page, 'Valid tool calls executable in state')).toBe(
+      true);
+
+    // Token and author columns should still be hidden
+    expect(await isColumnHidden(page, 'Average input tokens')).toBe(true);
+    expect(await isColumnHidden(page, 'Average output tokens')).toBe(true);
+    expect(await isColumnHidden(page, 'Author')).toBe(true);
+  });
+});
+
+test.describe('lg breakpoint (1024px+)', () => {
+  /**
+   * Column visibility tests
+   */
+  test('main page shows token columns', async ({
+    page
+  }) => {
+    await page.setViewportSize({
+      width: 1024,
+      height: 768
+    });
+    await page.goto('/');
+    await page.waitForSelector('tbody tr');
+
+    // Token columns should now be visible
+    expect(await isColumnVisible(page, 'Average input tokens')).toBe(true);
+    expect(await isColumnVisible(page, 'Average output tokens')).toBe(true);
+
+    // All previous columns should still be visible
+    expect(await isColumnVisible(page, 'Valid tool calls executable in state')).toBe(
+      true);
+    expect(await isColumnVisible(page, 'Average time per tool call')).toBe(true);
+
+    // Vendor should still be hidden
+    expect(await isColumnHidden(page, 'Vendor')).toBe(true);
+  });
+
+  test('community page shows token and author columns', async ({
+    page
+  }) => {
+    await page.setViewportSize({
+      width: 1024,
+      height: 768
+    });
+    await page.goto('/community.html');
+    await page.waitForSelector('tbody tr');
+
+    // Token columns should now be visible
+    expect(await isColumnVisible(page, 'Average input tokens')).toBe(true);
+    expect(await isColumnVisible(page, 'Average output tokens')).toBe(true);
+
+    // Author column should be visible (different from main leaderboard)
+    const authorHeader = page.locator('th:has-text("Author")');
+    await expect(authorHeader).toBeVisible();
+
+    // All previous columns should still be visible
+    expect(await isColumnVisible(page, 'Valid tool calls executable in state')).toBe(
+      true);
+    expect(await isColumnVisible(page, 'Average time per tool call')).toBe(true);
+  });
+
+  /**
+   * Page-specific feature: Author column appears at lg on community page
+   */
+  test('author column appears on community page only', async ({
+    page
+  }) => {
+    await page.setViewportSize({
+      width: 1024,
+      height: 768
+    });
+
+    // Community page: Author visible at lg
+    await page.goto('/community.html');
+    await page.waitForSelector('tbody tr');
+
+    const authorHeaderCommunity = page.locator('th:has-text("Author")');
+    await expect(authorHeaderCommunity).toBeVisible();
+
+    // Main page: No author column
+    await page.goto('/');
+    await page.waitForSelector('tbody tr');
+
+    const authorHeaderMain = page.locator('th:has-text("Author")');
+    const authorCount = await authorHeaderMain.count();
+    expect(authorCount).toBe(0);
+  });
+});
+
+test.describe('xl breakpoint (1280px+)', () => {
+  /**
+   * Column visibility tests
+   */
+  test('main page shows vendor column', async ({
+    page
+  }) => {
+    await page.setViewportSize({
+      width: 1280,
+      height: 720
+    });
+    await page.goto('/');
+    await page.waitForSelector('tbody tr');
+
+    // Vendor column should now be visible
+    const vendorHeader = page.locator('th:has-text("Vendor")');
+    await expect(vendorHeader).toBeVisible();
+
+    // All other columns should still be visible
+    expect(await isColumnVisible(page, 'Average input tokens')).toBe(true);
+    expect(await isColumnVisible(page, 'Valid tool calls executable in state')).toBe(
+      true);
+    expect(await isColumnVisible(page, 'Average time per tool call')).toBe(true);
+  });
+
+  test('community page shows same columns as lg', async ({
+    page
+  }) => {
+    await page.setViewportSize({
+      width: 1280,
+      height: 720
+    });
+    await page.goto('/community.html');
+    await page.waitForSelector('tbody tr');
+
+    // All columns from lg should be visible
+    const authorHeader = page.locator('th:has-text("Author")');
+    await expect(authorHeader).toBeVisible();
+
+    expect(await isColumnVisible(page, 'Average input tokens')).toBe(true);
+    expect(await isColumnVisible(page, 'Valid tool calls executable in state')).toBe(
+      true);
+    expect(await isColumnVisible(page, 'Average time per tool call')).toBe(true);
+
+    // No additional columns appear at xl on community page
+    // (Unlike main leaderboard which adds Vendor at xl)
+  });
+
+  /**
+   * Page-specific feature: Vendor column appears at xl on main page only
+   */
+  test('vendor column appears on main page only', async ({
+    page
+  }) => {
     await page.setViewportSize({
       width: 1280,
       height: 720
     });
 
-    // Navigate to the main leaderboard
+    // Main page: Vendor visible at xl
+    await page.goto('/');
+    await page.waitForSelector('tbody tr');
+
+    const vendorHeaderMain = page.locator('th:has-text("Vendor")');
+    await expect(vendorHeaderMain).toBeVisible();
+
+    // Community page: No vendor column
+    await page.goto('/community.html');
+    await page.waitForSelector('tbody tr');
+
+    const vendorHeaderCommunity = page.locator('th:has-text("Vendor")');
+    const vendorCount = await vendorHeaderCommunity.count();
+    expect(vendorCount).toBe(0);
+  });
+
+  /**
+   * Performance chart visibility (desktop)
+   */
+  test('main page - performance chart visible', async ({
+    page
+  }) => {
+    await page.setViewportSize({
+      width: 1280,
+      height: 720
+    });
+    await page.goto('/');
+    await page.waitForSelector('tbody tr');
+
+    const chartCanvas = page.locator('#performance-chart');
+    await expect(chartCanvas).toBeVisible();
+  });
+
+  test('performance chart only on main page', async ({
+    page
+  }) => {
+    await page.setViewportSize({
+      width: 1280,
+      height: 720
+    });
+
+    // Main page: Chart exists
+    await page.goto('/');
+    await page.waitForSelector('tbody tr');
+    const chartMain = page.locator('#performance-chart');
+    await expect(chartMain).toBeVisible();
+
+    // Community page: No chart
+    await page.goto('/community.html');
+    await page.waitForSelector('tbody tr');
+    const chartCommunity = page.locator('#performance-chart');
+    const chartCount = await chartCommunity.count();
+    expect(chartCount).toBe(0);
+  });
+
+  /**
+   * Expandable rows (desktop)
+   */
+  test('main page - expandable rows work', async ({
+    page
+  }) => {
+    await page.setViewportSize({
+      width: 1280,
+      height: 720
+    });
+    await page.goto('/');
+    await page.waitForSelector('tbody tr');
+
+    await page.locator('tbody tr').first().click();
+    await page.waitForSelector('tr.detail-row', {
+      timeout: 5000
+    });
+
+    const detailRow = page.locator('tr.detail-row').first();
+    await expect(detailRow).toBeVisible();
+  });
+
+  test('community page - expandable rows work', async ({
+    page
+  }) => {
+    await page.setViewportSize({
+      width: 1280,
+      height: 720
+    });
+    await page.goto('/community.html');
+    await page.waitForSelector('tbody tr');
+
+    await page.locator('tbody tr').first().click();
+    await page.waitForSelector('tr.detail-row', {
+      timeout: 5000
+    });
+
+    const detailRow = page.locator('tr.detail-row').first();
+    await expect(detailRow).toBeVisible();
+  });
+
+  /**
+   * Navigation (desktop)
+   */
+  test('main page - navigation accessible', async ({
+    page
+  }) => {
+    await page.setViewportSize({
+      width: 1280,
+      height: 720
+    });
     await page.goto('/');
 
-    // Verify navigation is present
     const nav = page.locator('nav');
     await expect(nav).toBeVisible();
 
-    // Verify navigation links work
+    await page.getByRole('link', {
+      name: 'About'
+    }).click();
+    await expect(page).toHaveURL(/about\.html/);
+  });
+
+  test('community page - navigation accessible', async ({
+    page
+  }) => {
+    await page.setViewportSize({
+      width: 1280,
+      height: 720
+    });
+    await page.goto('/community.html');
+
+    const nav = page.locator('nav');
+    await expect(nav).toBeVisible();
+
     await page.getByRole('link', {
       name: 'About'
     }).click();
@@ -230,157 +632,137 @@ test.describe('Responsive design', () => {
   });
 
   /**
-   * Test: Content is scrollable on mobile
-   * Verifies that tables can be scrolled horizontally on small screens
+   * Footer (desktop)
    */
-  test('table scrollable on mobile', async ({
+  test('main page - footer visible', async ({
     page
   }) => {
-    // Set mobile viewport
     await page.setViewportSize({
-      width: 375,
-      height: 667
+      width: 1280,
+      height: 720
     });
-
-    // Navigate to the main leaderboard
     await page.goto('/');
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
 
-    // Wait for table to load
-    await page.waitForSelector('tbody tr');
-
-    // Verify the table exists and is visible
-    const table = page.locator('table');
-    await expect(table).toBeVisible();
-
-    // On mobile, table container should allow scrolling
-    // Check that the table has content
-    const tableWidth = await table.evaluate(el => el.offsetWidth);
-    expect(tableWidth).toBeGreaterThan(0);
+    const footer = page.locator('footer');
+    await expect(footer).toBeVisible();
   });
 
-  /**
-   * Test: Version selector works on all screen sizes
-   * Verifies that the version dropdown is accessible and functional
-   */
-  test('version selector works on mobile', async ({
+  test('community page - footer visible', async ({
     page
   }) => {
-    // Set mobile viewport
+    await page.setViewportSize({
+      width: 1280,
+      height: 720
+    });
+    await page.goto('/community.html');
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+
+    const footer = page.locator('footer');
+    await expect(footer).toBeVisible();
+  });
+});
+
+/**
+ * Cross-breakpoint features
+ * These features work consistently across all viewport sizes
+ */
+test.describe('Cross-breakpoint features', () => {
+  test('main page - version selector works on mobile', async ({
+    page
+  }) => {
     await page.setViewportSize({
       width: 375,
       height: 667
     });
-
-    // Navigate to the main leaderboard
     await page.goto('/');
-
-    // Wait for page to load
     await page.waitForSelector('tbody tr');
 
-    // Verify version selector is visible
     const versionSelector = page.locator('select');
     await expect(versionSelector).toBeVisible();
 
-    // Verify it has options
     const options = versionSelector.locator('option');
     const optionCount = await options.count();
     expect(optionCount).toBeGreaterThan(0);
   });
 
-  test('version selector works on desktop', async ({
+  test('main page - version selector works on desktop', async ({
     page
   }) => {
-    // Set desktop viewport
     await page.setViewportSize({
       width: 1280,
       height: 720
     });
-
-    // Navigate to the main leaderboard
     await page.goto('/');
-
-    // Wait for page to load
     await page.waitForSelector('tbody tr');
 
-    // Verify version selector is visible
     const versionSelector = page.locator('select');
     await expect(versionSelector).toBeVisible();
   });
 
-  /**
-   * Test: Tablet viewport (medium screens)
-   * Verifies behavior at tablet breakpoint (md: 768px - lg: 1024px)
-   */
-  test('layout works on tablet', async ({
+  test('community page - version selector works on mobile', async ({
     page
   }) => {
-    // Set tablet viewport (between md and lg breakpoints)
-    await page.setViewportSize({
-      width: 768,
-      height: 1024
-    });
-
-    // Navigate to the main leaderboard
-    await page.goto('/');
-
-    // Wait for page to load
-    await page.waitForSelector('tbody tr');
-
-    // Verify page loads correctly
-    const table = page.locator('table');
-    await expect(table).toBeVisible();
-
-    // Navigation should be visible
-    const nav = page.locator('nav');
-    await expect(nav).toBeVisible();
-
-    // Performance chart should be hidden (below lg breakpoint)
-    const chartContainer = page.locator('#performance-chart').locator('..');
-    const isVisible = await chartContainer.isVisible();
-    expect(isVisible).toBe(false);
-  });
-
-  /**
-   * Test: Footer is visible and functional on all screen sizes
-   * Verifies that the footer renders correctly across viewports
-   */
-  test('footer visible on mobile', async ({
-    page
-  }) => {
-    // Set mobile viewport
     await page.setViewportSize({
       width: 375,
       height: 667
     });
+    await page.goto('/community.html');
+    await page.waitForSelector('tbody tr');
 
-    // Navigate to the main leaderboard
-    await page.goto('/');
+    const versionSelector = page.locator('select');
+    await expect(versionSelector).toBeVisible();
 
-    // Scroll to bottom to ensure footer is in viewport
-    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-
-    // Verify footer is visible
-    const footer = page.locator('footer');
-    await expect(footer).toBeVisible();
+    const options = versionSelector.locator('option');
+    const optionCount = await options.count();
+    expect(optionCount).toBeGreaterThan(0);
   });
 
-  test('footer visible on desktop', async ({
+  test('community page - version selector works on desktop', async ({
     page
   }) => {
-    // Set desktop viewport
     await page.setViewportSize({
       width: 1280,
       height: 720
     });
+    await page.goto('/community.html');
+    await page.waitForSelector('tbody tr');
 
-    // Navigate to the main leaderboard
+    const versionSelector = page.locator('select');
+    await expect(versionSelector).toBeVisible();
+  });
+
+  test('main page - table scrollable on mobile', async ({
+    page
+  }) => {
+    await page.setViewportSize({
+      width: 375,
+      height: 667
+    });
     await page.goto('/');
+    await page.waitForSelector('tbody tr');
 
-    // Scroll to bottom
-    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    const table = page.locator('table');
+    await expect(table).toBeVisible();
 
-    // Verify footer is visible
-    const footer = page.locator('footer');
-    await expect(footer).toBeVisible();
+    const tableWidth = await table.evaluate(el => el.offsetWidth);
+    expect(tableWidth).toBeGreaterThan(0);
+  });
+
+  test('community page - table scrollable on mobile', async ({
+    page
+  }) => {
+    await page.setViewportSize({
+      width: 375,
+      height: 667
+    });
+    await page.goto('/community.html');
+    await page.waitForSelector('tbody tr');
+
+    const table = page.locator('table');
+    await expect(table).toBeVisible();
+
+    const tableWidth = await table.evaluate(el => el.offsetWidth);
+    expect(tableWidth).toBeGreaterThan(0);
   });
 });
