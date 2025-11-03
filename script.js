@@ -1129,10 +1129,6 @@ function openRunViewer({
             <pre id="run-reasoning" class="flex-1 min-h-0 bg-zinc-50 dark:bg-zinc-900 rounded-md p-3 text-xs text-zinc-800 dark:text-zinc-200 font-mono italic whitespace-pre-wrap overflow-auto"></pre>
             <div id="run-tool-call" class="flex-shrink-0 bg-zinc-50 dark:bg-zinc-900 rounded-md px-3 py-2 text-xs font-mono text-zinc-800 dark:text-zinc-200 overflow-x-auto whitespace-nowrap text-center"></div>
           </div>
-          <!-- Stats Column (narrower) -->
-          <div class="flex flex-col" style="flex: 0 0 200px;">
-            <div id="run-stats" class="p-3 text-xs text-zinc-800 dark:text-zinc-200 overflow-auto"></div>
-          </div>
         </div>
       </div>
     </div>`;
@@ -1233,12 +1229,28 @@ async function loadAndRenderRequest(state) {
   const runNumber = state.runs && state.runs.length > 0 ? state.runIndex + 1 : null;
   const totalRuns = state.runs ? state.runs.length : null;
 
+  // Tokens icon from icons.svg
+  const tokensIcon =
+    `<svg class="w-3 h-3 inline-block"><use href="icons.svg#icon-tokens"></use></svg>`;
+
   let title = `${vendor}/${model} • ${seed}`;
   if (runNumber !== null && totalRuns !== null) {
     title += ` • Run ${runNumber}/${totalRuns}`;
   }
   title += ` • Request ${index}/${totalRequests}`;
-  overlay.querySelector('#run-title').textContent = title;
+
+  // Add tokens and cost if metadata exists
+  if (metadata && metadata.tokens && metadata.cost) {
+    const promptTokens = metadata.tokens.prompt || 0;
+    const completionTokens = metadata.tokens.completion || 0;
+    const promptCost = metadata.cost.prompt_usd || 0;
+    const completionCost = metadata.cost.completion_usd || 0;
+
+    title += ` • ${tokensIcon} in/out ${promptTokens}/${completionTokens}`;
+    title += ` • $ in/out ${promptCost.toFixed(4)}/${completionCost.toFixed(4)}`;
+  }
+
+  overlay.querySelector('#run-title').innerHTML = title;
 
   const imgEl = overlay.querySelector('#run-screenshot');
   // Try formats in order: webp -> png -> avif
@@ -1306,118 +1318,6 @@ async function loadAndRenderRequest(state) {
     toolCallDiv.textContent = `${name}(${argsString})`;
   }
 
-  // Render stats from metadata.json
-  const statsDiv = overlay.querySelector('#run-stats');
-  if (metadata) {
-    // Database icon SVG
-    const databaseIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
-      <path d="M8 7c3.314 0 6-1.343 6-3s-2.686-3-6-3-6 1.343-6 3 2.686 3 6 3Z" />
-      <path d="M8 8.5c1.84 0 3.579-.37 4.914-1.037A6.33 6.33 0 0 0 14 6.78V8c0 1.657-2.686 3-6 3S2 9.657 2 8V6.78c.346.273.72.5 1.087.683C4.42 8.131 6.16 8.5 8 8.5Z" />
-      <path d="M8 12.5c1.84 0 3.579-.37 4.914-1.037.366-.183.74-.41 1.086-.684V12c0 1.657-2.686 3-6 3s-6-1.343-6-3v-1.22c.346.273.72.5 1.087.683C4.42 12.131 6.16 12.5 8 12.5Z" />
-    </svg>`;
-
-    // Dollar icon SVG
-    const dollarIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
-      <path d="M6.375 5.5h.875v1.75h-.875a.875.875 0 1 1 0-1.75ZM8.75 10.5V8.75h.875a.875.875 0 0 1 0 1.75H8.75Z" />
-      <path fill-rule="evenodd" d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM7.25 3.75a.75.75 0 0 1 1.5 0V4h2.5a.75.75 0 0 1 0 1.5h-2.5v1.75h.875a2.375 2.375 0 1 1 0 4.75H8.75v.25a.75.75 0 0 1-1.5 0V12h-2.5a.75.75 0 0 1 0-1.5h2.5V8.75h-.875a2.375 2.375 0 1 1 0-4.75h.875v-.25Z" clip-rule="evenodd" />
-    </svg>`;
-
-    let statsHtml = '<div>';
-    statsHtml += '<table class="w-full"><tbody>';
-
-    // Tokens
-    statsHtml += `<tr>
-      <td class="py-1">
-        <div class="flex items-center justify-left space-x-1 text-zinc-700 dark:text-zinc-300">
-          ${databaseIcon}
-          <span>prompt</span>
-        </div>
-      </td>
-      <td class="text-right py-1">
-        <span class="text-xs font-mono text-zinc-700 dark:text-zinc-300">${(metadata.tokens.prompt / 1000).toFixed(1)} K</span>
-      </td>
-    </tr>`;
-
-    statsHtml += `<tr>
-      <td class="py-1">
-        <div class="flex items-center justify-left space-x-1 text-zinc-700 dark:text-zinc-300">
-          ${databaseIcon}
-          <span>completion</span>
-        </div>
-      </td>
-      <td class="text-right py-1">
-        <span class="text-xs font-mono text-zinc-700 dark:text-zinc-300">${(metadata.tokens.completion / 1000).toFixed(1)} K</span>
-      </td>
-    </tr>`;
-
-    statsHtml += `<tr>
-      <td class="py-1">
-        <div class="flex items-center justify-left space-x-1 text-zinc-700 dark:text-zinc-300">
-          ${databaseIcon}
-          <span>reasoning</span>
-        </div>
-      </td>
-      <td class="text-right py-1">
-        <span class="text-xs font-mono text-zinc-700 dark:text-zinc-300">${(metadata.tokens.reasoning / 1000).toFixed(1)} K</span>
-      </td>
-    </tr>`;
-
-    statsHtml += `<tr>
-      <td class="py-1">
-        <div class="flex items-center justify-left space-x-1 text-zinc-700 dark:text-zinc-300">
-          ${databaseIcon}
-          <span>total</span>
-        </div>
-      </td>
-      <td class="text-right py-1">
-        <span class="text-xs font-mono text-zinc-700 dark:text-zinc-300 font-semibold">${(metadata.tokens.total / 1000).toFixed(1)} K</span>
-      </td>
-    </tr>`;
-
-    // Add vertical space between tokens and cost
-    statsHtml += `<tr><td colspan="2" class="py-2"></td></tr>`;
-
-    // Cost
-    statsHtml += `<tr>
-      <td class="py-1">
-        <div class="flex items-center justify-left space-x-1 text-zinc-700 dark:text-zinc-300">
-          ${dollarIcon}
-          <span>prompt</span>
-        </div>
-      </td>
-      <td class="text-right py-1">
-        <span class="text-xs font-mono text-zinc-700 dark:text-zinc-300">$${metadata.cost.prompt_usd.toFixed(4)}</span>
-      </td>
-    </tr>`;
-
-    statsHtml += `<tr>
-      <td class="py-1">
-        <div class="flex items-center justify-left space-x-1 text-zinc-700 dark:text-zinc-300">
-          ${dollarIcon}
-          <span>completion</span>
-        </div>
-      </td>
-      <td class="text-right py-1">
-        <span class="text-xs font-mono text-zinc-700 dark:text-zinc-300">$${metadata.cost.completion_usd.toFixed(4)}</span>
-      </td>
-    </tr>`;
-
-    statsHtml += `<tr>
-      <td class="py-1">
-        <div class="flex items-center justify-left space-x-1 text-zinc-700 dark:text-zinc-300">
-          ${dollarIcon}
-          <span>total</span>
-        </div>
-      </td>
-      <td class="text-right py-1">
-        <span class="text-xs font-mono text-zinc-700 dark:text-zinc-300 font-semibold">$${metadata.cost.total_usd.toFixed(4)}</span>
-      </td>
-    </tr>`;
-
-    statsHtml += '</tbody></table>';
-    statsHtml += '</div>';
-    statsDiv.innerHTML = statsHtml;
-  }
 }
 
 async function navigateRun(state, delta) {
