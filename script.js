@@ -202,7 +202,8 @@ function createRoundHistogram(stats, canvasId) {
             boxWidth: 10,
             color: themeColors.axis,
             font: {
-              size: 11
+              size: 14,
+              family: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Courier New, monospace'
             }
           }
         },
@@ -219,7 +220,11 @@ function createRoundHistogram(stats, canvasId) {
             text: 'Round'
           },
           ticks: {
-            color: themeColors.axis
+            color: themeColors.axis,
+            font: {
+              size: 14,
+              family: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Courier New, monospace'
+            }
           },
           grid: {
             color: themeColors.grid,
@@ -239,7 +244,11 @@ function createRoundHistogram(stats, canvasId) {
           ticks: {
             color: themeColors.axis,
             precision: 0,
-            stepSize: 1
+            stepSize: 1,
+            font: {
+              size: 14,
+              family: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Courier New, monospace'
+            }
           },
           grid: {
             color: themeColors.grid,
@@ -320,6 +329,14 @@ function createPerformanceBarChart(entries) {
           display: false
         },
         tooltip: {
+          titleFont: {
+            size: 14,
+            family: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Courier New, monospace'
+          },
+          bodyFont: {
+            size: 14,
+            family: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Courier New, monospace'
+          },
           callbacks: {
             label: function(context) {
               const index = context.dataIndex;
@@ -335,7 +352,11 @@ function createPerformanceBarChart(entries) {
             text: 'Model'
           },
           ticks: {
-            color: themePalette.axis
+            color: themePalette.axis,
+            font: {
+              size: 14,
+              family: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Courier New, monospace'
+            }
           },
           grid: {
             color: themePalette.grid,
@@ -353,7 +374,11 @@ function createPerformanceBarChart(entries) {
             text: 'Average Final Round'
           },
           ticks: {
-            color: themePalette.axis
+            color: themePalette.axis,
+            font: {
+              size: 14,
+              family: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Courier New, monospace'
+            }
           },
           grid: {
             color: themePalette.grid,
@@ -453,7 +478,8 @@ function createProviderPieChart(data, canvasId) {
             boxWidth: 10,
             color: themeColors.axis,
             font: {
-              size: 11
+              size: 14,
+              family: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Courier New, monospace'
             }
           }
         },
