@@ -1048,7 +1048,7 @@ function openRunViewer({
   const overlay = document.createElement('div');
   overlay.className = 'fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4';
   overlay.innerHTML = `
-    <div class="relative w-full h-full bg-white dark:bg-zinc-800 rounded-lg shadow-2xl ring-1 ring-white/10 overflow-hidden flex flex-col">
+    <div class="relative w-full h-full max-w-[2400px] max-h-[90vh] bg-white dark:bg-zinc-800 rounded-lg shadow-2xl ring-1 ring-white/10 overflow-hidden flex flex-col lg:max-w-[2300px] 2xl:max-w-[2200px]">
       <div class="flex items-center justify-between px-4 py-2 border-b border-zinc-200 dark:border-zinc-600">
         <div class="text-sm text-zinc-600 dark:text-zinc-300 font-mono truncate" id="run-title"></div>
         <div class="flex items-center gap-2">
@@ -1257,7 +1257,7 @@ async function loadAndRenderRequest(state) {
 
   // Tokens icon from icons.svg
   const tokensIcon =
-    `<svg class="w-3 h-3 inline-block"><use href="icons.svg#icon-tokens"></use></svg>`;
+    `<svg class="w-3 h-3 inline-block text-zinc-600 dark:text-zinc-300"><use href="icons.svg#icon-tokens"></use></svg>`;
 
   let title = `${vendor}/${model} • ${seed}`;
   if (runNumber !== null && totalRuns !== null) {
