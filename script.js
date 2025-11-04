@@ -579,7 +579,7 @@ function createDetailRow(stats, modelName, data, vendor, model, basePath, strate
           <h4 class="text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-2 text-center">Totals</h4>
           <table class="w-full">
             <tbody>
-              <tr>
+              <tr id="total-input-tokens">
                 <td class="py-1">
                   <div class="flex items-center justify-left space-x-1 text-zinc-700 dark:text-zinc-300">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
@@ -594,7 +594,7 @@ function createDetailRow(stats, modelName, data, vendor, model, basePath, strate
                   <span class="text-sm font-mono text-zinc-700 dark:text-zinc-300">${(data.total.input_tokens / 1000000).toFixed(2)} M</span>
                 </td>
               </tr>
-              <tr>
+              <tr id="total-output-tokens">
                 <td class="py-1">
                   <div class="flex items-center justify-left space-x-1 text-zinc-700 dark:text-zinc-300">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
@@ -609,7 +609,7 @@ function createDetailRow(stats, modelName, data, vendor, model, basePath, strate
                   <span class="text-sm font-mono text-zinc-700 dark:text-zinc-300">${(data.total.output_tokens / 1000000).toFixed(2)} M</span>
                 </td>
               </tr>
-              <tr>
+              <tr id="total-input-price">
                 <td class="py-1">
                   <div class="flex items-center justify-left space-x-1 text-zinc-700 dark:text-zinc-300">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
@@ -623,7 +623,7 @@ function createDetailRow(stats, modelName, data, vendor, model, basePath, strate
                   <span class="text-sm font-mono text-zinc-700 dark:text-zinc-300">${(data.total.input_cost).toFixed(2)} $</span>
                 </td>
               </tr>
-              <tr>
+              <tr id="total-output-price">
                 <td class="py-1">
                   <div class="flex items-center justify-left space-x-1 text-zinc-700 dark:text-zinc-300">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
@@ -637,7 +637,7 @@ function createDetailRow(stats, modelName, data, vendor, model, basePath, strate
                   <span class="text-sm font-mono text-zinc-700 dark:text-zinc-300">${(data.total.output_cost).toFixed(2)} $</span>
                 </td>
               </tr>
-              <tr>
+              <tr id="total-total-price">
                 <td class="py-1">
                   <div class="flex items-center justify-left space-x-1 text-zinc-700 dark:text-zinc-300">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
@@ -651,7 +651,7 @@ function createDetailRow(stats, modelName, data, vendor, model, basePath, strate
                   <span class="text-sm font-mono text-zinc-700 dark:text-zinc-300">${(data.total.total_cost).toFixed(2)} $</span>
                 </td>
               </tr>
-              <tr>
+              <tr id="total-time">
                 <td class="py-1">
                   <div class="flex items-center justify-left space-x-1 text-zinc-700 dark:text-zinc-300">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
@@ -669,7 +669,7 @@ function createDetailRow(stats, modelName, data, vendor, model, basePath, strate
         </div>
       </div>
       <div class="overflow-x-auto rounded-lg shadow-lg" style="max-height: 180px; overflow-y: auto;">
-        <table class="w-full table-auto">
+        <table id="detail-runs-table" class="w-full table-auto">
           <thead class="bg-zinc-100 dark:bg-zinc-700 sticky top-0">
             <tr class="text-xs border-b border-zinc-300 dark:border-zinc-600">
               <!-- Stats Section -->
