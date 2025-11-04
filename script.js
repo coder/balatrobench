@@ -354,7 +354,7 @@ function createPerformanceBarChart(entries) {
           ticks: {
             color: themePalette.axis,
             font: {
-              size: 12,
+              size: 14,
               family: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Courier New, monospace'
             }
           },
@@ -376,7 +376,7 @@ function createPerformanceBarChart(entries) {
           ticks: {
             color: themePalette.axis,
             font: {
-              size: 12,
+              size: 14,
               family: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Courier New, monospace'
             }
           },
