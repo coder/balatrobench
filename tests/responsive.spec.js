@@ -385,7 +385,7 @@ test.describe('lg breakpoint (1024px+)', () => {
     expect(await isColumnHidden(page, 'Vendor')).toBe(true);
   });
 
-  test('community page shows token and author columns', async ({
+  test('community page shows token columns at lg', async ({
     page
   }) => {
     await page.setViewportSize({
@@ -399,9 +399,8 @@ test.describe('lg breakpoint (1024px+)', () => {
     expect(await isColumnVisible(page, 'Average input tokens')).toBe(true);
     expect(await isColumnVisible(page, 'Average output tokens')).toBe(true);
 
-    // Author column should be visible (different from main leaderboard)
-    const authorHeader = page.locator('th:has-text("Author")');
-    await expect(authorHeader).toBeVisible();
+    // Author column should still be hidden at lg (appears at xl)
+    expect(await isColumnHidden(page, 'Author')).toBe(true);
 
     // All previous columns should still be visible
     expect(await isColumnVisible(page, 'Valid tool calls executable in state')).toBe(
@@ -409,32 +408,6 @@ test.describe('lg breakpoint (1024px+)', () => {
     expect(await isColumnVisible(page, 'Average time per tool call')).toBe(true);
   });
 
-  /**
-   * Page-specific feature: Author column appears at lg on community page
-   */
-  test('author column appears on community page only', async ({
-    page
-  }) => {
-    await page.setViewportSize({
-      width: 1024,
-      height: 768
-    });
-
-    // Community page: Author visible at lg
-    await page.goto('/community.html');
-    await page.waitForSelector('tbody tr');
-
-    const authorHeaderCommunity = page.locator('th:has-text("Author")');
-    await expect(authorHeaderCommunity).toBeVisible();
-
-    // Main page: No author column
-    await page.goto('/');
-    await page.waitForSelector('tbody tr');
-
-    const authorHeaderMain = page.locator('th:has-text("Author")');
-    const authorCount = await authorHeaderMain.count();
-    expect(authorCount).toBe(0);
-  });
 });
 
 test.describe('xl breakpoint (1280px+)', () => {
@@ -510,6 +483,33 @@ test.describe('xl breakpoint (1280px+)', () => {
     const vendorHeaderCommunity = page.locator('th:has-text("Vendor")');
     const vendorCount = await vendorHeaderCommunity.count();
     expect(vendorCount).toBe(0);
+  });
+
+  /**
+   * Page-specific feature: Author column appears at xl on community page
+   */
+  test('author column appears on community page only', async ({
+    page
+  }) => {
+    await page.setViewportSize({
+      width: 1280,
+      height: 720
+    });
+
+    // Community page: Author visible at xl
+    await page.goto('/community.html');
+    await page.waitForSelector('tbody tr');
+
+    const authorHeaderCommunity = page.locator('th:has-text("Author")');
+    await expect(authorHeaderCommunity).toBeVisible();
+
+    // Main page: No author column
+    await page.goto('/');
+    await page.waitForSelector('tbody tr');
+
+    const authorHeaderMain = page.locator('th:has-text("Author")');
+    const authorCount = await authorHeaderMain.count();
+    expect(authorCount).toBe(0);
   });
 
   /**
