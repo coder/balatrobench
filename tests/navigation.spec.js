@@ -149,7 +149,7 @@ test.describe('External Links', () => {
     });
     await expect(contributeLink).toBeVisible();
     await expect(contributeLink).toHaveAttribute('href',
-      'https://github.com/S1M0N38/balatrollm/blob/main/CONTRIBUTING.md#contributing-strategies'
+      'https://coder.github.io/balatrollm/strategies/'
     );
 
     // Test Balatro game link (about.html)
