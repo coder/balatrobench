@@ -5,273 +5,245 @@ const {
 } = require('@playwright/test');
 
 /**
- * Chart Rendering Tests
+ * Chart Loading Tests
  *
- * These tests verify that Chart.js visualizations render correctly.
- * We check for the presence of canvas elements and verify that charts
- * are displayed when expected (performance bar chart on page load,
- * histograms and pie charts in expandable detail rows).
- *
- * Note: Tests verify that charts render (canvas exists), not chart content.
+ * These tests verify that charts load correctly and display expected values.
+ * Tests check performance chart labels, histogram legends, pie chart legends,
+ * and their correspondence with table data.
  */
 
-test.describe('Chart rendering', () => {
+// Set viewport to XL breakpoint for all tests
+test.use({
+  viewport: {
+    width: 1280,
+    height: 720
+  }
+});
+
+test.describe('Chart data loading [xl]', () => {
   /**
-   * Test: Performance bar chart renders on index page
-   * Verifies that the main performance comparison chart displays on desktop
+   * Test: Performance chart x-axis labels match main table model names
+   * Verifies: Chart labels correspond to models in leaderboard table
    */
-  test('performance bar chart renders on index page (desktop)', async ({
+  test('performance chart labels match table models [index]', async ({
     page
   }) => {
-    // Set desktop viewport to ensure chart is visible
-    await page.setViewportSize({
-      width: 1280,
-      height: 720
-    });
-
-    // Navigate to the main leaderboard
     await page.goto('/');
 
-    // Wait for the page to load data
+    // Wait for table to load
     await page.waitForSelector('tbody tr');
 
-    // Look for the performance chart canvas
-    // The chart is created with id="performance-chart"
-    const chartCanvas = page.locator('#performance-chart');
+    // Wait for performance chart to load
+    await page.waitForSelector('#performance-chart');
 
-    // Verify the canvas element exists
-    await expect(chartCanvas).toBeVisible();
+    // Get model names from the main table (2nd column)
+    const tableModelNames = await page.locator('#leaderboard tbody tr td:nth-child(2)')
+      .allTextContents();
 
-    // Verify it's a canvas element (Chart.js renders to canvas)
-    const tagName = await chartCanvas.evaluate(el => el.tagName);
-    expect(tagName).toBe('CANVAS');
+    // Clean up whitespace from table data
+    const cleanTableNames = tableModelNames.map(name => name.trim());
+
+    // Get x-axis labels from the performance chart using Chart.js API
+    const chartLabels = await page.evaluate(() => {
+      const canvas = document.getElementById('performance-chart');
+      const chart = Chart.getChart(canvas);
+      return chart ? chart.data.labels : [];
+    });
+
+    // Verify that chart labels match table model names
+    expect(chartLabels.length).toBeGreaterThan(0);
+    expect(chartLabels).toEqual(cleanTableNames);
   });
 
   /**
-   * Test: Community page performance chart
-   * Note: Community page currently does not have a performance chart
-   * This test is skipped as it's not part of the current implementation
+   * Test: Round distribution histogram legend seeds match runs table
+   * Verifies: Histogram legend labels correspond to seeds in runs table
    */
-  test.skip('performance bar chart renders on community page (desktop)', async ({
+  test('histogram legend seeds match runs table [index]', async ({
     page
   }) => {
-    // Set desktop viewport
-    await page.setViewportSize({
-      width: 1280,
-      height: 720
+    await page.goto('/');
+
+    // Wait for main table to load
+    await page.waitForSelector('tbody tr');
+
+    // Click first row to expand detail view
+    const firstRow = page.locator('tbody tr').first();
+    await firstRow.click();
+
+    // Wait for runs table to appear
+    await page.waitForSelector('#detail-runs-table tbody tr', {
+      timeout: 5000
     });
 
-    // Navigate to the community page
+    // Wait for histogram canvas to appear (using a pattern since ID is dynamic)
+    const histogramCanvas = page.locator('canvas[id^="histogram-"]').first();
+    await histogramCanvas.waitFor({
+      timeout: 5000
+    });
+
+    // Get seeds from the runs table (1st column)
+    const tableSeeds = await page.locator('#detail-runs-table tbody tr td:first-child')
+      .allTextContents();
+
+    // Get unique seeds and sort (matching the chart's behavior)
+    const uniqueTableSeeds = [...new Set(tableSeeds.map(s => s.trim()))].sort();
+
+    // Get legend labels from the histogram using Chart.js API
+    const histogramCanvasId = await histogramCanvas.getAttribute('id');
+    const legendLabels = await page.evaluate((canvasId) => {
+      const canvas = document.getElementById(canvasId);
+      const chart = Chart.getChart(canvas);
+      if (!chart || !chart.data.datasets) return [];
+      // Extract dataset labels (each seed is a dataset in the stacked bar chart)
+      return chart.data.datasets.map(dataset => dataset.label);
+    }, histogramCanvasId);
+
+    // Verify that legend labels match table seeds
+    expect(legendLabels.length).toBeGreaterThan(0);
+    expect(legendLabels.sort()).toEqual(uniqueTableSeeds);
+  });
+
+  /**
+   * Test: Provider pie chart legend has at least one member
+   * Verifies: Pie chart legend contains provider data
+   */
+  test('pie chart legend has members [index]', async ({
+    page
+  }) => {
+    await page.goto('/');
+
+    // Wait for main table to load
+    await page.waitForSelector('tbody tr');
+
+    // Click first row to expand detail view
+    const firstRow = page.locator('tbody tr').first();
+    await firstRow.click();
+
+    // Wait for runs table to appear
+    await page.waitForSelector('#detail-runs-table tbody tr', {
+      timeout: 5000
+    });
+
+    // Wait for pie chart canvas to appear (using a pattern since ID is dynamic)
+    const pieCanvas = page.locator('canvas[id^="pie-"]').first();
+    await pieCanvas.waitFor({
+      timeout: 5000
+    });
+
+    // Get legend labels from the pie chart using Chart.js API
+    const pieCanvasId = await pieCanvas.getAttribute('id');
+    const legendLabels = await page.evaluate((canvasId) => {
+      const canvas = document.getElementById(canvasId);
+      const chart = Chart.getChart(canvas);
+      if (!chart || !chart.data.labels) return [];
+      return chart.data.labels;
+    }, pieCanvasId);
+
+    // Verify that legend has at least one provider
+    expect(legendLabels.length).toBeGreaterThan(0);
+
+    // Verify that each label is a non-empty string
+    legendLabels.forEach(label => {
+      expect(label).toBeTruthy();
+      expect(typeof label).toBe('string');
+      expect(label.length).toBeGreaterThan(0);
+    });
+  });
+
+  /**
+   * Test: Round distribution histogram legend seeds match runs table (community page)
+   * Verifies: Histogram legend labels correspond to seeds in runs table
+   */
+  test('histogram legend seeds match runs table [community]', async ({
+    page
+  }) => {
     await page.goto('/community.html');
 
-    // Wait for the page to load data
+    // Wait for main table to load
     await page.waitForSelector('tbody tr');
 
-    // Look for the performance chart canvas
-    const chartCanvas = page.locator('#performance-chart');
-
-    // Verify the canvas element exists
-    await expect(chartCanvas).toBeVisible();
-  });
-
-  /**
-   * Test: Round histogram appears in expandable detail row
-   * Verifies that clicking a row displays a histogram chart
-   */
-  test('round histogram renders when row is expanded', async ({
-    page
-  }) => {
-    // Set desktop viewport (expandable rows only work on lg+ screens)
-    await page.setViewportSize({
-      width: 1280,
-      height: 720
-    });
-
-    // Navigate to the main leaderboard
-    await page.goto('/');
-
-    // Wait for table rows to load
-    await page.waitForSelector('tbody tr');
-
-    // Click the first data row to expand details
+    // Click first row to expand detail view
     const firstRow = page.locator('tbody tr').first();
     await firstRow.click();
 
-    // Wait for the detail row to appear
-    // The detail row should contain a canvas for the histogram
-    await page.waitForSelector('tr.detail-row', {
+    // Wait for runs table to appear
+    await page.waitForSelector('#detail-runs-table tbody tr', {
       timeout: 5000
     });
 
-    // Look for the histogram canvas
-    // Histogram is created with a canvas element in the detail row
-    const histogramCanvas = page.locator('tr.detail-row canvas').first();
+    // Wait for histogram canvas to appear (using a pattern since ID is dynamic)
+    const histogramCanvas = page.locator('canvas[id^="histogram-"]').first();
+    await histogramCanvas.waitFor({
+      timeout: 5000
+    });
 
-    // Verify the histogram canvas exists
-    await expect(histogramCanvas).toBeVisible();
+    // Get seeds from the runs table (1st column)
+    const tableSeeds = await page.locator('#detail-runs-table tbody tr td:first-child')
+      .allTextContents();
+
+    // Get unique seeds and sort (matching the chart's behavior)
+    const uniqueTableSeeds = [...new Set(tableSeeds.map(s => s.trim()))].sort();
+
+    // Get legend labels from the histogram using Chart.js API
+    const histogramCanvasId = await histogramCanvas.getAttribute('id');
+    const legendLabels = await page.evaluate((canvasId) => {
+      const canvas = document.getElementById(canvasId);
+      const chart = Chart.getChart(canvas);
+      if (!chart || !chart.data.datasets) return [];
+      // Extract dataset labels (each seed is a dataset in the stacked bar chart)
+      return chart.data.datasets.map(dataset => dataset.label);
+    }, histogramCanvasId);
+
+    // Verify that legend labels match table seeds
+    expect(legendLabels.length).toBeGreaterThan(0);
+    expect(legendLabels.sort()).toEqual(uniqueTableSeeds);
   });
 
   /**
-   * Test: Provider pie chart appears in expandable detail row
-   * Verifies that the provider usage pie chart renders when row is expanded
+   * Test: Provider pie chart legend has at least one member (community page)
+   * Verifies: Pie chart legend contains provider data
    */
-  test('provider pie chart renders when row is expanded', async ({
+  test('pie chart legend has members [community]', async ({
     page
   }) => {
-    // Set desktop viewport
-    await page.setViewportSize({
-      width: 1280,
-      height: 720
-    });
+    await page.goto('/community.html');
 
-    // Navigate to the main leaderboard
-    await page.goto('/');
-
-    // Wait for table rows to load
+    // Wait for main table to load
     await page.waitForSelector('tbody tr');
 
-    // Click the first data row to expand details
+    // Click first row to expand detail view
     const firstRow = page.locator('tbody tr').first();
     await firstRow.click();
 
-    // Wait for the detail row to appear
-    await page.waitForSelector('tr.detail-row', {
+    // Wait for runs table to appear
+    await page.waitForSelector('#detail-runs-table tbody tr', {
       timeout: 5000
     });
 
-    // Look for canvas elements in the detail row
-    // There should be at least 2: histogram and pie chart
-    const canvasElements = page.locator('tr.detail-row canvas');
-
-    // Count the canvas elements
-    const canvasCount = await canvasElements.count();
-
-    // Should have at least 2 charts (histogram and pie chart)
-    expect(canvasCount).toBeGreaterThanOrEqual(2);
-  });
-
-  /**
-   * Test: Charts render with correct theme colors
-   * Verifies that Chart.js charts adapt to light/dark theme
-   */
-  test('charts render in light mode', async ({
-    page
-  }) => {
-    // Set desktop viewport
-    await page.setViewportSize({
-      width: 1280,
-      height: 720
-    });
-
-    // Force light color scheme
-    await page.emulateMedia({
-      colorScheme: 'light'
-    });
-
-    // Navigate to the main leaderboard
-    await page.goto('/');
-
-    // Wait for data to load
-    await page.waitForSelector('tbody tr');
-
-    // Verify the performance chart exists
-    const chartCanvas = page.locator('#performance-chart');
-    await expect(chartCanvas).toBeVisible();
-
-    // The chart should render (this verifies theme-aware code doesn't break)
-    const canvasWidth = await chartCanvas.evaluate(el => el.width);
-    expect(canvasWidth).toBeGreaterThan(0);
-  });
-
-  test('charts render in dark mode', async ({
-    page
-  }) => {
-    // Set desktop viewport
-    await page.setViewportSize({
-      width: 1280,
-      height: 720
-    });
-
-    // Force dark color scheme
-    await page.emulateMedia({
-      colorScheme: 'dark'
-    });
-
-    // Navigate to the main leaderboard
-    await page.goto('/');
-
-    // Wait for data to load
-    await page.waitForSelector('tbody tr');
-
-    // Verify the performance chart exists
-    const chartCanvas = page.locator('#performance-chart');
-    await expect(chartCanvas).toBeVisible();
-
-    // The chart should render in dark mode
-    const canvasWidth = await chartCanvas.evaluate(el => el.width);
-    expect(canvasWidth).toBeGreaterThan(0);
-  });
-
-  /**
-   * Test: Multiple charts can be rendered simultaneously
-   * Verifies that expanding multiple rows doesn't break chart rendering
-   */
-  test('multiple detail charts can render simultaneously', async ({
-    page
-  }) => {
-    // Set desktop viewport
-    await page.setViewportSize({
-      width: 1280,
-      height: 720
-    });
-
-    // Navigate to the main leaderboard
-    await page.goto('/');
-
-    // Wait for table rows to load
-    await page.waitForSelector('tbody tr');
-
-    // Expand the first row
-    await page.locator('tbody tr').nth(0).click();
-    await page.waitForSelector('tr.detail-row', {
+    // Wait for pie chart canvas to appear (using a pattern since ID is dynamic)
+    const pieCanvas = page.locator('canvas[id^="pie-"]').first();
+    await pieCanvas.waitFor({
       timeout: 5000
     });
 
-    // Expand the second row (if it exists)
-    const secondRow = page.locator('tbody tr').nth(2); // Skip detail row at nth(1)
-    if (await secondRow.count() > 0) {
-      await secondRow.click();
-    }
+    // Get legend labels from the pie chart using Chart.js API
+    const pieCanvasId = await pieCanvas.getAttribute('id');
+    const legendLabels = await page.evaluate((canvasId) => {
+      const canvas = document.getElementById(canvasId);
+      const chart = Chart.getChart(canvas);
+      if (!chart || !chart.data.labels) return [];
+      return chart.data.labels;
+    }, pieCanvasId);
 
-    // Count all canvas elements on the page
-    // Should include: 1 performance chart + multiple detail charts
-    const allCanvases = page.locator('canvas');
-    const canvasCount = await allCanvases.count();
+    // Verify that legend has at least one provider
+    expect(legendLabels.length).toBeGreaterThan(0);
 
-    // Should have at least the performance chart
-    expect(canvasCount).toBeGreaterThan(0);
-  });
-
-  /**
-   * Test: Chart container exists even before data loads
-   * Verifies that the chart container is present in the HTML
-   */
-  test('performance chart container exists on page load', async ({
-    page
-  }) => {
-    // Set desktop viewport
-    await page.setViewportSize({
-      width: 1280,
-      height: 720
+    // Verify that each label is a non-empty string
+    legendLabels.forEach(label => {
+      expect(label).toBeTruthy();
+      expect(typeof label).toBe('string');
+      expect(label.length).toBeGreaterThan(0);
     });
-
-    // Navigate to the main leaderboard
-    await page.goto('/');
-
-    // Look for the chart container (should exist before data loads)
-    const chartContainer = page.locator('#performance-chart').locator('..');
-
-    // Verify container exists
-    await expect(chartContainer).toBeAttached();
   });
 });
