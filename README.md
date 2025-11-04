@@ -24,7 +24,7 @@ python3 -m http.server 8000
 
 Then visit [http://localhost:8000](http://localhost:8000)
 
-### Local Testing
+### Local Data
 
 To test with local benchmark data, symlink the `balatrobot/benchmarks` directory:
 
@@ -33,3 +33,26 @@ ln -s ../balatrobot/benchmarks benchmarks
 ```
 
 Then in `config.js`, comment/uncomment to switch environment to `development`.
+
+## Testing
+
+The project includes end-to-end tests using Playwright. Make sure the local server is running before executing tests.
+
+### Running Tests
+
+```bash
+# Install dependencies (first time only)
+npm install
+
+# Run tests headless (default)
+npm test
+
+# Run tests with interactive UI
+npx playwright test --ui
+
+# Run tests with browser visible
+npm run test:headed
+
+# Run tests in debug mode
+npm run test:debug
+```
