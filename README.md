@@ -56,3 +56,11 @@ npm run test:headed
 # Run tests in debug mode
 npm run test:debug
 ```
+
+## Upload to CDN
+
+This project make use of BunnyCDN for hosting static assets in benchmarks directory. If you have access to the CDN, you can upload the data with
+
+```
+uv run upload.py
+```
