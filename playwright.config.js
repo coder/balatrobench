@@ -56,7 +56,7 @@ module.exports = defineConfig({
   // Auto-start local dev server before running tests
   webServer: {
     // Use Python's built-in HTTP server (no dependencies needed)
-    command: 'python3 -m http.server 8000',
+    command: 'python3 -m http.server 8000 --directory site',
     url: 'http://localhost:8000',
     reuseExistingServer: !process.env.CI,
     // Give the server time to start
