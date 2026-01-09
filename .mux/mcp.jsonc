@@ -9,11 +9,9 @@
         }
       }
     },
-    "playwright": {
-      "command": "npx",
-      "args": [
-        "@playwright/mcp@latest"
-      ]
+    "playwrite": {
+      "command": "npx @playwright/mcp@latest",
+      "disabled": true
     }
   }
 }
