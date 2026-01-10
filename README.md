@@ -18,12 +18,12 @@ BalatroBench is a benchmark analysis tool and leaderboard for [BalatroLLM](https
 
 ## 📚 Documentation
 
-#### Requirements
+### Requirements
 
 - [uv](https://docs.astral.sh/uv/) - Python package manager
 - [npm](https://www.npmjs.com/) - Node.js package manager
 
-#### Installation
+### Installation
 
 Install Python and npm dependencies:
 
@@ -40,7 +40,7 @@ For browser binaries (first time only):
 npx playwright install
 ```
 
-#### Generating Benchmarks
+### Generating Benchmarks
 
 Generate benchmark data from BalatroLLM runs:
 
@@ -55,7 +55,7 @@ uv run balatrobench --input-dir /path/to/runs/v1.0.0 --output-dir /path/to/outpu
 uv run balatrobench --webp
 ```
 
-#### Starting the Website
+### Starting the Website
 
 Serve the site locally:
 
@@ -69,7 +69,7 @@ Then visit [http://localhost:8000](http://localhost:8000)
 
 To use local benchmark data, set `environment: 'development'` in `site/config.js`.
 
-#### Running Tests
+### Running Tests
 
 End-to-end tests use Playwright:
 
