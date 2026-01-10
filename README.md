@@ -19,36 +19,39 @@
 To run this project locally:
 
 ```bash
-python3 -m http.server 8000
+# Serve from site/ directory
+python3 -m http.server 8000 --directory site
 ```
 
 Then visit [http://localhost:8000](http://localhost:8000)
 
 ### Local Data
 
-To test with local benchmark data, symlink the `balatrobot/benchmarks` directory:
+Generate benchmark data from BalatroLLM runs:
 
 ```bash
-ln -s ../balatrobot/benchmarks benchmarks
+# Generate benchmark data (requires ../balatrollm/runs symlinked or present)
+uv run balatrobench --input-dir runs/v1.0.0
 ```
 
-Then in `config.js`, comment/uncomment to switch environment to `development`.
+Then in `site/config.js`, set `environment: 'development'` to use local data.
 
 ## Testing
 
-The project includes end-to-end tests using Playwright. Make sure the local server is running before executing tests.
+The project includes end-to-end tests using Playwright.
 
 ### Running Tests
 
 ```bash
 # Install dependencies (first time only)
 npm install
+npx playwright install  # Install browser binaries
 
 # Run tests headless (default)
 npm test
 
 # Run tests with interactive UI
-npx playwright test --ui
+npm run test:ui
 
 # Run tests with browser visible
 npm run test:headed
@@ -56,6 +59,8 @@ npm run test:headed
 # Run tests in debug mode
 npm run test:debug
 ```
+
+The test server is automatically started by Playwright (see `playwright.config.js`).
 
 ## Upload to CDN
 
