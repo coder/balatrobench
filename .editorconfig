@@ -1,6 +1,6 @@
 root = true
 
-# All files
+# All files - General Settings
 [*]
 charset = utf-8
 end_of_line = lf
@@ -12,12 +12,17 @@ trim_trailing_whitespace = true
 indent_style = space
 indent_size = 2
 max_line_length = 100
+brace_style = collapse,preserve-inline
+space_after_anon_function = true
 
 # HTML files
 [*.{html,htm}]
 indent_style = space
 indent_size = 2
 max_line_length = 120
+indent_inner_html = true
+wrap_attributes = auto
+indent_scripts = normal
 
 # CSS files
 [*.{css,scss,sass,less}]
