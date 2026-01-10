@@ -28,8 +28,8 @@ def analyzer() -> BenchmarkAnalyzer:
 
 
 @pytest.fixture
-def sample_strategy() -> Strategy:
-    """Sample Strategy for tests."""
+def simple_strategy() -> Strategy:
+    """Simple Strategy for local tests (distinct from conftest.sample_strategy)."""
     return Strategy(
         name="Default",
         description="Test strategy",
@@ -159,12 +159,12 @@ def test_subdirs_only_files(tmp_path: Path) -> None:
 def test_pooled_std_dev_single_run(
     analyzer: BenchmarkAnalyzer,
     sample_model_a: Model,
-    sample_strategy: Strategy,
+    simple_strategy: Strategy,
 ) -> None:
     """Single run with any calls_total <= 1 returns 0 for pooled std dev."""
     # Create a single run with calls_total = 1
     stats = make_stats(calls_total=1, tokens_in_std=10.0, tokens_in_avg=100.0)
-    run = make_run("run-1", sample_model_a, sample_strategy, stats=stats)
+    run = make_run("run-1", sample_model_a, simple_strategy, stats=stats)
     runs = (run,)
 
     result = analyzer._pooled_std_dev_from_runs(
@@ -175,17 +175,17 @@ def test_pooled_std_dev_single_run(
         total_n=1,
     )
 
-    assert result == 0.0
+    assert result == pytest.approx(0.0)
 
 
 def test_pooled_std_dev_zero_total_n(
     analyzer: BenchmarkAnalyzer,
     sample_model_a: Model,
-    sample_strategy: Strategy,
+    simple_strategy: Strategy,
 ) -> None:
     """total_n = 0 returns 0 for pooled std dev."""
     stats = make_stats(calls_total=0, tokens_in_std=0.0, tokens_in_avg=0.0)
-    run = make_run("run-1", sample_model_a, sample_strategy, stats=stats)
+    run = make_run("run-1", sample_model_a, simple_strategy, stats=stats)
     runs = (run,)
 
     result = analyzer._pooled_std_dev_from_runs(
@@ -196,13 +196,13 @@ def test_pooled_std_dev_zero_total_n(
         total_n=0,
     )
 
-    assert result == 0.0
+    assert result == pytest.approx(0.0)
 
 
 def test_pooled_std_dev_multiple_runs(
     analyzer: BenchmarkAnalyzer,
     sample_model_a: Model,
-    sample_strategy: Strategy,
+    simple_strategy: Strategy,
 ) -> None:
     """Pooled std dev is calculated correctly for multiple runs.
 
@@ -221,11 +221,11 @@ def test_pooled_std_dev_multiple_runs(
     """
     # Run 1: n=10, mean=100, std=5
     stats1 = make_stats(calls_total=10, tokens_in_std=5.0, tokens_in_avg=100.0)
-    run1 = make_run("run-1", sample_model_a, sample_strategy, stats=stats1)
+    run1 = make_run("run-1", sample_model_a, simple_strategy, stats=stats1)
 
     # Run 2: n=10, mean=110, std=5
     stats2 = make_stats(calls_total=10, tokens_in_std=5.0, tokens_in_avg=110.0)
-    run2 = make_run("run-2", sample_model_a, sample_strategy, stats=stats2)
+    run2 = make_run("run-2", sample_model_a, simple_strategy, stats=stats2)
 
     runs = (run1, run2)
     overall_mean = 105.0
@@ -252,13 +252,13 @@ def test_pooled_std_dev_multiple_runs(
 def test_compute_leaderboard_entry_single_run(
     analyzer: BenchmarkAnalyzer,
     sample_model_a: Model,
-    sample_strategy: Strategy,
+    simple_strategy: Strategy,
 ) -> None:
     """Single run should have std_round = 0."""
     run = make_run(
         "run-1",
         sample_model_a,
-        sample_strategy,
+        simple_strategy,
         final_round=10,
         run_won=True,
         run_completed=True,
@@ -270,14 +270,14 @@ def test_compute_leaderboard_entry_single_run(
     assert entry.run_count == 1
     assert entry.run_wins == 1
     assert entry.run_completed == 1
-    assert entry.avg_round == 10.0
-    assert entry.std_round == 0.0  # Single run = no variance
+    assert entry.avg_round == pytest.approx(10.0)
+    assert entry.std_round == pytest.approx(0.0)  # Single run = no variance
 
 
 def test_compute_leaderboard_entry_aggregates(
     analyzer: BenchmarkAnalyzer,
     sample_model_a: Model,
-    sample_strategy: Strategy,
+    simple_strategy: Strategy,
 ) -> None:
     """Correctly sums/averages stats across multiple runs."""
     # Run 1: rounds=8, won=False, completed=True
@@ -291,7 +291,7 @@ def test_compute_leaderboard_entry_aggregates(
     run1 = make_run(
         "run-1",
         sample_model_a,
-        sample_strategy,
+        simple_strategy,
         final_round=8,
         run_won=False,
         run_completed=True,
@@ -309,7 +309,7 @@ def test_compute_leaderboard_entry_aggregates(
     run2 = make_run(
         "run-2",
         sample_model_a,
-        sample_strategy,
+        simple_strategy,
         final_round=12,
         run_won=True,
         run_completed=True,
@@ -327,7 +327,7 @@ def test_compute_leaderboard_entry_aggregates(
     run3 = make_run(
         "run-3",
         sample_model_a,
-        sample_strategy,
+        simple_strategy,
         final_round=10,
         run_won=False,
         run_completed=False,
@@ -343,29 +343,29 @@ def test_compute_leaderboard_entry_aggregates(
     assert entry.run_completed == 2  # run1 and run2 completed
 
     # Round statistics
-    assert entry.avg_round == 10.0  # (8 + 12 + 10) / 3 = 10
+    assert entry.avg_round == pytest.approx(10.0)  # (8 + 12 + 10) / 3 = 10
     # std_round for [8, 12, 10] = statistics.stdev([8, 12, 10])
     import statistics
 
-    assert abs(entry.std_round - statistics.stdev([8, 12, 10])) < 0.001
+    assert entry.std_round == pytest.approx(statistics.stdev([8, 12, 10]))
 
     # Aggregated stats
     assert entry.stats.calls_total == 150  # 50 * 3
     assert entry.stats.tokens_in_total == 15000  # 5000 * 3
     assert entry.stats.tokens_out_total == 3000  # 1000 * 3
     assert entry.stats.time_total_ms == 75000  # 25000 * 3
-    assert entry.stats.cost_total == 1.5  # 0.5 * 3
+    assert entry.stats.cost_total == pytest.approx(1.5)  # 0.5 * 3
 
     # Per-call averages
-    assert entry.stats.tokens_in_avg == 100.0  # 15000 / 150
-    assert entry.stats.tokens_out_avg == 20.0  # 3000 / 150
-    assert entry.stats.cost_avg == 0.01  # 1.5 / 150
+    assert entry.stats.tokens_in_avg == pytest.approx(100.0)  # 15000 / 150
+    assert entry.stats.tokens_out_avg == pytest.approx(20.0)  # 3000 / 150
+    assert entry.stats.cost_avg == pytest.approx(0.01)  # 1.5 / 150
 
 
 def test_compute_leaderboard_entry_zero_calls(
     analyzer: BenchmarkAnalyzer,
     sample_model_a: Model,
-    sample_strategy: Strategy,
+    simple_strategy: Strategy,
 ) -> None:
     """Zero calls_total handles division by zero correctly."""
     stats = make_stats(
@@ -379,17 +379,17 @@ def test_compute_leaderboard_entry_zero_calls(
         cost_total=0.0,
         cost_avg=0.0,
     )
-    run = make_run("run-1", sample_model_a, sample_strategy, stats=stats)
+    run = make_run("run-1", sample_model_a, simple_strategy, stats=stats)
     runs = (run,)
 
     # Should not raise ZeroDivisionError
     entry = analyzer._compute_leaderboard_entry(runs)
 
     # Averages should all be 0
-    assert entry.stats.tokens_in_avg == 0.0
-    assert entry.stats.tokens_out_avg == 0.0
-    assert entry.stats.time_avg_ms == 0.0
-    assert entry.stats.cost_avg == 0.0
+    assert entry.stats.tokens_in_avg == pytest.approx(0.0)
+    assert entry.stats.tokens_out_avg == pytest.approx(0.0)
+    assert entry.stats.time_avg_ms == pytest.approx(0.0)
+    assert entry.stats.cost_avg == pytest.approx(0.0)
 
 
 # =============================================================================
@@ -399,86 +399,86 @@ def test_compute_leaderboard_entry_zero_calls(
 
 def test_leaderboard_sorting(
     analyzer: BenchmarkAnalyzer,
-    sample_strategy: Strategy,
+    simple_strategy: Strategy,
     sample_model_a: Model,
     sample_model_b: Model,
 ) -> None:
     """Leaderboard entries are sorted by avg_round descending."""
     # Model A: low avg_round (8)
-    run_a = make_run("run-a", sample_model_a, sample_strategy, final_round=8)
+    run_a = make_run("run-a", sample_model_a, simple_strategy, final_round=8)
     runs_a = Runs(
         generated_at=0,
         model=sample_model_a,
-        strategy=sample_strategy,
+        strategy=simple_strategy,
         runs=(run_a,),
     )
 
     # Model B: high avg_round (15)
-    run_b = make_run("run-b", sample_model_b, sample_strategy, final_round=15)
+    run_b = make_run("run-b", sample_model_b, simple_strategy, final_round=15)
     runs_b = Runs(
         generated_at=0,
         model=sample_model_b,
-        strategy=sample_strategy,
+        strategy=simple_strategy,
         runs=(run_b,),
     )
 
     # Create leaderboard (pass in unsorted order: A first, B second)
     with patch("time.time", return_value=1234567890):
         leaderboard = analyzer.create_models_leaderboard(
-            sample_strategy, [runs_a, runs_b]
+            simple_strategy, [runs_a, runs_b]
         )
 
     # Entries should be sorted by avg_round descending (B first, A second)
     assert len(leaderboard.entries) == 2
     assert leaderboard.entries[0].model == sample_model_b  # Higher avg_round
-    assert leaderboard.entries[0].avg_round == 15.0
+    assert leaderboard.entries[0].avg_round == pytest.approx(15.0)
     assert leaderboard.entries[1].model == sample_model_a  # Lower avg_round
-    assert leaderboard.entries[1].avg_round == 8.0
+    assert leaderboard.entries[1].avg_round == pytest.approx(8.0)
 
     # Verify leaderboard metadata
-    assert leaderboard.strategy == sample_strategy
+    assert leaderboard.strategy == simple_strategy
     assert leaderboard.generated_at == 1234567890
 
 
 def test_create_models_leaderboard_empty_list(
     analyzer: BenchmarkAnalyzer,
-    sample_strategy: Strategy,
+    simple_strategy: Strategy,
 ) -> None:
     """Empty runs list creates leaderboard with no entries."""
     with patch("time.time", return_value=1234567890):
-        leaderboard = analyzer.create_models_leaderboard(sample_strategy, [])
+        leaderboard = analyzer.create_models_leaderboard(simple_strategy, [])
 
     assert len(leaderboard.entries) == 0
-    assert leaderboard.strategy == sample_strategy
+    assert leaderboard.strategy == simple_strategy
 
 
 def test_create_models_leaderboard_ties(
     analyzer: BenchmarkAnalyzer,
-    sample_strategy: Strategy,
+    simple_strategy: Strategy,
     sample_model_a: Model,
     sample_model_b: Model,
 ) -> None:
     """Leaderboard handles ties in avg_round (order is stable)."""
     # Both models have same avg_round
-    run_a = make_run("run-a", sample_model_a, sample_strategy, final_round=10)
+    run_a = make_run("run-a", sample_model_a, simple_strategy, final_round=10)
     runs_a = Runs(
         generated_at=0,
         model=sample_model_a,
-        strategy=sample_strategy,
+        strategy=simple_strategy,
         runs=(run_a,),
     )
 
-    run_b = make_run("run-b", sample_model_b, sample_strategy, final_round=10)
+    run_b = make_run("run-b", sample_model_b, simple_strategy, final_round=10)
     runs_b = Runs(
         generated_at=0,
         model=sample_model_b,
-        strategy=sample_strategy,
+        strategy=simple_strategy,
         runs=(run_b,),
     )
 
-    leaderboard = analyzer.create_models_leaderboard(sample_strategy, [runs_a, runs_b])
+    leaderboard = analyzer.create_models_leaderboard(simple_strategy, [runs_a, runs_b])
 
     # Both should be present with same avg_round
     assert len(leaderboard.entries) == 2
-    assert leaderboard.entries[0].avg_round == 10.0
-    assert leaderboard.entries[1].avg_round == 10.0
+    assert leaderboard.entries[0].avg_round == pytest.approx(10.0)
+    assert leaderboard.entries[1].avg_round == pytest.approx(10.0)
