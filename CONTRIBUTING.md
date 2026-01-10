@@ -26,6 +26,7 @@ Test thoroughly with different seeds and game scenarios to ensure your strategy 
 Visit the **Community** page on our website and find the submission form. You'll need to provide:
 
 **Required Fields:**
+
 - **Provider/Model**: The AI provider and model
 - **Base URL**: API endpoint for your chosen provider
 - **API Key**: Your API key for the service
@@ -36,6 +37,7 @@ Visit the **Community** page on our website and find the submission form. You'll
 ### Step 3: Server Validation
 
 After submission:
+
 - We'll automatically run your strategy on our benchmark servers
 - Results will be added to the leaderboard if validation passes
 - No manual review process - fully automated
