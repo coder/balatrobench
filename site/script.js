@@ -45,6 +45,40 @@ let PAGE_TYPE = null; // 'main' or 'community'
 const DATA_BASE_URL = window.CONFIG ? window.CONFIG.getData() : '';
 const IS_DEV = window.CONFIG ? window.CONFIG.environment === 'development' : false;
 
+/**
+ * Aggregate providers across all runs into a single object.
+ * New schema: each run has providers as array of [name, count] tuples
+ * Converts to {providerName: totalCount} format for charts.
+ * @param {Array} runs - Array of run objects
+ * @returns {Object} Aggregated providers {name: count}
+ */
+function aggregateProviders(runs) {
+  const providers = {};
+  for (const run of runs) {
+    for (const [name, count] of run.providers || []) {
+      providers[name] = (providers[name] || 0) + count;
+    }
+  }
+  return providers;
+}
+
+/**
+ * Compute totals from runs array.
+ * New schema doesn't include data.total, so we compute it client-side.
+ * @param {Array} runs - Array of run objects
+ * @returns {Object} Totals object with input_tokens, output_tokens, total_cost, time_ms
+ */
+function computeTotals(runs) {
+  return {
+    input_tokens: runs.reduce((sum, r) => sum + (r.stats?.tokens_in_total || 0), 0),
+    output_tokens: runs.reduce((sum, r) => sum + (r.stats?.tokens_out_total || 0), 0),
+    // Note: Python schema only has cost_total, not separate cost_in/cost_out totals
+    // We'll compute input/output costs as proportional estimates
+    total_cost: runs.reduce((sum, r) => sum + (r.stats?.cost_total || 0), 0),
+    time_ms: runs.reduce((sum, r) => sum + (r.stats?.time_total_ms || 0), 0),
+  };
+}
+
 // Detect which page we're on
 function detectPageType() {
   const pageTitle = document.title;
@@ -68,11 +102,13 @@ function detectPageType() {
 function buildRequestPath(basePath, vendor, model, runId, requestId, strategy = null, filename =
   'tool_call.json') {
   if (PAGE_TYPE === 'community' && strategy) {
-    // For strategies: basePath/strategy/model/runId/request-{requestId}/filename
-    return `${basePath}/${strategy}/${model}/${runId}/request-${requestId}/${filename}`;
+    // For strategies: basePath/strategy/runId/{requestId}/filename
+    // New schema: no 'request-' prefix, just the request ID (e.g., '00031')
+    return `${basePath}/${strategy}/${runId}/${requestId}/${filename}`;
   } else {
-    // For models: basePath/vendor/model/runId/request-{requestId}/filename
-    return `${basePath}/${vendor}/${model}/${runId}/request-${requestId}/${filename}`;
+    // For models: basePath/vendor/model/runId/{requestId}/filename
+    // New schema: no 'request-' prefix, just the request ID (e.g., '00031')
+    return `${basePath}/${vendor}/${model}/${runId}/${requestId}/${filename}`;
   }
 }
 
@@ -88,19 +124,23 @@ function buildRequestPath(basePath, vendor, model, runId, requestId, strategy = 
  */
 function buildRequestBasePath(basePath, vendor, model, runId, requestId, strategy = null) {
   if (PAGE_TYPE === 'community' && strategy) {
-    return `${basePath}/${strategy}/${model}/${runId}/request-${requestId}`;
+    // New schema: no 'request-' prefix
+    return `${basePath}/${strategy}/${runId}/${requestId}`;
   } else {
-    return `${basePath}/${vendor}/${model}/${runId}/request-${requestId}`;
+    // New schema: no 'request-' prefix
+    return `${basePath}/${vendor}/${model}/${runId}/${requestId}`;
   }
 }
 
 // Get data paths based on page type and version
-function getDataPaths(version) {
+// TODO: Community page should discover available models dynamically from manifest
+// For now, using google/gemini-3-flash-preview as default model for strategies view
+function getDataPaths(version, vendor = 'google', model = 'gemini-3-flash-preview') {
   if (PAGE_TYPE === 'community') {
     return {
       manifestPath: `${DATA_BASE_URL}/benchmarks/strategies/manifest.json`,
-      leaderboardPath: `${DATA_BASE_URL}/benchmarks/strategies/${version}/openai/gpt-oss-20b/leaderboard.json`,
-      detailBasePath: `${DATA_BASE_URL}/benchmarks/strategies/${version}/openai/gpt-oss-20b`
+      leaderboardPath: `${DATA_BASE_URL}/benchmarks/strategies/${version}/${vendor}/${model}/leaderboard.json`,
+      detailBasePath: `${DATA_BASE_URL}/benchmarks/strategies/${version}/${vendor}/${model}`
     };
   } else {
     return {
@@ -116,8 +156,8 @@ async function loadDetails(vendor, model, basePath, strategy = null) {
   try {
     let detailPath;
     if (PAGE_TYPE === 'community' && strategy) {
-      // For strategies: load from strategy/stats.json
-      detailPath = `${basePath}/${strategy}/stats.json`;
+      // For strategies: load from {strategy}/runs.json (new schema)
+      detailPath = `${basePath}/${strategy}/runs.json`;
     } else {
       // For models: load from vendor/model.json
       detailPath = `${basePath}/${vendor}/${model}.json`;
@@ -135,8 +175,9 @@ async function loadDetails(vendor, model, basePath, strategy = null) {
 }
 
 // Create round distribution histogram with stacked bars by seed
-function createRoundHistogram(stats, canvasId) {
-  const rounds = stats.map(stat => stat.final_round);
+// Note: stats parameter is now runs array with new schema
+function createRoundHistogram(runs, canvasId) {
+  const rounds = runs.map(run => run.final_round);
   const maxRound = Math.max(...rounds);
   const minRound = 1;
 
@@ -146,7 +187,8 @@ function createRoundHistogram(stats, canvasId) {
   }, (_, i) => i + minRound);
 
   // Extract unique seeds and sort them for consistent ordering
-  const seeds = [...new Set(stats.map(stat => stat.seed || 'Unknown'))].sort();
+  // New schema: run.config.seed (instead of stat.seed)
+  const seeds = [...new Set(runs.map(run => run.config?.seed || 'Unknown'))].sort();
 
   // Create a color palette for seeds using theme-aware colors
   const ctx = document.getElementById(canvasId).getContext('2d');
@@ -168,7 +210,9 @@ function createRoundHistogram(stats, canvasId) {
   // Create datasets - one per seed
   const datasets = seeds.map(seed => {
     const counts = bins.map(round => {
-      return stats.filter(s => s.final_round === round && (s.seed || 'Unknown') === seed)
+      // New schema: run.config.seed (instead of s.seed)
+      return runs.filter(r => r.final_round === round && (r.config?.seed || 'Unknown') ===
+          seed)
         .length;
     });
 
@@ -278,13 +322,14 @@ function createPerformanceBarChart(entries) {
   const themePalette = colors[currentTheme] || colors.light;
 
   entries.forEach(entry => {
-    const modelParts = entry.config.model.split('/');
-    const vendor = modelParts[0];
-    const model = modelParts[1];
+    // New schema: entry.model.vendor and entry.model.name (instead of entry.config.model)
+    const vendor = entry.model.vendor;
+    const model = entry.model.name;
 
     models.push(model);
-    avgRounds.push(entry.avg_final_round);
-    stdDevs.push(entry.std_dev_final_round);
+    // New schema: avg_round and std_round (instead of avg_final_round and std_dev_final_round)
+    avgRounds.push(entry.avg_round);
+    stdDevs.push(entry.std_round);
     vendors.push(vendor);
 
     const base = themePalette.vendors[vendor];
@@ -451,9 +496,10 @@ function createPerformanceBarChart(entries) {
 
 // Create provider distribution pie chart
 // Provider distribution pie chart (uses defaults for fills; borders match background)
-function createProviderPieChart(data, canvasId) {
-  const providers = Object.keys(data.providers || {});
-  const counts = Object.values(data.providers || {});
+// Note: data.providers is now pre-aggregated as {name: count} object
+function createProviderPieChart(providers, canvasId) {
+  const providerNames = Object.keys(providers || {});
+  const counts = Object.values(providers || {});
 
   const ctx = document.getElementById(canvasId).getContext('2d');
   const theme = getCurrentTheme();
@@ -461,7 +507,7 @@ function createProviderPieChart(data, canvasId) {
   new Chart(ctx, {
     type: 'doughnut',
     data: {
-      labels: providers,
+      labels: providerNames,
       datasets: [{
         data: counts,
         borderWidth: 1
@@ -493,36 +539,44 @@ function createProviderPieChart(data, canvasId) {
 }
 
 // Create inline detail row after clicked row
+// Note: stats parameter is now runs array with new schema
 function createDetailRow(stats, modelName, data, vendor, model, basePath, strategy = null) {
   const detailRow = document.createElement('tr');
   detailRow.className = 'detail-row bg-zinc-50 dark:bg-zinc-800';
 
+  // New schema: compute totals and aggregate providers from runs
+  const runs = stats; // stats is now runs array
+  const totals = computeTotals(runs);
+  const providers = aggregateProviders(runs);
+
   // Create detail table HTML
   let detailTableRows = '';
-  stats.forEach((stat) => {
-    const successRate = ((stat.calls.successful / stat.calls.total) * 100).toFixed(0);
-    const failedRate = ((stat.calls.failed / stat.calls.total) * 100).toFixed(0);
-    const errorRate = ((stat.calls.error / stat.calls.total) * 100).toFixed(0);
+  runs.forEach((run) => {
+    // New schema: run.stats.calls_* (instead of stat.calls.*)
+    const successRate = ((run.stats.calls_success / run.stats.calls_total) * 100).toFixed(0);
+    const failedRate = ((run.stats.calls_failed / run.stats.calls_total) * 100).toFixed(0);
+    const errorRate = ((run.stats.calls_error / run.stats.calls_total) * 100).toFixed(0);
 
-    // Format averages with standard deviation
-    const avgInputTokens = `${stat.average.input_tokens.toFixed(0)}`;
-    const avgInputTokensStdDev = `${stat.std_dev.input_tokens.toFixed(0)}`;
+    // Format averages with standard deviation - New schema: run.stats.*
+    const avgInputTokens = `${run.stats.tokens_in_avg.toFixed(0)}`;
+    const avgInputTokensStdDev = `${run.stats.tokens_in_std.toFixed(0)}`;
 
-    const avgOutputTokens = `${stat.average.output_tokens.toFixed(0)}`;
-    const avgOutputTokensStdDev = `${stat.std_dev.output_tokens.toFixed(0)}`;
+    const avgOutputTokens = `${run.stats.tokens_out_avg.toFixed(0)}`;
+    const avgOutputTokensStdDev = `${run.stats.tokens_out_std.toFixed(0)}`;
 
     // Convert time from ms to seconds
-    const avgTimeSeconds = `${(stat.average.time_ms / 1000).toFixed(2)}`;
-    const avgTimeSecondsStdDev = `${(stat.std_dev.time_ms / 1000).toFixed(2)}`;
+    const avgTimeSeconds = `${(run.stats.time_avg_ms / 1000).toFixed(2)}`;
+    const avgTimeSecondsStdDev = `${(run.stats.time_std_ms / 1000).toFixed(2)}`;
 
     // Cost per tool calls (m$)
-    const avgCost = `${(stat.average.total_cost * 1000).toFixed(2)}`;
-    const costStdDev = `${(stat.std_dev.total_cost * 1000).toFixed(2)}`;
+    const avgCost = `${(run.stats.cost_avg * 1000).toFixed(2)}`;
+    const costStdDev = `${(run.stats.cost_std * 1000).toFixed(2)}`;
 
+    // New schema: run.config.seed (instead of stat.seed) and run.final_round
     detailTableRows += `
       <tr class="hover:bg-zinc-100 hover:dark:bg-zinc-700 text-xs">
-        <td class="px-2 py-2 text-center text-zinc-700 dark:text-zinc-300 font-mono">${stat.seed || 'Unknown'}</td>
-        <td class="px-2 py-2 text-center text-zinc-700 dark:text-zinc-300 font-mono">${stat.final_round}</td>
+        <td class="px-2 py-2 text-center text-zinc-700 dark:text-zinc-300 font-mono">${run.config?.seed || 'Unknown'}</td>
+        <td class="px-2 py-2 text-center text-zinc-700 dark:text-zinc-300 font-mono">${run.final_round}</td>
         <td class="px-2 py-2 text-center text-green-600 dark:text-green-400 font-mono">${successRate}%</td>
         <td class="px-2 py-2 text-center text-yellow-600 dark:text-yellow-400 font-mono">${failedRate}%</td>
         <td class="px-2 py-2 text-center text-red-600 dark:text-red-400 font-mono">${errorRate}%</td>
@@ -591,7 +645,7 @@ function createDetailRow(stats, modelName, data, vendor, model, basePath, strate
                   </div>
                 </td>
                 <td class="text-right py-1">
-                  <span class="text-sm font-mono text-zinc-700 dark:text-zinc-300">${(data.total.input_tokens / 1000000).toFixed(2)} M</span>
+                  <span class="text-sm font-mono text-zinc-700 dark:text-zinc-300">${(totals.input_tokens / 1000000).toFixed(2)} M</span>
                 </td>
               </tr>
               <tr id="total-output-tokens">
@@ -606,35 +660,7 @@ function createDetailRow(stats, modelName, data, vendor, model, basePath, strate
                   </div>
                 </td>
                 <td class="text-right py-1">
-                  <span class="text-sm font-mono text-zinc-700 dark:text-zinc-300">${(data.total.output_tokens / 1000000).toFixed(2)} M</span>
-                </td>
-              </tr>
-              <tr id="total-input-price">
-                <td class="py-1">
-                  <div class="flex items-center justify-left space-x-1 text-zinc-700 dark:text-zinc-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
-                      <path d="M6.375 5.5h.875v1.75h-.875a.875.875 0 1 1 0-1.75ZM8.75 10.5V8.75h.875a.875.875 0 0 1 0 1.75H8.75Z" />
-                      <path fill-rule="evenodd" d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM7.25 3.75a.75.75 0 0 1 1.5 0V4h2.5a.75.75 0 0 1 0 1.5h-2.5v1.75h.875a2.375 2.375 0 1 1 0 4.75H8.75v.25a.75.75 0 0 1-1.5 0V12h-2.5a.75.75 0 0 1 0-1.5h2.5V8.75h-.875a2.375 2.375 0 1 1 0-4.75h.875v-.25Z" clip-rule="evenodd" />
-                    </svg>
-                    <span>in</span>
-                  </div>
-                </td>
-                <td class="text-right py-1">
-                  <span class="text-sm font-mono text-zinc-700 dark:text-zinc-300">${(data.total.input_cost).toFixed(2)} $</span>
-                </td>
-              </tr>
-              <tr id="total-output-price">
-                <td class="py-1">
-                  <div class="flex items-center justify-left space-x-1 text-zinc-700 dark:text-zinc-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
-                      <path d="M6.375 5.5h.875v1.75h-.875a.875.875 0 1 1 0-1.75ZM8.75 10.5V8.75h.875a.875.875 0 0 1 0 1.75H8.75Z" />
-                      <path fill-rule="evenodd" d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM7.25 3.75a.75.75 0 0 1 1.5 0V4h2.5a.75.75 0 0 1 0 1.5h-2.5v1.75h.875a2.375 2.375 0 1 1 0 4.75H8.75v.25a.75.75 0 0 1-1.5 0V12h-2.5a.75.75 0 0 1 0-1.5h2.5V8.75h-.875a2.375 2.375 0 1 1 0-4.75h.875v-.25Z" clip-rule="evenodd" />
-                    </svg>
-                    <span>out</span>
-                  </div>
-                </td>
-                <td class="text-right py-1">
-                  <span class="text-sm font-mono text-zinc-700 dark:text-zinc-300">${(data.total.output_cost).toFixed(2)} $</span>
+                  <span class="text-sm font-mono text-zinc-700 dark:text-zinc-300">${(totals.output_tokens / 1000000).toFixed(2)} M</span>
                 </td>
               </tr>
               <tr id="total-total-price">
@@ -648,7 +674,7 @@ function createDetailRow(stats, modelName, data, vendor, model, basePath, strate
                   </div>
                 </td>
                 <td class="text-right py-1">
-                  <span class="text-sm font-mono text-zinc-700 dark:text-zinc-300">${(data.total.total_cost).toFixed(2)} $</span>
+                  <span class="text-sm font-mono text-zinc-700 dark:text-zinc-300">${(totals.total_cost).toFixed(2)} $</span>
                 </td>
               </tr>
               <tr id="total-time">
@@ -661,7 +687,7 @@ function createDetailRow(stats, modelName, data, vendor, model, basePath, strate
                   </div>
                 </td>
                 <td class="text-right py-1">
-                  <span class="text-sm font-mono text-zinc-700 dark:text-zinc-300">${(data.total.time_ms / 1000).toFixed(0)} s</span>
+                  <span class="text-sm font-mono text-zinc-700 dark:text-zinc-300">${(totals.time_ms / 1000).toFixed(0)} s</span>
                 </td>
               </tr>
             </tbody>
@@ -781,8 +807,8 @@ function createDetailRow(stats, modelName, data, vendor, model, basePath, strate
   // Prepare chart initialization to be called after the row is inserted into the DOM
   detailRow._initCharts = () => {
     try {
-      createRoundHistogram(stats, histogramCanvasId);
-      createProviderPieChart(data, pieChartCanvasId);
+      createRoundHistogram(runs, histogramCanvasId);
+      createProviderPieChart(providers, pieChartCanvasId);
     } catch (e) {
       console.error('Failed to initialize detail charts', e);
     }
@@ -792,18 +818,19 @@ function createDetailRow(stats, modelName, data, vendor, model, basePath, strate
   const perRunTable = detailRow.querySelector('table.table-auto');
   const tbody = perRunTable ? perRunTable.querySelector('tbody') : null;
   if (tbody) {
-    const rows = Array.from(tbody.querySelectorAll('tr'));
-    const runs = Array.isArray(data.runs) ? data.runs : null;
-    if (runs && runs.length > 0 && rows.length > 0) {
-      const count = Math.min(runs.length, rows.length);
+    const tableRows = Array.from(tbody.querySelectorAll('tr'));
+    // New schema: extract run IDs from runs array (runs[].id)
+    const runIds = runs.map(r => r.id);
+    if (runIds && runIds.length > 0 && tableRows.length > 0) {
+      const count = Math.min(runIds.length, tableRows.length);
       for (let i = 0; i < count; i++) {
-        const tr = rows[i];
+        const tr = tableRows[i];
         tr.classList.add('cursor-pointer');
         tr.title = 'Open run viewer';
         tr.setAttribute('role', 'button');
         tr.addEventListener('click', async (e) => {
           e.stopPropagation();
-          const runId = runs[i];
+          const runId = runIds[i];
           if (!runId) return;
           // Probe first request (00001) to verify run data exists before opening viewer
           const reqId = '00001';
@@ -821,7 +848,7 @@ function createDetailRow(stats, modelName, data, vendor, model, basePath, strate
             runId,
             strategy,
             startIndex: 1,
-            runs: runs,
+            runs: runIds, // Pass run IDs array
             runIndex: i
           });
         });
@@ -860,17 +887,18 @@ async function loadLeaderboard(leaderboardPath, detailBasePath, displayMode = 'm
       // Parse data based on display mode
       let primaryValue, secondaryValue, vendor, model;
 
-      // Parse model and vendor from config.model (format: "vendor/model")
-      const modelParts = entry.config.model.split('/');
-      vendor = modelParts[0];
-      model = modelParts[1];
-
       if (displayMode === 'community') {
-        // For strategies: show strategy name as primary, author as secondary
+        // For strategies: entries have strategy objects, model is at data top level
+        // New schema: data.model.vendor and data.model.name
+        vendor = data.model.vendor;
+        model = data.model.name;
         primaryValue = entry.strategy.name;
         secondaryValue = entry.strategy.author;
       } else {
-        // For models: show model name as primary, vendor as secondary
+        // For models: entries have model objects
+        // New schema: entry.model.vendor and entry.model.name
+        vendor = entry.model.vendor;
+        model = entry.model.name;
         primaryValue = model;
         secondaryValue = vendor;
       }
@@ -889,10 +917,11 @@ async function loadLeaderboard(leaderboardPath, detailBasePath, displayMode = 'm
             document.querySelectorAll('.detail-row').forEach(dr => dr.remove());
 
             // Load and show details
-            const strategy = displayMode === 'community' ? entry.config.strategy : null;
+            // New schema: entry.strategy.name (instead of entry.config.strategy)
+            const strategy = displayMode === 'community' ? entry.strategy.name : null;
             const data = await loadDetails(vendor, model, detailBasePath, strategy);
             const detailRow = createDetailRow(
-              data.stats,
+              data.runs, // New schema: data.runs (instead of data.stats)
               displayMode === 'community' ? primaryValue : model,
               data,
               vendor,
@@ -908,28 +937,31 @@ async function loadLeaderboard(leaderboardPath, detailBasePath, displayMode = 'm
         }
       });
 
-      // Calculate percentages
-      const successRate = ((entry.calls.successful / entry.calls.total) * 100).toFixed(0);
-      const failureRate = ((entry.calls.failed / entry.calls.total) * 100).toFixed(0);
-      const errorRate = ((entry.calls.error / entry.calls.total) * 100).toFixed(0);
+      // Calculate percentages - New schema: entry.stats.calls_* (instead of entry.calls.*)
+      const successRate = ((entry.stats.calls_success / entry.stats.calls_total) * 100)
+        .toFixed(0);
+      const failureRate = ((entry.stats.calls_failed / entry.stats.calls_total) * 100)
+        .toFixed(0);
+      const errorRate = ((entry.stats.calls_error / entry.stats.calls_total) * 100).toFixed(
+      0);
 
-      // Format averages with standard deviation
-      const avgRound = `${entry.avg_final_round.toFixed(1)}`;
-      const avgRoundStdDev = `${entry.std_dev_final_round.toFixed(1)}`;
+      // Format averages with standard deviation - New schema: avg_round/std_round and stats.*
+      const avgRound = `${entry.avg_round.toFixed(1)}`;
+      const avgRoundStdDev = `${entry.std_round.toFixed(1)}`;
 
-      const avgInputTokens = `${entry.average.input_tokens.toFixed(0)}`;
-      const avgInputTokensStdDev = `${entry.std_dev.input_tokens.toFixed(0)}`;
+      const avgInputTokens = `${entry.stats.tokens_in_avg.toFixed(0)}`;
+      const avgInputTokensStdDev = `${entry.stats.tokens_in_std.toFixed(0)}`;
 
-      const avgOutputTokens = `${entry.average.output_tokens.toFixed(0)}`;
-      const avgOutputTokensStdDev = `${entry.std_dev.output_tokens.toFixed(0)}`;
+      const avgOutputTokens = `${entry.stats.tokens_out_avg.toFixed(0)}`;
+      const avgOutputTokensStdDev = `${entry.stats.tokens_out_std.toFixed(0)}`;
 
       // Convert time from ms to seconds
-      const avgTimeSeconds = `${(entry.average.time_ms / 1000).toFixed(2)}`;
-      const avgTimeSecondsStdDev = `${(entry.std_dev.time_ms / 1000).toFixed(2)}`;
+      const avgTimeSeconds = `${(entry.stats.time_avg_ms / 1000).toFixed(2)}`;
+      const avgTimeSecondsStdDev = `${(entry.stats.time_std_ms / 1000).toFixed(2)}`;
 
       // Cost per tool calls (m$)
-      const cost = `${(entry.average.total_cost * 1000).toFixed(2)}`;
-      const costStdDev = `${(entry.std_dev.total_cost * 1000).toFixed(2)}`;
+      const cost = `${(entry.stats.cost_avg * 1000).toFixed(2)}`;
+      const costStdDev = `${(entry.stats.cost_std * 1000).toFixed(2)}`;
 
       row.innerHTML = `
         <td class="px-4 py-3 text-left text-zinc-700 dark:text-zinc-300 font-mono">${index + 1}</td>
@@ -1251,7 +1283,10 @@ async function loadAndRenderRequest(state) {
   const totalRequests = state.totalRequests[runId];
 
   // Build title: [vendor/model] • [seed] • Run [X/Y] • Request [N/Total]
-  const seed = metadata?.balatro_seed || 'Unknown';
+  // Extract seed from runId (format: 20260109_170402_590_RED_WHITE_BBBBBBB)
+  // The seed is the last underscore-separated part
+  const runIdParts = runId.split('_');
+  const seed = runIdParts.length > 0 ? runIdParts[runIdParts.length - 1] : 'Unknown';
   const runNumber = state.runs && state.runs.length > 0 ? state.runIndex + 1 : null;
   const totalRuns = state.runs ? state.runs.length : null;
 
@@ -1266,11 +1301,12 @@ async function loadAndRenderRequest(state) {
   title += ` • Request ${index}/${totalRequests}`;
 
   // Add tokens and cost if metadata exists
-  if (metadata && metadata.tokens && metadata.cost) {
-    const promptTokens = metadata.tokens.prompt || 0;
-    const completionTokens = metadata.tokens.completion || 0;
-    const promptCost = metadata.cost.prompt_usd || 0;
-    const completionCost = metadata.cost.completion_usd || 0;
+  // New schema: tokens_in/tokens_out and cost_in/cost_out (flattened, not nested)
+  if (metadata && (metadata.tokens_in !== undefined || metadata.cost_in !== undefined)) {
+    const promptTokens = metadata.tokens_in || 0;
+    const completionTokens = metadata.tokens_out || 0;
+    const promptCost = metadata.cost_in || 0;
+    const completionCost = metadata.cost_out || 0;
 
     title += ` • ${tokensIcon} in/out ${promptTokens}/${completionTokens}`;
     title += ` • $ in/out ${promptCost.toFixed(4)}/${completionCost.toFixed(4)}`;
