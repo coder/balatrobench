@@ -25,16 +25,12 @@ def sample_run_dir(fixtures_dir: Path) -> Path:
 @pytest.fixture
 def sample_model() -> Model:
     """Sample Model instance."""
-    from balatrobench.models import Model
-
     return Model(vendor="openai", name="gpt-oss-120b")
 
 
 @pytest.fixture
 def sample_strategy() -> Strategy:
     """Sample Strategy instance."""
-    from balatrobench.models import Strategy
-
     return Strategy(
         name="Default",
         description="The default BalatroLLM strategy",
@@ -47,8 +43,6 @@ def sample_strategy() -> Strategy:
 @pytest.fixture
 def sample_stats() -> Stats:
     """Sample Stats instance with realistic values."""
-    from balatrobench.models import Stats
-
     return Stats(
         calls_total=87,
         calls_success=80,
