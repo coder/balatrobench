@@ -252,3 +252,4 @@ test-results
 BENCHMARKS_DATA.md
 benchmarks-old
 runs
+!tests/fixtures/runs/
