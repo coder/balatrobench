@@ -1,8 +1,13 @@
 // @ts-check
+const { test, expect } = require('@playwright/test');
 const {
-    test,
-    expect
-} = require('@playwright/test');
+  PAGES,
+  VIEWPORTS,
+  waitForTableLoaded,
+  waitForLayoutStable,
+  isColumnVisible,
+  isColumnHidden
+} = require('./helpers');
 
 /**
  * Responsive Design Tests
@@ -23,644 +28,248 @@ const {
  * - xl: 1280px+ (adds attribution on main page)
  */
 
-/**
- * Helper function to check if a column header is visible by aria-label
- */
-async function isColumnVisible(page, ariaLabel) {
-    const locator = page.locator(`th[aria-label="${ariaLabel}"]`);
-    const count = await locator.count();
-    if (count === 0) return false;
-    return await locator.first().isVisible();
-}
-
-/**
- * Helper function to check if a column header exists but is hidden
- */
-async function isColumnHidden(page, ariaLabel) {
-    const locator = page.locator(`th[aria-label="${ariaLabel}"]`);
-    const count = await locator.count();
-    if (count === 0) return true; // Not in DOM = hidden
-    return await locator.first().isHidden();
-}
-
 test.describe('Mobile viewport (< 640px)', () => {
-    /**
-     * Column visibility tests
-     */
-    test('main page shows only core columns', async ({
-        page
-    }) => {
-        await page.setViewportSize({
-            width: 375,
-            height: 667
-        });
-        await page.goto('/');
-        await page.waitForSelector('tbody tr');
+  // Parameterized tests for both pages
+  for (const [pageName, config] of Object.entries(PAGES)) {
+    test(`${pageName} page shows only core columns`, async ({ page }) => {
+      await page.setViewportSize(VIEWPORTS.mobile);
+      await page.goto(config.url);
+      await waitForTableLoaded(page);
 
-        // Verify core columns are visible
-        const rankHeader = page.locator('th:has-text("#")');
-        const modelHeader = page.locator('th:has-text("Model")');
-        const roundHeader = page.locator('th:has-text("Round")');
+      // Verify core columns are visible
+      const rankHeader = page.locator('th:has-text("#")');
+      const primaryHeader = page.locator(`th:has-text("${config.primaryColumn}")`);
+      const roundHeader = page.locator('th:has-text("Round")');
 
-        await expect(rankHeader).toBeVisible();
-        await expect(modelHeader).toBeVisible();
-        await expect(roundHeader).toBeVisible();
+      await expect(rankHeader).toBeVisible();
+      await expect(primaryHeader).toBeVisible();
+      await expect(roundHeader).toBeVisible();
 
-        // Verify all other columns are hidden
-        expect(await isColumnHidden(page, 'Vendor')).toBe(true);
-        expect(await isColumnHidden(page, 'Valid tool calls executable in state')).toBe(true);
-        expect(await isColumnHidden(page, 'Valid tool calls not executable in state')).toBe(
-            true);
-        expect(await isColumnHidden(page, 'Responses without valid tool calls')).toBe(true);
-        expect(await isColumnHidden(page, 'Average input tokens')).toBe(true);
-        expect(await isColumnHidden(page, 'Average output tokens')).toBe(true);
-        expect(await isColumnHidden(page, 'Average time per tool call')).toBe(true);
-        expect(await isColumnHidden(page, 'Average cost per tool call')).toBe(true);
+      // Verify all other columns are hidden
+      expect(await isColumnHidden(page, config.secondaryColumn)).toBe(true);
+      expect(await isColumnHidden(page, 'Valid tool calls executable in state')).toBe(true);
+      expect(await isColumnHidden(page, 'Valid tool calls not executable in state')).toBe(true);
+      expect(await isColumnHidden(page, 'Responses without valid tool calls')).toBe(true);
+      expect(await isColumnHidden(page, 'Average input tokens')).toBe(true);
+      expect(await isColumnHidden(page, 'Average output tokens')).toBe(true);
+      expect(await isColumnHidden(page, 'Average time per tool call')).toBe(true);
+      expect(await isColumnHidden(page, 'Average cost per tool call')).toBe(true);
     });
 
-    test('community page shows only core columns', async ({
-        page
-    }) => {
-        await page.setViewportSize({
-            width: 375,
-            height: 667
-        });
-        await page.goto('/community.html');
-        await page.waitForSelector('tbody tr');
+    test(`${pageName} page - expandable rows disabled`, async ({ page }) => {
+      await page.setViewportSize(VIEWPORTS.mobile);
+      await page.goto(config.url);
+      await waitForTableLoaded(page);
 
-        // Verify core columns are visible
-        const rankHeader = page.locator('th:has-text("#")');
-        const strategyHeader = page.locator('th:has-text("Strategy")');
-        const roundHeader = page.locator('th:has-text("Round")');
+      const firstRow = page.locator('tbody tr').first();
+      await firstRow.click();
+      await waitForLayoutStable(page);
 
-        await expect(rankHeader).toBeVisible();
-        await expect(strategyHeader).toBeVisible();
-        await expect(roundHeader).toBeVisible();
-
-        // Verify all other columns are hidden
-        expect(await isColumnHidden(page, 'Author')).toBe(true);
-        expect(await isColumnHidden(page, 'Valid tool calls executable in state')).toBe(true);
-        expect(await isColumnHidden(page, 'Valid tool calls not executable in state')).toBe(
-            true);
-        expect(await isColumnHidden(page, 'Responses without valid tool calls')).toBe(true);
-        expect(await isColumnHidden(page, 'Average input tokens')).toBe(true);
-        expect(await isColumnHidden(page, 'Average output tokens')).toBe(true);
-        expect(await isColumnHidden(page, 'Average time per tool call')).toBe(true);
-        expect(await isColumnHidden(page, 'Average cost per tool call')).toBe(true);
+      const detailRows = page.locator('tr.detail-row');
+      const detailRowCount = await detailRows.count();
+      expect(detailRowCount).toBe(0);
     });
 
-    /**
-     * Performance chart visibility
-     */
-    test('main page - performance chart hidden', async ({
-        page
-    }) => {
-        await page.setViewportSize({
-            width: 375,
-            height: 667
-        });
-        await page.goto('/');
-        await page.waitForSelector('tbody tr');
+    test(`${pageName} page - navigation accessible [mobile]`, async ({ page }) => {
+      await page.setViewportSize(VIEWPORTS.mobile);
+      await page.goto(config.url);
 
-        const chartContainer = page.locator('#performance-chart').locator('..');
-        const isVisible = await chartContainer.isVisible();
-        expect(isVisible).toBe(false);
+      const nav = page.locator('nav');
+      await expect(nav).toBeVisible();
+
+      // Navigate to the other page
+      const targetPage = pageName === 'index' ? 'Community' : 'BalatroBench';
+      const targetUrl = pageName === 'index' ? /community\.html/ : /\/$|index\.html/;
+      await page.getByRole('link', { name: targetPage }).click();
+      await expect(page).toHaveURL(targetUrl);
     });
 
-    test('community page - no performance chart', async ({
-        page
-    }) => {
-        await page.setViewportSize({
-            width: 375,
-            height: 667
-        });
-        await page.goto('/community.html');
-        await page.waitForSelector('tbody tr');
+    test(`${pageName} page - footer visible [mobile]`, async ({ page }) => {
+      await page.setViewportSize(VIEWPORTS.mobile);
+      await page.goto(config.url);
+      await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
 
-        const chartCanvas = page.locator('#performance-chart');
-        const count = await chartCanvas.count();
-        expect(count).toBe(0);
+      const footer = page.locator('footer');
+      await expect(footer).toBeVisible();
     });
+  }
 
-    /**
-     * Expandable rows behavior
-     */
-    test('main page - expandable rows disabled', async ({
-        page
-    }) => {
-        await page.setViewportSize({
-            width: 375,
-            height: 667
-        });
-        await page.goto('/');
-        await page.waitForSelector('tbody tr');
+  /**
+   * Performance chart visibility (index-specific)
+   */
+  test('main page - performance chart hidden', async ({ page }) => {
+    await page.setViewportSize(VIEWPORTS.mobile);
+    await page.goto('/');
+    await waitForTableLoaded(page);
 
-        const firstRow = page.locator('tbody tr').first();
-        await firstRow.click();
-        await page.waitForTimeout(500);
+    const chartContainer = page.locator('#performance-chart').locator('..');
+    const isVisible = await chartContainer.isVisible();
+    expect(isVisible).toBe(false);
+  });
 
-        const detailRows = page.locator('tr.detail-row');
-        const detailRowCount = await detailRows.count();
-        expect(detailRowCount).toBe(0);
-    });
+  test('community page - no performance chart', async ({ page }) => {
+    await page.setViewportSize(VIEWPORTS.mobile);
+    await page.goto('/community.html');
+    await waitForTableLoaded(page);
 
-    test('community page - expandable rows disabled', async ({
-        page
-    }) => {
-        await page.setViewportSize({
-            width: 375,
-            height: 667
-        });
-        await page.goto('/community.html');
-        await page.waitForSelector('tbody tr');
-
-        const firstRow = page.locator('tbody tr').first();
-        await firstRow.click();
-        await page.waitForTimeout(500);
-
-        const detailRows = page.locator('tr.detail-row');
-        const detailRowCount = await detailRows.count();
-        expect(detailRowCount).toBe(0);
-    });
-
-    /**
-     * Navigation
-     */
-    test('main page - navigation accessible', async ({
-        page
-    }) => {
-        await page.setViewportSize({
-            width: 375,
-            height: 667
-        });
-        await page.goto('/');
-
-        const nav = page.locator('nav');
-        await expect(nav).toBeVisible();
-
-        await page.getByRole('link', {
-            name: 'Community'
-        }).click();
-        await expect(page).toHaveURL(/community\.html/);
-    });
-
-    test('community page - navigation accessible', async ({
-        page
-    }) => {
-        await page.setViewportSize({
-            width: 375,
-            height: 667
-        });
-        await page.goto('/community.html');
-
-        const nav = page.locator('nav');
-        await expect(nav).toBeVisible();
-
-        await page.getByRole('link', {
-            name: 'BalatroBench'
-        }).click();
-        await expect(page).toHaveURL(/\/$|index\.html/);
-    });
-
-    /**
-     * Footer
-     */
-    test('main page - footer visible', async ({
-        page
-    }) => {
-        await page.setViewportSize({
-            width: 375,
-            height: 667
-        });
-        await page.goto('/');
-        await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-
-        const footer = page.locator('footer');
-        await expect(footer).toBeVisible();
-    });
-
-    test('community page - footer visible', async ({
-        page
-    }) => {
-        await page.setViewportSize({
-            width: 375,
-            height: 667
-        });
-        await page.goto('/community.html');
-        await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-
-        const footer = page.locator('footer');
-        await expect(footer).toBeVisible();
-    });
+    const chartCanvas = page.locator('#performance-chart');
+    const count = await chartCanvas.count();
+    expect(count).toBe(0);
+  });
 });
 
 test.describe('sm breakpoint (640px+)', () => {
-    /**
-     * Column visibility tests
-     */
-    test('main page shows tool call columns', async ({
-        page
-    }) => {
-        await page.setViewportSize({
-            width: 640,
-            height: 667
-        });
-        await page.goto('/');
-        await page.waitForSelector('tbody tr');
+  for (const [pageName, config] of Object.entries(PAGES)) {
+    test(`${pageName} page shows tool call columns`, async ({ page }) => {
+      await page.setViewportSize(VIEWPORTS.sm);
+      await page.goto(config.url);
+      await waitForTableLoaded(page);
 
-        // Tool call columns should now be visible
-        expect(await isColumnVisible(page, 'Valid tool calls executable in state')).toBe(
-            true);
-        expect(await isColumnVisible(page, 'Valid tool calls not executable in state')).toBe(
-            true);
-        expect(await isColumnVisible(page, 'Responses without valid tool calls')).toBe(true);
+      // Tool call columns should now be visible
+      expect(await isColumnVisible(page, 'Valid tool calls executable in state')).toBe(true);
+      expect(await isColumnVisible(page, 'Valid tool calls not executable in state')).toBe(true);
+      expect(await isColumnVisible(page, 'Responses without valid tool calls')).toBe(true);
 
-        // Token and vendor columns should still be hidden
-        expect(await isColumnHidden(page, 'Average input tokens')).toBe(true);
-        expect(await isColumnHidden(page, 'Average output tokens')).toBe(true);
-        expect(await isColumnHidden(page, 'Vendor')).toBe(true);
+      // Token and secondary columns should still be hidden
+      expect(await isColumnHidden(page, 'Average input tokens')).toBe(true);
+      expect(await isColumnHidden(page, 'Average output tokens')).toBe(true);
+      expect(await isColumnHidden(page, config.secondaryColumn)).toBe(true);
     });
-
-    test('community page shows tool call columns', async ({
-        page
-    }) => {
-        await page.setViewportSize({
-            width: 640,
-            height: 667
-        });
-        await page.goto('/community.html');
-        await page.waitForSelector('tbody tr');
-
-        // Tool call columns should now be visible
-        expect(await isColumnVisible(page, 'Valid tool calls executable in state')).toBe(
-            true);
-        expect(await isColumnVisible(page, 'Valid tool calls not executable in state')).toBe(
-            true);
-        expect(await isColumnVisible(page, 'Responses without valid tool calls')).toBe(true);
-
-        // Token and author columns should still be hidden
-        expect(await isColumnHidden(page, 'Average input tokens')).toBe(true);
-        expect(await isColumnHidden(page, 'Average output tokens')).toBe(true);
-        expect(await isColumnHidden(page, 'Author')).toBe(true);
-    });
+  }
 });
 
 test.describe('md breakpoint (768px+)', () => {
-    /**
-     * Column visibility tests
-     */
-    test('main page shows time and cost columns', async ({
-        page
-    }) => {
-        await page.setViewportSize({
-            width: 768,
-            height: 1024
-        });
-        await page.goto('/');
-        await page.waitForSelector('tbody tr');
+  for (const [pageName, config] of Object.entries(PAGES)) {
+    test(`${pageName} page shows time and cost columns`, async ({ page }) => {
+      await page.setViewportSize(VIEWPORTS.md);
+      await page.goto(config.url);
+      await waitForTableLoaded(page);
 
-        // Time and cost columns should now be visible
-        expect(await isColumnVisible(page, 'Average time per tool call')).toBe(true);
-        expect(await isColumnVisible(page, 'Average cost per tool call')).toBe(true);
+      // Time and cost columns should now be visible
+      expect(await isColumnVisible(page, 'Average time per tool call')).toBe(true);
+      expect(await isColumnVisible(page, 'Average cost per tool call')).toBe(true);
 
-        // Tool call columns should still be visible
-        expect(await isColumnVisible(page, 'Valid tool calls executable in state')).toBe(
-            true);
+      // Tool call columns should still be visible
+      expect(await isColumnVisible(page, 'Valid tool calls executable in state')).toBe(true);
 
-        // Token and vendor columns should still be hidden
-        expect(await isColumnHidden(page, 'Average input tokens')).toBe(true);
-        expect(await isColumnHidden(page, 'Average output tokens')).toBe(true);
-        expect(await isColumnHidden(page, 'Vendor')).toBe(true);
+      // Token and secondary columns should still be hidden
+      expect(await isColumnHidden(page, 'Average input tokens')).toBe(true);
+      expect(await isColumnHidden(page, 'Average output tokens')).toBe(true);
+      expect(await isColumnHidden(page, config.secondaryColumn)).toBe(true);
     });
-
-    test('community page shows time and cost columns', async ({
-        page
-    }) => {
-        await page.setViewportSize({
-            width: 768,
-            height: 1024
-        });
-        await page.goto('/community.html');
-        await page.waitForSelector('tbody tr');
-
-        // Time and cost columns should now be visible
-        expect(await isColumnVisible(page, 'Average time per tool call')).toBe(true);
-        expect(await isColumnVisible(page, 'Average cost per tool call')).toBe(true);
-
-        // Tool call columns should still be visible
-        expect(await isColumnVisible(page, 'Valid tool calls executable in state')).toBe(
-            true);
-
-        // Token and author columns should still be hidden
-        expect(await isColumnHidden(page, 'Average input tokens')).toBe(true);
-        expect(await isColumnHidden(page, 'Average output tokens')).toBe(true);
-        expect(await isColumnHidden(page, 'Author')).toBe(true);
-    });
+  }
 });
 
 test.describe('lg breakpoint (1024px+)', () => {
-    /**
-     * Column visibility tests
-     */
-    test('main page shows token columns', async ({
-        page
-    }) => {
-        await page.setViewportSize({
-            width: 1024,
-            height: 768
-        });
-        await page.goto('/');
-        await page.waitForSelector('tbody tr');
+  for (const [pageName, config] of Object.entries(PAGES)) {
+    test(`${pageName} page shows token columns`, async ({ page }) => {
+      await page.setViewportSize(VIEWPORTS.lg);
+      await page.goto(config.url);
+      await waitForTableLoaded(page);
 
-        // Token columns should now be visible
-        expect(await isColumnVisible(page, 'Average input tokens')).toBe(true);
-        expect(await isColumnVisible(page, 'Average output tokens')).toBe(true);
+      // Token columns should now be visible
+      expect(await isColumnVisible(page, 'Average input tokens')).toBe(true);
+      expect(await isColumnVisible(page, 'Average output tokens')).toBe(true);
 
-        // All previous columns should still be visible
-        expect(await isColumnVisible(page, 'Valid tool calls executable in state')).toBe(
-            true);
-        expect(await isColumnVisible(page, 'Average time per tool call')).toBe(true);
+      // All previous columns should still be visible
+      expect(await isColumnVisible(page, 'Valid tool calls executable in state')).toBe(true);
+      expect(await isColumnVisible(page, 'Average time per tool call')).toBe(true);
 
-        // Vendor should still be hidden
-        expect(await isColumnHidden(page, 'Vendor')).toBe(true);
+      // Secondary column should still be hidden at lg (appears at xl)
+      expect(await isColumnHidden(page, config.secondaryColumn)).toBe(true);
     });
-
-    test('community page shows token columns at lg', async ({
-        page
-    }) => {
-        await page.setViewportSize({
-            width: 1024,
-            height: 768
-        });
-        await page.goto('/community.html');
-        await page.waitForSelector('tbody tr');
-
-        // Token columns should now be visible
-        expect(await isColumnVisible(page, 'Average input tokens')).toBe(true);
-        expect(await isColumnVisible(page, 'Average output tokens')).toBe(true);
-
-        // Author column should still be hidden at lg (appears at xl)
-        expect(await isColumnHidden(page, 'Author')).toBe(true);
-
-        // All previous columns should still be visible
-        expect(await isColumnVisible(page, 'Valid tool calls executable in state')).toBe(
-            true);
-        expect(await isColumnVisible(page, 'Average time per tool call')).toBe(true);
-    });
-
+  }
 });
 
 test.describe('xl breakpoint (1280px+)', () => {
-    /**
-     * Column visibility tests
-     */
-    test('main page shows vendor column', async ({
-        page
-    }) => {
-        await page.setViewportSize({
-            width: 1280,
-            height: 720
-        });
-        await page.goto('/');
-        await page.waitForSelector('tbody tr');
+  // Parameterized tests for both pages
+  for (const [pageName, config] of Object.entries(PAGES)) {
+    test(`${pageName} page shows all columns including secondary`, async ({ page }) => {
+      await page.setViewportSize(VIEWPORTS.xl);
+      await page.goto(config.url);
+      await waitForTableLoaded(page);
 
-        // Vendor column should now be visible
-        const vendorHeader = page.locator('th:has-text("Vendor")');
-        await expect(vendorHeader).toBeVisible();
+      // Secondary column (Vendor/Author) should now be visible
+      const secondaryHeader = page.locator(`th:has-text("${config.secondaryColumn}")`);
+      await expect(secondaryHeader).toBeVisible();
 
-        // All other columns should still be visible
-        expect(await isColumnVisible(page, 'Average input tokens')).toBe(true);
-        expect(await isColumnVisible(page, 'Valid tool calls executable in state')).toBe(
-            true);
-        expect(await isColumnVisible(page, 'Average time per tool call')).toBe(true);
+      // All other columns should still be visible
+      expect(await isColumnVisible(page, 'Average input tokens')).toBe(true);
+      expect(await isColumnVisible(page, 'Valid tool calls executable in state')).toBe(true);
+      expect(await isColumnVisible(page, 'Average time per tool call')).toBe(true);
     });
 
-    test('community page shows same columns as lg', async ({
-        page
-    }) => {
-        await page.setViewportSize({
-            width: 1280,
-            height: 720
-        });
-        await page.goto('/community.html');
-        await page.waitForSelector('tbody tr');
+    test(`${pageName} page - expandable rows work [xl]`, async ({ page }) => {
+      await page.setViewportSize(VIEWPORTS.xl);
+      await page.goto(config.url);
+      await waitForTableLoaded(page);
 
-        // All columns from lg should be visible
-        const authorHeader = page.locator('th:has-text("Author")');
-        await expect(authorHeader).toBeVisible();
+      await page.locator('tbody tr').first().click();
+      await page.waitForSelector('tr.detail-row', { timeout: 5000 });
 
-        expect(await isColumnVisible(page, 'Average input tokens')).toBe(true);
-        expect(await isColumnVisible(page, 'Valid tool calls executable in state')).toBe(
-            true);
-        expect(await isColumnVisible(page, 'Average time per tool call')).toBe(true);
-
-        // No additional columns appear at xl on community page
-        // (Unlike main leaderboard which adds Vendor at xl)
+      const detailRow = page.locator('tr.detail-row').first();
+      await expect(detailRow).toBeVisible();
     });
 
-    /**
-     * Page-specific feature: Vendor column appears at xl on main page only
-     */
-    test('vendor column appears on main page only', async ({
-        page
-    }) => {
-        await page.setViewportSize({
-            width: 1280,
-            height: 720
-        });
+    test(`${pageName} page - navigation accessible [xl]`, async ({ page }) => {
+      await page.setViewportSize(VIEWPORTS.xl);
+      await page.goto(config.url);
 
-        // Main page: Vendor visible at xl
-        await page.goto('/');
-        await page.waitForSelector('tbody tr');
+      const nav = page.locator('nav');
+      await expect(nav).toBeVisible();
 
-        const vendorHeaderMain = page.locator('th:has-text("Vendor")');
-        await expect(vendorHeaderMain).toBeVisible();
-
-        // Community page: No vendor column
-        await page.goto('/community.html');
-        await page.waitForSelector('tbody tr');
-
-        const vendorHeaderCommunity = page.locator('th:has-text("Vendor")');
-        const vendorCount = await vendorHeaderCommunity.count();
-        expect(vendorCount).toBe(0);
+      await page.getByRole('link', { name: 'About' }).click();
+      await expect(page).toHaveURL(/about\.html/);
     });
 
-    /**
-     * Page-specific feature: Author column appears at xl on community page
-     */
-    test('author column appears on community page only', async ({
-        page
-    }) => {
-        await page.setViewportSize({
-            width: 1280,
-            height: 720
-        });
+    test(`${pageName} page - footer visible [xl]`, async ({ page }) => {
+      await page.setViewportSize(VIEWPORTS.xl);
+      await page.goto(config.url);
+      await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
 
-        // Community page: Author visible at xl
-        await page.goto('/community.html');
-        await page.waitForSelector('tbody tr');
-
-        const authorHeaderCommunity = page.locator('th:has-text("Author")');
-        await expect(authorHeaderCommunity).toBeVisible();
-
-        // Main page: No author column
-        await page.goto('/');
-        await page.waitForSelector('tbody tr');
-
-        const authorHeaderMain = page.locator('th:has-text("Author")');
-        const authorCount = await authorHeaderMain.count();
-        expect(authorCount).toBe(0);
+      const footer = page.locator('footer');
+      await expect(footer).toBeVisible();
     });
+  }
 
-    /**
-     * Performance chart visibility (desktop)
-     */
-    test('main page - performance chart visible', async ({
-        page
-    }) => {
-        await page.setViewportSize({
-            width: 1280,
-            height: 720
-        });
-        await page.goto('/');
-        await page.waitForSelector('tbody tr');
+  /**
+   * Page-specific features
+   */
+  test('vendor column appears on main page only', async ({ page }) => {
+    await page.setViewportSize(VIEWPORTS.xl);
 
-        const chartCanvas = page.locator('#performance-chart');
-        await expect(chartCanvas).toBeVisible();
-    });
+    await page.goto('/');
+    await waitForTableLoaded(page);
+    await expect(page.locator('th:has-text("Vendor")')).toBeVisible();
 
-    test('performance chart only on main page', async ({
-        page
-    }) => {
-        await page.setViewportSize({
-            width: 1280,
-            height: 720
-        });
+    await page.goto('/community.html');
+    await waitForTableLoaded(page);
+    expect(await page.locator('th:has-text("Vendor")').count()).toBe(0);
+  });
 
-        // Main page: Chart exists
-        await page.goto('/');
-        await page.waitForSelector('tbody tr');
-        const chartMain = page.locator('#performance-chart');
-        await expect(chartMain).toBeVisible();
+  test('author column appears on community page only', async ({ page }) => {
+    await page.setViewportSize(VIEWPORTS.xl);
 
-        // Community page: No chart
-        await page.goto('/community.html');
-        await page.waitForSelector('tbody tr');
-        const chartCommunity = page.locator('#performance-chart');
-        const chartCount = await chartCommunity.count();
-        expect(chartCount).toBe(0);
-    });
+    await page.goto('/community.html');
+    await waitForTableLoaded(page);
+    await expect(page.locator('th:has-text("Author")')).toBeVisible();
 
-    /**
-     * Expandable rows (desktop)
-     */
-    test('main page - expandable rows work', async ({
-        page
-    }) => {
-        await page.setViewportSize({
-            width: 1280,
-            height: 720
-        });
-        await page.goto('/');
-        await page.waitForSelector('tbody tr');
+    await page.goto('/');
+    await waitForTableLoaded(page);
+    expect(await page.locator('th:has-text("Author")').count()).toBe(0);
+  });
 
-        await page.locator('tbody tr').first().click();
-        await page.waitForSelector('tr.detail-row', {
-            timeout: 5000
-        });
+  test('performance chart only on main page', async ({ page }) => {
+    await page.setViewportSize(VIEWPORTS.xl);
 
-        const detailRow = page.locator('tr.detail-row').first();
-        await expect(detailRow).toBeVisible();
-    });
+    await page.goto('/');
+    await waitForTableLoaded(page);
+    await expect(page.locator('#performance-chart')).toBeVisible();
 
-    test('community page - expandable rows work', async ({
-        page
-    }) => {
-        await page.setViewportSize({
-            width: 1280,
-            height: 720
-        });
-        await page.goto('/community.html');
-        await page.waitForSelector('tbody tr');
-
-        await page.locator('tbody tr').first().click();
-        await page.waitForSelector('tr.detail-row', {
-            timeout: 5000
-        });
-
-        const detailRow = page.locator('tr.detail-row').first();
-        await expect(detailRow).toBeVisible();
-    });
-
-    /**
-     * Navigation (desktop)
-     */
-    test('main page - navigation accessible', async ({
-        page
-    }) => {
-        await page.setViewportSize({
-            width: 1280,
-            height: 720
-        });
-        await page.goto('/');
-
-        const nav = page.locator('nav');
-        await expect(nav).toBeVisible();
-
-        await page.getByRole('link', {
-            name: 'About'
-        }).click();
-        await expect(page).toHaveURL(/about\.html/);
-    });
-
-    test('community page - navigation accessible', async ({
-        page
-    }) => {
-        await page.setViewportSize({
-            width: 1280,
-            height: 720
-        });
-        await page.goto('/community.html');
-
-        const nav = page.locator('nav');
-        await expect(nav).toBeVisible();
-
-        await page.getByRole('link', {
-            name: 'About'
-        }).click();
-        await expect(page).toHaveURL(/about\.html/);
-    });
-
-    /**
-     * Footer (desktop)
-     */
-    test('main page - footer visible', async ({
-        page
-    }) => {
-        await page.setViewportSize({
-            width: 1280,
-            height: 720
-        });
-        await page.goto('/');
-        await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-
-        const footer = page.locator('footer');
-        await expect(footer).toBeVisible();
-    });
-
-    test('community page - footer visible', async ({
-        page
-    }) => {
-        await page.setViewportSize({
-            width: 1280,
-            height: 720
-        });
-        await page.goto('/community.html');
-        await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-
-        const footer = page.locator('footer');
-        await expect(footer).toBeVisible();
-    });
+    await page.goto('/community.html');
+    await waitForTableLoaded(page);
+    expect(await page.locator('#performance-chart').count()).toBe(0);
+  });
 });
 
 /**
@@ -668,101 +277,39 @@ test.describe('xl breakpoint (1280px+)', () => {
  * These features work consistently across all viewport sizes
  */
 test.describe('Cross-breakpoint features', () => {
-    test('main page - version selector works on mobile', async ({
-        page
-    }) => {
-        await page.setViewportSize({
-            width: 375,
-            height: 667
-        });
-        await page.goto('/');
-        await page.waitForSelector('tbody tr');
+  const viewportsToTest = [
+    { name: 'mobile', viewport: VIEWPORTS.mobile },
+    { name: 'desktop', viewport: VIEWPORTS.xl }
+  ];
+
+  for (const [pageName, config] of Object.entries(PAGES)) {
+    for (const { name: vpName, viewport } of viewportsToTest) {
+      test(`${pageName} page - version selector works on ${vpName}`, async ({ page }) => {
+        await page.setViewportSize(viewport);
+        await page.goto(config.url);
+        await waitForTableLoaded(page);
 
         const versionSelector = page.locator('select');
         await expect(versionSelector).toBeVisible();
 
-        const options = versionSelector.locator('option');
-        const optionCount = await options.count();
-        expect(optionCount).toBeGreaterThan(0);
+        if (vpName === 'mobile') {
+          const options = versionSelector.locator('option');
+          const optionCount = await options.count();
+          expect(optionCount).toBeGreaterThan(0);
+        }
+      });
+    }
+
+    test(`${pageName} page - table scrollable on mobile`, async ({ page }) => {
+      await page.setViewportSize(VIEWPORTS.mobile);
+      await page.goto(config.url);
+      await waitForTableLoaded(page);
+
+      const table = page.locator('table');
+      await expect(table).toBeVisible();
+
+      const tableWidth = await table.evaluate(el => el.offsetWidth);
+      expect(tableWidth).toBeGreaterThan(0);
     });
-
-    test('main page - version selector works on desktop', async ({
-        page
-    }) => {
-        await page.setViewportSize({
-            width: 1280,
-            height: 720
-        });
-        await page.goto('/');
-        await page.waitForSelector('tbody tr');
-
-        const versionSelector = page.locator('select');
-        await expect(versionSelector).toBeVisible();
-    });
-
-    test('community page - version selector works on mobile', async ({
-        page
-    }) => {
-        await page.setViewportSize({
-            width: 375,
-            height: 667
-        });
-        await page.goto('/community.html');
-        await page.waitForSelector('tbody tr');
-
-        const versionSelector = page.locator('select');
-        await expect(versionSelector).toBeVisible();
-
-        const options = versionSelector.locator('option');
-        const optionCount = await options.count();
-        expect(optionCount).toBeGreaterThan(0);
-    });
-
-    test('community page - version selector works on desktop', async ({
-        page
-    }) => {
-        await page.setViewportSize({
-            width: 1280,
-            height: 720
-        });
-        await page.goto('/community.html');
-        await page.waitForSelector('tbody tr');
-
-        const versionSelector = page.locator('select');
-        await expect(versionSelector).toBeVisible();
-    });
-
-    test('main page - table scrollable on mobile', async ({
-        page
-    }) => {
-        await page.setViewportSize({
-            width: 375,
-            height: 667
-        });
-        await page.goto('/');
-        await page.waitForSelector('tbody tr');
-
-        const table = page.locator('table');
-        await expect(table).toBeVisible();
-
-        const tableWidth = await table.evaluate(el => el.offsetWidth);
-        expect(tableWidth).toBeGreaterThan(0);
-    });
-
-    test('community page - table scrollable on mobile', async ({
-        page
-    }) => {
-        await page.setViewportSize({
-            width: 375,
-            height: 667
-        });
-        await page.goto('/community.html');
-        await page.waitForSelector('tbody tr');
-
-        const table = page.locator('table');
-        await expect(table).toBeVisible();
-
-        const tableWidth = await table.evaluate(el => el.offsetWidth);
-        expect(tableWidth).toBeGreaterThan(0);
-    });
+  }
 });

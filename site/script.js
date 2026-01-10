@@ -36,6 +36,286 @@ function getCurrentTheme() {
   }
 }
 
+// ============================================================================
+// SVG Icon Templates (reused across UI components)
+// ============================================================================
+
+const Icons = {
+  // Token/database icon (used for input/output tokens)
+  tokens: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
+    <path d="M8 7c3.314 0 6-1.343 6-3s-2.686-3-6-3-6 1.343-6 3 2.686 3 6 3Z" />
+    <path d="M8 8.5c1.84 0 3.579-.37 4.914-1.037A6.33 6.33 0 0 0 14 6.78V8c0 1.657-2.686 3-6 3S2 9.657 2 8V6.78c.346.273.72.5 1.087.683C4.42 8.131 6.16 8.5 8 8.5Z" />
+    <path d="M8 12.5c1.84 0 3.579-.37 4.914-1.037.366-.183.74-.41 1.086-.684V12c0 1.657-2.686 3-6 3s-6-1.343-6-3v-1.22c.346.273.72.5 1.087.683C4.42 12.131 6.16 12.5 8 12.5Z" />
+  </svg>`,
+
+  // Dollar/currency icon
+  dollar: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
+    <path d="M6.375 5.5h.875v1.75h-.875a.875.875 0 1 1 0-1.75ZM8.75 10.5V8.75h.875a.875.875 0 0 1 0 1.75H8.75Z" />
+    <path fill-rule="evenodd" d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM7.25 3.75a.75.75 0 0 1 1.5 0V4h2.5a.75.75 0 0 1 0 1.5h-2.5v1.75h.875a2.375 2.375 0 1 1 0 4.75H8.75v.25a.75.75 0 0 1-1.5 0V12h-2.5a.75.75 0 0 1 0-1.5h2.5V8.75h-.875a2.375 2.375 0 1 1 0-4.75h.875v-.25Z" clip-rule="evenodd" />
+  </svg>`,
+
+  // Clock/time icon
+  clock: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
+    <path fill-rule="evenodd" d="M1 8a7 7 0 1 1 14 0A7 7 0 0 1 1 8Zm7.75-4.25a.75.75 0 0 0-1.5 0V8c0 .414.336.75.75.75h3.25a.75.75 0 0 0 0-1.5h-2.5v-3.5Z" clip-rule="evenodd" />
+  </svg>`,
+
+  // Tool/wrench icon
+  tool: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
+    <path fill-rule="evenodd" d="M15 4.5A3.5 3.5 0 0 1 11.435 8c-.99-.019-2.093.132-2.7.913l-4.13 5.31a2.015 2.015 0 1 1-2.827-2.828l5.309-4.13c.78-.607.932-1.71.914-2.7L8 4.5a3.5 3.5 0 0 1 4.477-3.362c.325.094.39.497.15.736L10.6 3.902a.48.48 0 0 0-.033.653c.271.314.565.608.879.879a.48.48 0 0 0 .653-.033l2.027-2.027c.239-.24.642-.175.736.15.09.31.138.637.138.976ZM3.75 13a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" clip-rule="evenodd" />
+    <path d="M11.5 9.5c.313 0 .62-.029.917-.084l1.962 1.962a2.121 2.121 0 0 1-3 3l-2.81-2.81 1.35-1.734c.05-.064.158-.158.426-.233.278-.078.639-.11 1.062-.102l.093.001ZM5 4l1.446 1.445a2.256 2.256 0 0 1-.047.21c-.075.268-.169.377-.233.427l-.61.474L4 5H2.655a.25.25 0 0 1-.224-.139l-1.35-2.7a.25.25 0 0 1 .047-.289l.745-.745a.25.25 0 0 1 .289-.047l2.7 1.35A.25.25 0 0 1 5 2.654V4Z" />
+  </svg>`,
+
+  // Success checkmark (green)
+  success: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3 text-green-600 dark:text-green-400">
+    <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14Zm3.844-8.791a.75.75 0 0 0-1.188-.918l-3.7 4.79-1.649-1.833a.75.75 0 1 0-1.114 1.004l2.25 2.5a.75.75 0 0 0 1.15-.043l4.25-5.5Z" clip-rule="evenodd" />
+  </svg>`,
+
+  // Warning triangle (yellow)
+  warning: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3 text-yellow-500 dark:text-yellow-400">
+    <path fill-rule="evenodd" d="M6.701 2.25c.577-1 2.02-1 2.598 0l5.196 9a1.5 1.5 0 0 1-1.299 2.25H2.804a1.5 1.5 0 0 1-1.3-2.25l5.197-9ZM8 4a.75.75 0 0 1 .75.75v3a.75.75 0 1 1-1.5 0v-3A.75.75 0 0 1 8 4Zm0 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clip-rule="evenodd" />
+  </svg>`,
+
+  // Error circle (red)
+  error: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3 text-red-600 dark:text-red-400">
+    <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14ZM8 4a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-1.5 0v-3A.75.75 0 0 1 8 4Zm0 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clip-rule="evenodd" />
+  </svg>`
+};
+
+// ============================================================================
+// Detail Row Template Helpers
+
+// ============================================================================
+// Run Viewer Modal Templates
+// ============================================================================
+
+const RunViewerTemplates = {
+  /**
+   * Keyboard shortcut row for help popup
+   */
+  shortcutRow(keys, description) {
+    const keyHtml = keys.map(k =>
+      `<kbd class="font-mono bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded text-xs font-semibold text-zinc-700 dark:text-zinc-300 border border-zinc-300 dark:border-zinc-700">${k}</kbd>`
+    ).join('<span class="text-xs text-zinc-400 dark:text-zinc-500">or</span>');
+    return `
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-1.5 min-w-[80px]">${keyHtml}</div>
+        <span class="text-sm text-zinc-600 dark:text-zinc-400">${description}</span>
+      </div>`;
+  },
+
+  /**
+   * Full keyboard help popup HTML
+   */
+  get helpPopup() {
+    return `
+      <div id="run-help-popup" class="hidden absolute top-14 right-4 z-10 bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-600 rounded-lg shadow-xl p-5 w-96">
+        <h3 class="text-base font-bold text-zinc-700 dark:text-zinc-300 mb-4">Keyboard Navigation</h3>
+        <div class="space-y-4">
+          <!-- Horizontal Section -->
+          <div>
+            <div class="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-2">Horizontal (Requests)</div>
+            <div class="space-y-1.5">
+              ${this.shortcutRow(['←', 'h'], 'Previous request')}
+              ${this.shortcutRow(['→', 'l'], 'Next request')}
+            </div>
+          </div>
+
+          <!-- Vertical Section -->
+          <div>
+            <div class="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-2">Vertical (Runs)</div>
+            <div class="space-y-1.5">
+              ${this.shortcutRow(['↑', 'k'], 'Previous run')}
+              ${this.shortcutRow(['↓', 'j'], 'Next run')}
+            </div>
+          </div>
+
+          <!-- Other Section -->
+          <div class="border-t border-zinc-200 dark:border-zinc-700 pt-3">
+            <div class="space-y-1.5">
+              <div class="flex items-center gap-3">
+                <kbd class="font-mono bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded text-xs font-semibold text-zinc-700 dark:text-zinc-300 border border-zinc-300 dark:border-zinc-700 min-w-[80px] text-center">Esc</kbd>
+                <span class="text-sm text-zinc-600 dark:text-zinc-400">Close viewer</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <kbd class="font-mono bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded text-xs font-semibold text-zinc-700 dark:text-zinc-300 border border-zinc-300 dark:border-zinc-700 min-w-[80px] text-center">?</kbd>
+                <span class="text-sm text-zinc-600 dark:text-zinc-400">Toggle this help</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>`;
+  },
+
+  /**
+   * Context file panel (strategy/gamestate/memory)
+   */
+  contextPanel(id, title) {
+    return `
+      <div class="flex flex-col min-h-0">
+        <h3 class="text-xs font-semibold text-zinc-600 dark:text-zinc-400 mb-2 px-2 text-center">${title}</h3>
+        <pre id="${id}" class="flex-1 min-h-0 bg-zinc-50 dark:bg-zinc-900 rounded-md p-3 text-xs text-zinc-800 dark:text-zinc-200 whitespace-pre-wrap overflow-auto"></pre>
+      </div>`;
+  },
+
+  /**
+   * Full modal HTML structure
+   */
+  get modal() {
+    return `
+    <div class="relative w-full h-full max-w-[2400px] max-h-[90vh] bg-white dark:bg-zinc-800 rounded-lg shadow-2xl ring-1 ring-white/10 overflow-hidden flex flex-col lg:max-w-[2300px] 2xl:max-w-[2200px]">
+      <div class="flex items-center justify-between px-4 py-2 border-b border-zinc-200 dark:border-zinc-600">
+        <div class="text-sm text-zinc-600 dark:text-zinc-300 font-mono truncate" id="run-title"></div>
+        <div class="flex items-center gap-2">
+          <button id="run-help" class="p-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300" aria-label="Help">?</button>
+          <button id="run-close" class="p-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300" aria-label="Close">✕</button>
+        </div>
+      </div>
+      ${this.helpPopup}
+      <div class="p-4 flex-1 flex flex-col overflow-hidden">
+        <!-- Row 1: Context Files (3 columns) - Dynamic height -->
+        <div class="grid grid-cols-3 gap-4 flex-1 mb-4 min-h-0">
+          ${this.contextPanel('run-strategy', 'STRATEGY.md')}
+          ${this.contextPanel('run-gamestate', 'GAMESTATE.md')}
+          ${this.contextPanel('run-memory', 'MEMORY.md')}
+        </div>
+
+        <!-- Separator -->
+        <div class="border-t border-zinc-300 dark:border-zinc-600 mb-4"></div>
+
+        <!-- Row 2: Main Content - Fixed height to fit screenshot -->
+        <div class="flex gap-4 mb-4" style="height: 384px;">
+          <!-- Screenshot Column -->
+          <div class="flex items-center justify-center px-4 rounded-md" style="flex: 0 0 auto;">
+            <img id="run-screenshot" class="max-h-full object-contain rounded-md" alt="Screenshot" style="max-width: 512px;" />
+          </div>
+          <!-- Reasoning + Tool Call Column -->
+          <div class="flex flex-col flex-1" style="height: 384px; gap: 12px;">
+            <pre id="run-reasoning" class="flex-1 min-h-0 bg-zinc-50 dark:bg-zinc-900 rounded-md p-3 text-xs text-zinc-800 dark:text-zinc-200 font-mono italic whitespace-pre-wrap overflow-auto"></pre>
+            <div id="run-tool-call" class="flex-shrink-0 bg-zinc-50 dark:bg-zinc-900 rounded-md px-3 py-2 text-xs font-mono text-zinc-800 dark:text-zinc-200 overflow-x-auto whitespace-nowrap text-center"></div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }
+};
+
+// ============================================================================
+
+/**
+ * Create a totals row for the detail view
+ * @param {string} icon - HTML icon string
+ * @param {string} label - Row label
+ * @param {string} value - Formatted value
+ * @returns {string} HTML table row
+ */
+function createTotalRow(icon, label, value) {
+  return `
+    <tr>
+      <td class="py-1">
+        <div class="flex items-center justify-left space-x-1 text-zinc-700 dark:text-zinc-300">
+          ${icon}
+          <span>${label}</span>
+        </div>
+      </td>
+      <td class="text-right py-1">
+        <span class="text-sm font-mono text-zinc-700 dark:text-zinc-300">${value}</span>
+      </td>
+    </tr>`;
+}
+
+/**
+ * Create a value ± stddev cell
+ * @param {string} value - Main value
+ * @param {string} stdDev - Standard deviation
+ * @param {string} valueWidth - CSS width class for value (default: 'w-12')
+ * @param {string} stdWidth - CSS width class for stddev (default: 'w-12')
+ * @returns {string} HTML cell content
+ */
+function createValueWithStdDev(value, stdDev, valueWidth = 'w-12', stdWidth = 'w-12') {
+  return `
+    <div class="flex justify-center items-center">
+      <span class="${valueWidth} text-center">${value}</span>
+      <span class="px-1">±</span>
+      <span class="${stdWidth} text-center">${stdDev}</span>
+    </div>`;
+}
+
+// ============================================================================
+// Shared Chart.js Configuration
+// ============================================================================
+
+/**
+ * Shared chart configuration factory to reduce duplication across chart functions.
+ * Provides consistent fonts, colors, and styling for all Chart.js visualizations.
+ */
+const ChartConfig = {
+  fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Courier New, monospace',
+
+  /**
+   * Get axis/ticks options for a given theme palette
+   * @param {Object} themePalette - Theme color palette (colors.light or colors.dark)
+   * @param {number} fontSize - Font size for ticks (default: 12)
+   * @returns {Object} Axis configuration for scales.x or scales.y
+   */
+  getAxisOptions(themePalette, fontSize = 12) {
+    return {
+      ticks: {
+        color: themePalette.axis,
+        font: { size: fontSize, family: this.fontFamily }
+      },
+      grid: {
+        color: themePalette.grid,
+        borderColor: themePalette.border
+      },
+      border: {
+        color: themePalette.border
+      }
+    };
+  },
+
+  /**
+   * Get legend options for a given theme palette
+   * @param {Object} themePalette - Theme color palette
+   * @param {boolean} display - Whether to show legend
+   * @param {string} position - Legend position (default: 'bottom')
+   * @returns {Object} Legend plugin configuration
+   */
+  getLegendOptions(themePalette, display = true, position = 'bottom') {
+    return {
+      display,
+      position,
+      labels: {
+        boxWidth: 10,
+        color: themePalette.axis,
+        font: { size: 12, family: this.fontFamily }
+      }
+    };
+  },
+
+  /**
+   * Get tooltip font options
+   * @param {number} fontSize - Font size (default: 12)
+   * @returns {Object} Tooltip font configuration
+   */
+  getTooltipFonts(fontSize = 12) {
+    return {
+      titleFont: { size: fontSize, family: this.fontFamily },
+      bodyFont: { size: fontSize, family: this.fontFamily }
+    };
+  },
+
+  /**
+   * Get common chart options (responsive, aspect ratio)
+   * @returns {Object} Base chart options
+   */
+  getBaseOptions() {
+    return {
+      responsive: true,
+      maintainAspectRatio: false
+    };
+  }
+};
+
 // Global state for main leaderboard chart
 let performanceChart = null;
 let DEFAULT_BENCHMARK_VERSION = null; // Must be set from manifest
@@ -225,82 +505,25 @@ function createRoundHistogram(runs, canvasId) {
     };
   });
 
+  const axisOptions = ChartConfig.getAxisOptions(themeColors);
+
   new Chart(ctx, {
     type: 'bar',
-    data: {
-      labels: bins,
-      datasets: datasets
-    },
+    data: { labels: bins, datasets: datasets },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: {
-        intersect: false,
-        mode: 'index'
-      },
+      ...ChartConfig.getBaseOptions(),
+      interaction: { intersect: false, mode: 'index' },
       plugins: {
-        legend: {
-          display: true,
-          position: 'bottom',
-          labels: {
-            boxWidth: 10,
-            color: themeColors.axis,
-            font: {
-              size: 12,
-              family: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Courier New, monospace'
-            }
-          }
-        },
-        title: {
-          display: false,
-          text: 'Rounds by Seed'
-        }
+        legend: ChartConfig.getLegendOptions(themeColors),
+        title: { display: false }
       },
       scales: {
-        x: {
-          stacked: true,
-          title: {
-            display: false,
-            text: 'Round'
-          },
-          ticks: {
-            color: themeColors.axis,
-            font: {
-              size: 12,
-              family: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Courier New, monospace'
-            }
-          },
-          grid: {
-            color: themeColors.grid,
-            borderColor: themeColors.border
-          },
-          border: {
-            color: themeColors.border
-          }
-        },
+        x: { stacked: true, ...axisOptions },
         y: {
           stacked: true,
           beginAtZero: true,
-          title: {
-            display: false,
-            text: 'Frequency'
-          },
-          ticks: {
-            color: themeColors.axis,
-            precision: 0,
-            stepSize: 1,
-            font: {
-              size: 12,
-              family: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Courier New, monospace'
-            }
-          },
-          grid: {
-            color: themeColors.grid,
-            borderColor: themeColors.border
-          },
-          border: {
-            color: themeColors.border
-          }
+          ...axisOptions,
+          ticks: { ...axisOptions.ticks, precision: 0, stepSize: 1 }
         }
       }
     }
@@ -342,6 +565,8 @@ function createPerformanceBarChart(entries) {
   // Add 0.5 padding above highest error bar, then round up to next integer for clean axis labels
   const yAxisMax = Math.ceil(maxWithError + 0.5);
 
+  const axisOptions = ChartConfig.getAxisOptions(themePalette, 14);
+
   if (performanceChart) {
     performanceChart.destroy();
   }
@@ -355,90 +580,26 @@ function createPerformanceBarChart(entries) {
         backgroundColor: fillColors,
         borderColor: strokeColors,
         borderWidth: 0,
-        errorBars: {
-          'Average Final Round': {
-            plus: stdDevs,
-            minus: stdDevs
-          }
-        }
+        errorBars: { 'Average Final Round': { plus: stdDevs, minus: stdDevs } }
       }]
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
+      ...ChartConfig.getBaseOptions(),
       plugins: {
-        legend: {
-          display: false
-        },
-        title: {
-          display: false
-        },
+        legend: { display: false },
+        title: { display: false },
         tooltip: {
-          titleFont: {
-            size: 12,
-            family: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Courier New, monospace'
-          },
-          bodyFont: {
-            size: 12,
-            family: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Courier New, monospace'
-          },
+          ...ChartConfig.getTooltipFonts(),
           callbacks: {
-            label: function(context) {
-              const index = context.dataIndex;
-              return `${context.parsed.y.toFixed(1)} ± ${stdDevs[index].toFixed(1)}`;
-            }
+            label: (context) => `${context.parsed.y.toFixed(1)} ± ${stdDevs[context.dataIndex].toFixed(1)}`
           }
         }
       },
       scales: {
-        x: {
-          title: {
-            display: false,
-            text: 'Model'
-          },
-          ticks: {
-            color: themePalette.axis,
-            font: {
-              size: 14,
-              family: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Courier New, monospace'
-            }
-          },
-          grid: {
-            color: themePalette.grid,
-            borderColor: themePalette.border
-          },
-          border: {
-            color: themePalette.border
-          }
-        },
-        y: {
-          beginAtZero: true,
-          max: yAxisMax,
-          title: {
-            display: false,
-            text: 'Average Final Round'
-          },
-          ticks: {
-            color: themePalette.axis,
-            font: {
-              size: 14,
-              family: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Courier New, monospace'
-            }
-          },
-          grid: {
-            color: themePalette.grid,
-            borderColor: themePalette.border
-          },
-          border: {
-            color: themePalette.border
-          }
-        }
+        x: axisOptions,
+        y: { beginAtZero: true, max: yAxisMax, ...axisOptions }
       },
-      elements: {
-        bar: {
-          borderRadius: 10
-        }
-      }
+      elements: { bar: { borderRadius: 10 } }
     },
     plugins: [{
       id: 'errorBars',
@@ -504,37 +665,20 @@ function createProviderPieChart(providers, canvasId) {
   const ctx = document.getElementById(canvasId).getContext('2d');
   const theme = getCurrentTheme();
   const themeColors = colors[theme] || colors.light;
+
   new Chart(ctx, {
     type: 'doughnut',
     data: {
       labels: providerNames,
-      datasets: [{
-        data: counts,
-        borderWidth: 1
-      }]
+      datasets: [{ data: counts, borderWidth: 1 }]
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
+      ...ChartConfig.getBaseOptions(),
       plugins: {
-        legend: {
-          display: true,
-          position: 'bottom',
-          labels: {
-            boxWidth: 10,
-            color: themeColors.axis,
-            font: {
-              size: 12,
-              family: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Courier New, monospace'
-            }
-          }
-        },
-        title: {
-          display: false,
-          text: 'Providers',
-        }
+        legend: ChartConfig.getLegendOptions(themeColors),
+        title: { display: false }
       }
-    },
+    }
   });
 }
 
@@ -1079,117 +1223,7 @@ function openRunViewer({
   };
   const overlay = document.createElement('div');
   overlay.className = 'fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4';
-  overlay.innerHTML = `
-    <div class="relative w-full h-full max-w-[2400px] max-h-[90vh] bg-white dark:bg-zinc-800 rounded-lg shadow-2xl ring-1 ring-white/10 overflow-hidden flex flex-col lg:max-w-[2300px] 2xl:max-w-[2200px]">
-      <div class="flex items-center justify-between px-4 py-2 border-b border-zinc-200 dark:border-zinc-600">
-        <div class="text-sm text-zinc-600 dark:text-zinc-300 font-mono truncate" id="run-title"></div>
-        <div class="flex items-center gap-2">
-          <button id="run-help" class="p-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300" aria-label="Help">?</button>
-          <button id="run-close" class="p-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300" aria-label="Close">✕</button>
-        </div>
-      </div>
-      <!-- Help Popup -->
-      <div id="run-help-popup" class="hidden absolute top-14 right-4 z-10 bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-600 rounded-lg shadow-xl p-5 w-96">
-        <h3 class="text-base font-bold text-zinc-700 dark:text-zinc-300 mb-4">Keyboard Navigation</h3>
-        <div class="space-y-4">
-          <!-- Horizontal Section -->
-          <div>
-            <div class="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-2">Horizontal (Requests)</div>
-            <div class="space-y-1.5">
-              <div class="flex items-center gap-3">
-                <div class="flex items-center gap-1.5 min-w-[80px]">
-                  <kbd class="font-mono bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded text-xs font-semibold text-zinc-700 dark:text-zinc-300 border border-zinc-300 dark:border-zinc-700">←</kbd>
-                  <span class="text-xs text-zinc-400 dark:text-zinc-500">or</span>
-                  <kbd class="font-mono bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded text-xs font-semibold text-zinc-700 dark:text-zinc-300 border border-zinc-300 dark:border-zinc-700">h</kbd>
-                </div>
-                <span class="text-sm text-zinc-600 dark:text-zinc-400">Previous request</span>
-              </div>
-              <div class="flex items-center gap-3">
-                <div class="flex items-center gap-1.5 min-w-[80px]">
-                  <kbd class="font-mono bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded text-xs font-semibold text-zinc-700 dark:text-zinc-300 border border-zinc-300 dark:border-zinc-700">→</kbd>
-                  <span class="text-xs text-zinc-400 dark:text-zinc-500">or</span>
-                  <kbd class="font-mono bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded text-xs font-semibold text-zinc-700 dark:text-zinc-300 border border-zinc-300 dark:border-zinc-700">l</kbd>
-                </div>
-                <span class="text-sm text-zinc-600 dark:text-zinc-400">Next request</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Vertical Section -->
-          <div>
-            <div class="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-2">Vertical (Runs)</div>
-            <div class="space-y-1.5">
-              <div class="flex items-center gap-3">
-                <div class="flex items-center gap-1.5 min-w-[80px]">
-                  <kbd class="font-mono bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded text-xs font-semibold text-zinc-700 dark:text-zinc-300 border border-zinc-300 dark:border-zinc-700">↑</kbd>
-                  <span class="text-xs text-zinc-400 dark:text-zinc-500">or</span>
-                  <kbd class="font-mono bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded text-xs font-semibold text-zinc-700 dark:text-zinc-300 border border-zinc-300 dark:border-zinc-700">k</kbd>
-                </div>
-                <span class="text-sm text-zinc-600 dark:text-zinc-400">Previous run</span>
-              </div>
-              <div class="flex items-center gap-3">
-                <div class="flex items-center gap-1.5 min-w-[80px]">
-                  <kbd class="font-mono bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded text-xs font-semibold text-zinc-700 dark:text-zinc-300 border border-zinc-300 dark:border-zinc-700">↓</kbd>
-                  <span class="text-xs text-zinc-400 dark:text-zinc-500">or</span>
-                  <kbd class="font-mono bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded text-xs font-semibold text-zinc-700 dark:text-zinc-300 border border-zinc-300 dark:border-zinc-700">j</kbd>
-                </div>
-                <span class="text-sm text-zinc-600 dark:text-zinc-400">Next run</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Other Section -->
-          <div class="border-t border-zinc-200 dark:border-zinc-700 pt-3">
-            <div class="space-y-1.5">
-              <div class="flex items-center gap-3">
-                <kbd class="font-mono bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded text-xs font-semibold text-zinc-700 dark:text-zinc-300 border border-zinc-300 dark:border-zinc-700 min-w-[80px] text-center">Esc</kbd>
-                <span class="text-sm text-zinc-600 dark:text-zinc-400">Close viewer</span>
-              </div>
-              <div class="flex items-center gap-3">
-                <kbd class="font-mono bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded text-xs font-semibold text-zinc-700 dark:text-zinc-300 border border-zinc-300 dark:border-zinc-700 min-w-[80px] text-center">?</kbd>
-                <span class="text-sm text-zinc-600 dark:text-zinc-400">Toggle this help</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="p-4 flex-1 flex flex-col overflow-hidden">
-        <!-- Row 1: Context Files (3 columns) - Dynamic height -->
-        <div class="grid grid-cols-3 gap-4 flex-1 mb-4 min-h-0">
-          <!-- Strategy -->
-          <div class="flex flex-col min-h-0">
-            <h3 class="text-xs font-semibold text-zinc-600 dark:text-zinc-400 mb-2 px-2 text-center">STRATEGY.md</h3>
-            <pre id="run-strategy" class="flex-1 min-h-0 bg-zinc-50 dark:bg-zinc-900 rounded-md p-3 text-xs text-zinc-800 dark:text-zinc-200 whitespace-pre-wrap overflow-auto"></pre>
-          </div>
-          <!-- Gamestate -->
-          <div class="flex flex-col min-h-0">
-            <h3 class="text-xs font-semibold text-zinc-600 dark:text-zinc-400 mb-2 px-2 text-center">GAMESTATE.md</h3>
-            <pre id="run-gamestate" class="flex-1 min-h-0 bg-zinc-50 dark:bg-zinc-900 rounded-md p-3 text-xs text-zinc-800 dark:text-zinc-200 whitespace-pre-wrap overflow-auto"></pre>
-          </div>
-          <!-- Memory -->
-          <div class="flex flex-col min-h-0">
-            <h3 class="text-xs font-semibold text-zinc-600 dark:text-zinc-400 mb-2 px-2 text-center">MEMORY.md</h3>
-            <pre id="run-memory" class="flex-1 min-h-0 bg-zinc-50 dark:bg-zinc-900 rounded-md p-3 text-xs text-zinc-800 dark:text-zinc-200 whitespace-pre-wrap overflow-auto"></pre>
-          </div>
-        </div>
-
-        <!-- Separator -->
-        <div class="border-t border-zinc-300 dark:border-zinc-600 mb-4"></div>
-
-        <!-- Row 2: Main Content - Fixed height to fit screenshot -->
-        <div class="flex gap-4 mb-4" style="height: 384px;">
-          <!-- Screenshot Column -->
-          <div class="flex items-center justify-center px-4 rounded-md" style="flex: 0 0 auto;">
-            <img id="run-screenshot" class="max-h-full object-contain rounded-md" alt="Screenshot" style="max-width: 512px;" />
-          </div>
-          <!-- Reasoning + Tool Call Column -->
-          <div class="flex flex-col flex-1" style="height: 384px; gap: 12px;">
-            <pre id="run-reasoning" class="flex-1 min-h-0 bg-zinc-50 dark:bg-zinc-900 rounded-md p-3 text-xs text-zinc-800 dark:text-zinc-200 font-mono italic whitespace-pre-wrap overflow-auto"></pre>
-            <div id="run-tool-call" class="flex-shrink-0 bg-zinc-50 dark:bg-zinc-900 rounded-md px-3 py-2 text-xs font-mono text-zinc-800 dark:text-zinc-200 overflow-x-auto whitespace-nowrap text-center"></div>
-          </div>
-        </div>
-      </div>
-    </div>`;
+  overlay.innerHTML = RunViewerTemplates.modal;
 
   document.body.appendChild(overlay);
   document.body.style.overflow = 'hidden';
