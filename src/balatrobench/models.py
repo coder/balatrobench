@@ -218,8 +218,8 @@ class Run:
     final_ante: int
     final_round: int
 
-    # Provider usage distribution
-    providers: dict[str, int]  # provider_name -> call count
+    # Provider usage distribution (immutable tuple of (name, count) pairs)
+    providers: tuple[tuple[str, int], ...]
 
     # Per-call statistics within this run
     stats: Stats
@@ -244,7 +244,7 @@ class Runs:
 class Request:
     """Metadata for a single LLM API request."""
 
-    id: str  # Request identifier (e.g., "00042")
+    id: str  # Request identifier (e.g., "request-00042")
     status: Literal["success", "error"]
     provider: str  # LLM provider (e.g., "openai", "azure", "groq")
 
