@@ -5,6 +5,7 @@ import re
 import sys
 from pathlib import Path
 
+from . import __version__
 from .analyzer import BenchmarkAnalyzer
 from .models import Model
 from .writer import BenchmarkWriter
@@ -47,16 +48,15 @@ def create_parser() -> argparse.ArgumentParser:
 
 
 def infer_version(input_dir: Path) -> str:
-    """Infer version from input directory name."""
+    """Infer version from input directory name.
+
+    Returns v{__version__} if version cannot be inferred from the path.
+    """
     # Try to extract version from path like runs/v1.0.0
     name = input_dir.name
     if VERSION_PATTERN.match(name):
         return name
-    raise ValueError(
-        f"Could not infer version from directory name '{name}'. "
-        f"Expected format: v<major>.<minor>.<patch> (e.g., v1.0.0). "
-        f"Use --version to specify explicitly."
-    )
+    return f"v{__version__}"
 
 
 def main() -> None:
