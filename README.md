@@ -1,52 +1,79 @@
 <div align="center">
   <h1>BalatroBench</h1>
   <p align="center">
+    <a href="https://github.com/coder/balatrobench/releases">
+      <img alt="GitHub release" src="https://img.shields.io/github/v/release/coder/balatrobench?include_prereleases&sort=semver&style=for-the-badge&logo=github"/>
+    </a>
     <a href="https://discord.gg/TPn6FYgGPv">
       <img alt="Discord" src="https://img.shields.io/badge/discord-server?style=for-the-badge&logo=discord&logoColor=%23FFFFFF&color=%235865F2"/>
     </a>
   </p>
-  <div>
-    <img width="1024" alt="Screenshot: BalatroBench" src="https://github.com/user-attachments/assets/33a52df0-a7f8-4784-a640-0212267ed199" />
-  </div>
-  <br>
-  <p><em>Benchmark LLMs' strategic performance in Balatro</em></p>
+  <div><img src="./site/assets/balatrobench.svg" alt="balatrobench" width="170" height="170"></div>
+  <p><em>Benchmark LLMs playing Balatro</em></p>
 </div>
 
 ---
 
-## Quick Start
+BalatroBench is a benchmark analysis tool and leaderboard for [BalatroLLM](https://github.com/coder/balatrollm) runs. It processes game data and generates interactive leaderboards comparing LLM models and strategies playing [Balatro](https://www.playbalatro.com/).
 
-To run this project locally:
+## 📚 Documentation
+
+#### Requirements
+
+- [uv](https://docs.astral.sh/uv/) - Python package manager
+- [npm](https://www.npmjs.com/) - Node.js package manager
+
+#### Installation
+
+Install Python and npm dependencies:
 
 ```bash
-# Serve from site/ directory
+make install
+source .venv/bin/activate
+```
+
+This runs `uv sync` for Python packages and `npm install` for Playwright tests.
+
+For browser binaries (first time only):
+
+```bash
+npx playwright install
+```
+
+#### Generating Benchmarks
+
+Generate benchmark data from BalatroLLM runs:
+
+```bash
+# Default: reads from ../balatrollm/runs/v1.0.0, writes to site/benchmarks
+uv run balatrobench
+
+# Custom paths
+uv run balatrobench --input-dir /path/to/runs/v1.0.0 --output-dir /path/to/output
+
+# Enable WebP conversion for screenshots
+uv run balatrobench --webp
+```
+
+#### Starting the Website
+
+Serve the site locally:
+
+```bash
+npm run serve
+# or
 python3 -m http.server 8000 --directory site
 ```
 
 Then visit [http://localhost:8000](http://localhost:8000)
 
-### Local Data
+To use local benchmark data, set `environment: 'development'` in `site/config.js`.
 
-Generate benchmark data from BalatroLLM runs:
+#### Running Tests
 
-```bash
-# Generate benchmark data (requires ../balatrollm/runs symlinked or present)
-uv run balatrobench --input-dir runs/v1.0.0
-```
-
-Then in `site/config.js`, set `environment: 'development'` to use local data.
-
-## Testing
-
-The project includes end-to-end tests using Playwright.
-
-### Running Tests
+End-to-end tests use Playwright:
 
 ```bash
-# Install dependencies (first time only)
-npm install
-npx playwright install  # Install browser binaries
-
 # Run tests headless (default)
 npm test
 
@@ -62,10 +89,8 @@ npm run test:debug
 
 The test server is automatically started by Playwright (see `playwright.config.js`).
 
-## Upload to CDN
+## 🚀 Related Projects
 
-This project make use of BunnyCDN for hosting static assets in benchmarks directory. If you have access to the CDN, you can upload the data with
-
-```
-uv run upload.py
-```
+- [**BalatroBot**](https://github.com/coder/balatrobot): API for developing Balatro bots
+- [**BalatroLLM**](https://github.com/coder/balatrollm): Play Balatro with LLMs
+- [**BalatroBench**](https://github.com/coder/balatrobench): Benchmark LLMs playing Balatro
