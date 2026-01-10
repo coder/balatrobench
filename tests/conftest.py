@@ -1,14 +1,10 @@
 """Shared pytest fixtures for balatrobench tests."""
 
-from __future__ import annotations
-
 from pathlib import Path
-from typing import TYPE_CHECKING
 
 import pytest
 
-if TYPE_CHECKING:
-    from balatrobench.models import Model, Stats, Strategy
+from balatrobench.models import Model, Stats, Strategy
 
 
 @pytest.fixture

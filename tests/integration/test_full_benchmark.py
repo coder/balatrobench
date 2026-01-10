@@ -3,8 +3,6 @@
 Tests the complete CLI → BenchmarkAnalyzer → BenchmarkWriter output flow.
 """
 
-from __future__ import annotations
-
 import json
 from pathlib import Path
 
