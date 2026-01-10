@@ -40,8 +40,10 @@ format: ## Run formatters (ruff, mdformat, js-beautify)
 	ruff format .
 	@$(PRINT) "$(YELLOW)Running mdformat formatter...$(RESET)"
 	mdformat README.md CLAUDE.md CONTRIBUTING.md
-	@$(PRINT) "$(YELLOW)Running js-beautify...$(RESET)"
-	@git ls-files --cached --others --exclude-standard | grep -E "\.(js|html)$$" | xargs -r js-beautify -r
+	@$(PRINT) "$(YELLOW)Running js-beautify formatter...$(RESET)"
+	html-beautify --replace --editorconfig site/*.html
+	js-beautify --replace --editorconfig site/*.js
+	js-beautify --replace --editorconfig site/benchmarks/**/*.json
 
 typecheck: ## Run type checkers (Python and Lua)
 	@$(PRINT) "$(YELLOW)Running Python type checker...$(RESET)"
