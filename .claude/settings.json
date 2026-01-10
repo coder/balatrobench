@@ -16,7 +16,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "js-beautify --editorconfig -r \"**/*.js\" && js-beautify --editorconfig -r \"**/*.html\" && js-beautify --editorconfig -r \"**/*.css\""
+            "command": "make quality",
           }
         ]
       }
