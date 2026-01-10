@@ -38,7 +38,7 @@ format: ## Run formatters (ruff, mdformat, stylua)
 	ruff check --select I --fix .
 	ruff format .
 	@$(PRINT) "$(YELLOW)Running mdformat formatter...$(RESET)"
-	mdformat README.md CLAUDE.md
+	mdformat README.md CLAUDE.md CONTRIBUTING.md
 
 typecheck: ## Run type checkers (Python and Lua)
 	@$(PRINT) "$(YELLOW)Running Python type checker...$(RESET)"
