@@ -1,0 +1,26 @@
+{
+  "run_won": false,
+  "run_completed": true,
+  "final_ante": 2,
+  "final_round": 4,
+  "providers": {
+    "Groq": 25,
+    "Cerebras": 9
+  },
+  "calls_total": 34,
+  "calls_success": 34,
+  "calls_error": 0,
+  "calls_failed": 0,
+  "tokens_in_total": 455289,
+  "tokens_out_total": 42069,
+  "tokens_in_avg": 13390.85294117647,
+  "tokens_out_avg": 1237.3235294117646,
+  "tokens_in_std": 310.1518818894578,
+  "tokens_out_std": 618.7600367395697,
+  "time_total_ms": 109092,
+  "time_avg_ms": 3208.5882352941176,
+  "time_std_ms": 1384.0242841985603,
+  "cost_total": 0.1022712,
+  "cost_avg": 0.0030079764705882354,
+  "cost_std": 0.0017756556516872813
+}
