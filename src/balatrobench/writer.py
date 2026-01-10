@@ -22,12 +22,31 @@ from .models import (
     Version,
 )
 
+# File naming constants
+MANIFEST_FILENAME = "manifest.json"
+LEADERBOARD_FILENAME = "leaderboard.json"
+REQUEST_ID_PREFIX = "request-"
+
 
 class BenchmarkWriter:
     """Writes benchmark data to files."""
 
     def __init__(self, output_dir: Path) -> None:
         self.output_dir = output_dir
+
+    def _write_json(self, path: Path, data: object) -> Path:
+        """Write data to JSON file, creating directories as needed.
+
+        Args:
+            path: Output file path
+            data: Data to serialize (dataclass or dict)
+
+        Returns the path to the written file.
+        """
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with path.open("w") as f:
+            json.dump(self._to_dict(data), f, indent=2)
+        return path
 
     def write_manifest(self, versions: list[str], latest_version: str) -> Path:
         """Write manifest.json to base directory.
@@ -44,14 +63,7 @@ class BenchmarkWriter:
             version_entries.append(entry)
 
         manifest = Manifest(versions=tuple(version_entries))
-
-        manifest_path = self.output_dir / "manifest.json"
-        manifest_path.parent.mkdir(parents=True, exist_ok=True)
-
-        with manifest_path.open("w") as f:
-            json.dump(self._to_dict(manifest), f, indent=2)
-
-        return manifest_path
+        return self._write_json(self.output_dir / MANIFEST_FILENAME, manifest)
 
     def write_models_leaderboard(
         self, leaderboard: ModelsLeaderboard, version: str, strategy: str
@@ -62,13 +74,8 @@ class BenchmarkWriter:
 
         Returns the path to the written file.
         """
-        output_path = self.output_dir / version / strategy / "leaderboard.json"
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-
-        with output_path.open("w") as f:
-            json.dump(self._to_dict(leaderboard), f, indent=2)
-
-        return output_path
+        output_path = self.output_dir / version / strategy / LEADERBOARD_FILENAME
+        return self._write_json(output_path, leaderboard)
 
     def write_strategies_leaderboard(
         self, leaderboard: StrategiesLeaderboard, version: str, model_key: str
@@ -79,13 +86,8 @@ class BenchmarkWriter:
 
         Returns the path to the written file.
         """
-        output_path = self.output_dir / version / model_key / "leaderboard.json"
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-
-        with output_path.open("w") as f:
-            json.dump(self._to_dict(leaderboard), f, indent=2)
-
-        return output_path
+        output_path = self.output_dir / version / model_key / LEADERBOARD_FILENAME
+        return self._write_json(output_path, leaderboard)
 
     def write_runs(self, runs: Runs, version: str, strategy: str) -> Path:
         """Write {model}.json for a model.
@@ -99,12 +101,7 @@ class BenchmarkWriter:
             / runs.model.vendor
             / f"{runs.model.name}.json"
         )
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-
-        with output_path.open("w") as f:
-            json.dump(self._to_dict(runs), f, indent=2)
-
-        return output_path
+        return self._write_json(output_path, runs)
 
     def write_strategy_runs(
         self, runs: Runs, version: str, vendor: str, model_name: str
@@ -121,12 +118,7 @@ class BenchmarkWriter:
             / runs.strategy.name
             / "runs.json"
         )
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-
-        with output_path.open("w") as f:
-            json.dump(self._to_dict(runs), f, indent=2)
-
-        return output_path
+        return self._write_json(output_path, runs)
 
     def write_request_files(
         self,
@@ -153,7 +145,7 @@ class BenchmarkWriter:
 
         for custom_id in all_custom_ids:
             # Convert "request-00042" to "00042"
-            request_id = custom_id.replace("request-", "")
+            request_id = custom_id.replace(REQUEST_ID_PREFIX, "")
             request_dir = output_base / run_id / request_id
             request_dir.mkdir(parents=True, exist_ok=True)
 
