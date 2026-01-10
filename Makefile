@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := help
-.PHONY: help install lint format typecheck quality test all
+.PHONY: help install lint format typecheck quality test coverage all
 
 # Colors (ANSI)
 YELLOW := \033[33m
@@ -23,6 +23,7 @@ help: ## Show this help message
 	@printf "  $(GREEN)%-18s$(RESET) %s\n" "quality"   "Run all code quality checks"
 	@printf "  $(GREEN)%-18s$(RESET) %s\n" "test"      "Run Python test suite"
 	@printf "  $(GREEN)%-18s$(RESET) %s\n" "all"       "Run all code quality checks and tests"
+	@printf "  $(GREEN)%-18s$(RESET) %s\n" "coverage"  "Run tests with coverage report"
 
 install: ## Install balatrobot and all dependencies (including dev)
 	@$(PRINT) "$(YELLOW)Installing all dependencies...$(RESET)"
@@ -50,6 +51,10 @@ quality: lint typecheck format ## Run all code quality checks
 test: ## Run Python test suite
 	@$(PRINT) "$(YELLOW)Running balatrobench tests...$(RESET)"
 	@pytest
+
+coverage: ## Run tests with coverage report
+	@$(PRINT) "$(YELLOW)Running tests with coverage...$(RESET)"
+	@pytest --cov=balatrobench --cov-report=term-missing --cov-report=html
 
 all: lint format typecheck test ## Run all code quality checks and tests
 	@$(PRINT) "$(GREEN)✓ All checks completed$(RESET)"
