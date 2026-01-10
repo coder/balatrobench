@@ -241,68 +241,74 @@
         class="bg-white dark:bg-zinc-800 rounded-lg shadow-lg dark:shadow-2xl dark:ring-1 dark:ring-white/5 p-8 mb-8">
         <h2 class="text-2xl font-bold text-zinc-800 dark:text-zinc-100 mb-4">Leaderboards</h2>
         <div class="grid md:grid-cols-2 gap-6">
-          <div class="border border-zinc-200 dark:border-zinc-700 rounded-lg p-4">
-            <h3 class="text-lg font-semibold text-zinc-700 dark:text-zinc-200 mb-2">Model Leaderboard</h3>
-            <p class="text-zinc-600 dark:text-zinc-300 text-sm leading-relaxed">
-              Compare performance across different LLMs. Models are ranked by their average
-              final round reached, with detailed statistics on costs, speed, and reliability.
-            </p>
-            <a href="index.html"
-              class="inline-block mt-3 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm font-medium">
-              View Model Leaderboard →
-            </a>
-          </div>
-          <div class="border border-zinc-200 dark:border-zinc-700 rounded-lg p-4">
-            <h3 class="text-lg font-semibold text-zinc-700 dark:text-zinc-200 mb-2">Community Strategies</h3>
-            <p class="text-zinc-600 dark:text-zinc-300 text-sm leading-relaxed">
-              Explore community-submitted strategies and approaches to playing Balatro with fixed model.
-              You can contribute with your own strategies.
-            </p>
-            <a href="community.html"
-              class="inline-block mt-3 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm font-medium">
-              View Community Leaderboard →
-            </a>
-          </div>
+          <a href="index.html"
+            class="border border-zinc-200 dark:border-zinc-700 rounded-lg p-6 hover:border-blue-400 dark:hover:border-blue-500 hover:shadow-md transition-all group">
+            <div class="flex flex-col items-center text-center">
+              <h3 class="text-lg font-semibold text-zinc-700 dark:text-zinc-200 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                Model Leaderboard
+              </h3>
+              <p class="text-zinc-600 dark:text-zinc-300 text-sm leading-relaxed">
+                Compare performance across different LLMs. Models are ranked by their average
+                final round reached, with detailed statistics on costs, speed, and reliability.
+              </p>
+            </div>
+          </a>
+          <a href="community.html"
+            class="border border-zinc-200 dark:border-zinc-700 rounded-lg p-6 hover:border-blue-400 dark:hover:border-blue-500 hover:shadow-md transition-all group">
+            <div class="flex flex-col items-center text-center">
+              <h3 class="text-lg font-semibold text-zinc-700 dark:text-zinc-200 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                Community Strategies
+              </h3>
+              <p class="text-zinc-600 dark:text-zinc-300 text-sm leading-relaxed">
+                Explore community-submitted strategies and approaches to playing Balatro with fixed model.
+                You can contribute with your own strategies.
+              </p>
+            </div>
+          </a>
         </div>
       </div>
 
       <div
         class="bg-white dark:bg-zinc-800 rounded-lg shadow-lg dark:shadow-2xl dark:ring-1 dark:ring-white/5 p-8 mb-8">
         <h2 class="text-2xl font-bold text-zinc-800 dark:text-zinc-100 mb-4">Related Projects</h2>
-        <div class="space-y-6">
-          <div class="border border-zinc-200 dark:border-zinc-700 rounded-lg p-4">
-            <h3 class="text-lg font-semibold text-zinc-700 dark:text-zinc-200 mb-2">
-              <a href="https://github.com/coder/balatrobot"
-                class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">BalatroBot</a>
-            </h3>
-            <p class="text-zinc-600 dark:text-zinc-300 text-sm leading-relaxed">
-              The foundational Python framework that enables automated interaction with Balatro. Provides the core API
-              for game state reading, action execution, and bot development that powers all LLM players in our
-              benchmarks.
-            </p>
-          </div>
-          <div class="border border-zinc-200 dark:border-zinc-700 rounded-lg p-4">
-            <h3 class="text-lg font-semibold text-zinc-700 dark:text-zinc-200 mb-2">
-              <a href="https://github.com/coder/balatrollm"
-                class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">BalatroLLM</a>
-            </h3>
-            <p class="text-zinc-600 dark:text-zinc-300 text-sm leading-relaxed">
-              The LLM-powered bot that generates all benchmark data displayed on this site. Uses strategy templates and
-              game state analysis to make strategic decisions, then runs multiple games to produce the performance
-              statistics you see in our leaderboards.
-            </p>
-          </div>
-          <div class="border border-zinc-200 dark:border-zinc-700 rounded-lg p-4">
-            <h3 class="text-lg font-semibold text-zinc-700 dark:text-zinc-200 mb-2">
-              <a href="https://github.com/coder/balatrobench"
-                class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">BalatroBench</a>
-            </h3>
-            <p class="text-zinc-600 dark:text-zinc-300 text-sm leading-relaxed">
-              This website repository that processes and visualizes the benchmark data. Takes raw game results from
-              BalatroLLM runs and transforms them into interactive leaderboards with detailed statistics, charts,
-              and performance analysis.
-            </p>
-          </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <a href="https://github.com/coder/balatrobot"
+            class="border border-zinc-200 dark:border-zinc-700 rounded-lg p-6 hover:border-blue-400 dark:hover:border-blue-500 hover:shadow-md transition-all group">
+            <div class="flex flex-col items-center text-center">
+              <img src="assets/balatrobot.svg" alt="BalatroBot logo" class="w-20 h-20 mb-4">
+              <h3 class="text-lg font-semibold text-zinc-700 dark:text-zinc-200 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                BalatroBot
+              </h3>
+              <p class="text-zinc-600 dark:text-zinc-300 text-sm leading-relaxed">
+                Python framework for automated Balatro interaction. Core API for game state reading and action
+                execution.
+              </p>
+            </div>
+          </a>
+          <a href="https://github.com/coder/balatrollm"
+            class="border border-zinc-200 dark:border-zinc-700 rounded-lg p-6 hover:border-blue-400 dark:hover:border-blue-500 hover:shadow-md transition-all group">
+            <div class="flex flex-col items-center text-center">
+              <img src="assets/balatrollm.svg" alt="BalatroLLM logo" class="w-20 h-20 mb-4">
+              <h3 class="text-lg font-semibold text-zinc-700 dark:text-zinc-200 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                BalatroLLM
+              </h3>
+              <p class="text-zinc-600 dark:text-zinc-300 text-sm leading-relaxed">
+                LLM-powered bot that generates benchmark data. Uses strategies and game state analysis for decisions.
+              </p>
+            </div>
+          </a>
+          <a href="https://github.com/coder/balatrobench"
+            class="border border-zinc-200 dark:border-zinc-700 rounded-lg p-6 hover:border-blue-400 dark:hover:border-blue-500 hover:shadow-md transition-all group">
+            <div class="flex flex-col items-center text-center">
+              <img src="assets/balatrobench.svg" alt="BalatroBench logo" class="w-20 h-20 mb-4">
+              <h3 class="text-lg font-semibold text-zinc-700 dark:text-zinc-200 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                BalatroBench
+              </h3>
+              <p class="text-zinc-600 dark:text-zinc-300 text-sm leading-relaxed">
+                This site! Processes and visualizes benchmark data into interactive leaderboards and statistics.
+              </p>
+            </div>
+          </a>
         </div>
       </div>
 
