@@ -38,6 +38,7 @@ markers = [
 test = ["pytest>=9.0.2", "pytest-cov>=6.0.0"]
 dev = [
   "commitizen>=4.11.0",
+  "jsbeautifier>=1.15.4",
   "mdformat>=0.7.22,<0.8.0",
   "mdformat-footnote>=0.1.2",
   "mdformat-frontmatter>=2.0.8",
