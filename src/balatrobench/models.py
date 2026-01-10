@@ -57,7 +57,7 @@ Output Files:
 from dataclasses import dataclass
 from typing import Literal
 
-from balatrobench.enums import Deck, Stake
+from .enums import Deck, Stake
 
 ################################################################################
 # Version, Manifest, Strategy, Model & Config
