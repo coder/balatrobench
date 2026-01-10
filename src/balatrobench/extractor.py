@@ -3,10 +3,7 @@
 import json
 from collections.abc import Iterator
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
-
-if TYPE_CHECKING:
-    from typing import Literal
+from typing import Any, Literal
 
 from .models import Request
 

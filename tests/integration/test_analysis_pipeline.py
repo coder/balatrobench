@@ -4,8 +4,6 @@ Tests analyzer with real fixture data to verify the full analysis pipeline
 produces correct output structures.
 """
 
-from __future__ import annotations
-
 from pathlib import Path
 
 import pytest

@@ -1,9 +1,6 @@
 """Unit tests for balatrobench.analyzer module."""
 
-from __future__ import annotations
-
 from pathlib import Path
-from typing import TYPE_CHECKING
 from unittest.mock import patch
 
 import pytest
@@ -18,10 +15,6 @@ from balatrobench.models import (
     Stats,
     Strategy,
 )
-
-if TYPE_CHECKING:
-    pass
-
 
 # =============================================================================
 # Fixtures
