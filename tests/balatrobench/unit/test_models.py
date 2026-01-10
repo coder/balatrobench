@@ -14,7 +14,6 @@ from balatrobench.models import (
 )
 
 
-@pytest.mark.unit
 def test_model_frozen(sample_model: Model) -> None:
     """Model dataclass is immutable (raises FrozenInstanceError)."""
     with pytest.raises(FrozenInstanceError):
@@ -24,7 +23,6 @@ def test_model_frozen(sample_model: Model) -> None:
         sample_model.name = "claude-4"  # type: ignore[misc]
 
 
-@pytest.mark.unit
 def test_model_equality(sample_model: Model) -> None:
     """Two Models with same vendor/name are equal."""
     identical = Model(vendor="openai", name="gpt-oss-120b")
@@ -38,7 +36,6 @@ def test_model_equality(sample_model: Model) -> None:
     assert hash(sample_model) == hash(identical)
 
 
-@pytest.mark.unit
 def test_stats_fields(sample_stats: Stats) -> None:
     """Stats has all expected fields with correct types."""
     # Expected fields grouped by category
@@ -82,7 +79,6 @@ def test_stats_fields(sample_stats: Stats) -> None:
     assert isinstance(sample_stats.cost_total, float)
 
 
-@pytest.mark.unit
 def test_leaderboard_entry_inheritance(
     sample_model: Model, sample_stats: Stats
 ) -> None:
@@ -116,7 +112,6 @@ def test_leaderboard_entry_inheritance(
         entry.run_count = 10  # type: ignore[misc]
 
 
-@pytest.mark.unit
 def test_config_with_enums() -> None:
     """Config correctly uses Deck/Stake enums from strings."""
     # Create config using enum values directly

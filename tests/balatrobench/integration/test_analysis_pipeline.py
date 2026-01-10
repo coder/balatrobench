@@ -23,7 +23,6 @@ from balatrobench.models import (
 )
 
 
-@pytest.mark.integration
 class TestAnalyzeModels:
     """Tests for analyze_models() with fixture data."""
 
@@ -60,7 +59,6 @@ class TestAnalyzeModels:
             analyzer.analyze_models(missing_dir)
 
 
-@pytest.mark.integration
 class TestAnalyzeStrategies:
     """Tests for analyze_strategies() with fixture data."""
 
@@ -86,7 +84,6 @@ class TestAnalyzeStrategies:
             assert runs.model.name == "gpt-oss-120b"
 
 
-@pytest.mark.integration
 class TestComputeRuns:
     """Tests for Run objects produced by the analyzer."""
 
@@ -136,7 +133,6 @@ class TestComputeRuns:
         assert run.stats.cost_total == pytest.approx(0.1022712, rel=1e-5)
 
 
-@pytest.mark.integration
 class TestLeaderboards:
     """Tests for leaderboard creation from fixture data."""
 

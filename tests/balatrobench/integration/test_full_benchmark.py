@@ -6,13 +6,10 @@ Tests the complete CLI → BenchmarkAnalyzer → BenchmarkWriter output flow.
 import json
 from pathlib import Path
 
-import pytest
-
 from balatrobench.analyzer import BenchmarkAnalyzer
 from balatrobench.writer import BenchmarkWriter
 
 
-@pytest.mark.integration
 class TestBenchmarkOutputStructure:
     """Test that the analyzer+writer produces correct output directory structure."""
 
@@ -76,7 +73,6 @@ class TestBenchmarkOutputStructure:
                     )
 
 
-@pytest.mark.integration
 class TestManifestGeneration:
     """Test manifest.json generation."""
 
@@ -124,7 +120,6 @@ class TestManifestGeneration:
         assert manifest["versions"][0]["latest"] is True
 
 
-@pytest.mark.integration
 class TestLeaderboardJsonValid:
     """Test leaderboard.json generation and validity."""
 
@@ -230,7 +225,6 @@ class TestLeaderboardJsonValid:
                     )
 
 
-@pytest.mark.integration
 class TestRunsJsonContent:
     """Test generated {model}.json runs files."""
 

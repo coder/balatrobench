@@ -16,7 +16,6 @@ from balatrobench.models import (
 from balatrobench.writer import BenchmarkWriter
 
 
-@pytest.mark.unit
 def test_to_dict_simple_dataclass(sample_model: Model) -> None:
     """Converts Model dataclass to dict."""
     result = BenchmarkWriter._to_dict(sample_model)
@@ -25,7 +24,6 @@ def test_to_dict_simple_dataclass(sample_model: Model) -> None:
     assert result == {"vendor": "openai", "name": "gpt-oss-120b"}
 
 
-@pytest.mark.unit
 def test_to_dict_nested_dataclass(sample_stats: Stats, sample_model: Model) -> None:
     """Handles nested dataclasses (Stats inside LeaderboardEntry)."""
     entry = ModelsLeaderboardEntry(
@@ -57,7 +55,6 @@ def test_to_dict_nested_dataclass(sample_stats: Stats, sample_model: Model) -> N
     assert result["model"]["name"] == "gpt-oss-120b"
 
 
-@pytest.mark.unit
 def test_to_dict_enum() -> None:
     """Converts Deck/Stake enums to string values."""
 
@@ -76,7 +73,6 @@ def test_to_dict_enum() -> None:
     assert '"stake": "WHITE"' in serialized
 
 
-@pytest.mark.unit
 def test_to_dict_tuple_to_list(sample_strategy: Strategy) -> None:
     """Converts tuples (like Strategy.tags) to lists."""
     result = BenchmarkWriter._to_dict(sample_strategy)
@@ -90,7 +86,6 @@ def test_to_dict_tuple_to_list(sample_strategy: Strategy) -> None:
     assert result["tags"] == ["conservative", "financial"]
 
 
-@pytest.mark.unit
 def test_strip_reasoning_valid_json() -> None:
     """Strips reasoning key from tool_call arguments."""
     tool_calls = [
@@ -123,7 +118,6 @@ def test_strip_reasoning_valid_json() -> None:
     assert "reasoning" in original_args
 
 
-@pytest.mark.unit
 def test_strip_reasoning_invalid_json() -> None:
     """Returns original on JSON parse error."""
     tool_calls = [
@@ -144,7 +138,6 @@ def test_strip_reasoning_invalid_json() -> None:
     assert result[0]["function"]["arguments"] == "not valid json {{{"
 
 
-@pytest.mark.unit
 def test_strip_reasoning_no_reasoning_key() -> None:
     """No-op when reasoning not present."""
     tool_calls = [

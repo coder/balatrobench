@@ -14,7 +14,6 @@ from balatrobench.extractor import (
 )
 
 
-@pytest.mark.unit
 class TestIterJsonl:
     """Tests for _iter_jsonl function."""
 
@@ -63,7 +62,6 @@ class TestIterJsonl:
         assert results[1][0] == "valid-002"
 
 
-@pytest.mark.unit
 class TestExtractRequestContent:
     """Tests for extract_request_content function."""
 
@@ -118,7 +116,6 @@ class TestExtractRequestContent:
         assert result["request-001"]["memory"] == ""
 
 
-@pytest.mark.unit
 class TestExtractResponseData:
     """Tests for extract_response_data function."""
 
@@ -157,7 +154,6 @@ class TestExtractResponseData:
         assert result == {}
 
 
-@pytest.mark.unit
 class TestExtractReasoningFromToolCalls:
     """Tests for _extract_reasoning_from_tool_calls function."""
 
@@ -214,7 +210,6 @@ class TestExtractReasoningFromToolCalls:
         assert result == ""
 
 
-@pytest.mark.unit
 class TestExtractRequestMetadata:
     """Tests for extract_request_metadata function."""
 
