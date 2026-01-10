@@ -35,7 +35,7 @@ markers = [
 ]
 
 [dependency-groups]
-test = ["pytest>=9.0.2"]
+test = ["pytest>=9.0.2", "pytest-cov>=6.0.0"]
 dev = [
   "commitizen>=4.11.0",
   "mdformat>=0.7.22,<0.8.0",
@@ -47,4 +47,16 @@ dev = [
   "mdformat-simple-breaks>=0.0.1",
   "ruff>=0.14.10",
   "ty>=0.0.9",
+]
+
+[tool.coverage.run]
+source = ["src/balatrobench"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+exclude_lines = [
+  "pragma: no cover",
+  "if TYPE_CHECKING:",
+  "raise NotImplementedError",
 ]
