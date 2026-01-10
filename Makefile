@@ -12,22 +12,24 @@ RESET  := \033[0m
 PRINT = printf "%b\n"
 
 help: ## Show this help message
-	@$(PRINT) "$(BLUE)BalatroBot Development Makefile$(RESET)"
+	@$(PRINT) "$(BLUE)BalatroBench Development Makefile$(RESET)"
 	@$(PRINT) ""
 	@$(PRINT) "$(YELLOW)Available targets:$(RESET)"
 	@printf "  $(GREEN)%-18s$(RESET) %s\n" "help"      "Show this help message"
-	@printf "  $(GREEN)%-18s$(RESET) %s\n" "install"   "Install balatrobot and all dependencies (including dev)"
+	@printf "  $(GREEN)%-18s$(RESET) %s\n" "install"   "Install balatrobench and all dependencies (Python + npm)"
 	@printf "  $(GREEN)%-18s$(RESET) %s\n" "lint"      "Run ruff linter (check only)"
 	@printf "  $(GREEN)%-18s$(RESET) %s\n" "format"    "Run formatters (ruff, mdformat, js-beautify)"
 	@printf "  $(GREEN)%-18s$(RESET) %s\n" "typecheck" "Run type checkers (Python and Lua)"
 	@printf "  $(GREEN)%-18s$(RESET) %s\n" "quality"   "Run all code quality checks"
-	@printf "  $(GREEN)%-18s$(RESET) %s\n" "test"      "Run Python test suite"
+	@printf "  $(GREEN)%-18s$(RESET) %s\n" "test"      "Run Python and site test suites"
 	@printf "  $(GREEN)%-18s$(RESET) %s\n" "all"       "Run all code quality checks and tests"
 	@printf "  $(GREEN)%-18s$(RESET) %s\n" "coverage"  "Run tests with coverage report"
 
-install: ## Install balatrobot and all dependencies (including dev)
-	@$(PRINT) "$(YELLOW)Installing all dependencies...$(RESET)"
+install: ## Install balatrobench and all dependencies (Python + npm)
+	@$(PRINT) "$(YELLOW)Installing Python dependencies...$(RESET)"
 	uv sync --group dev --group test
+	@$(PRINT) "$(YELLOW)Installing npm dependencies...$(RESET)"
+	npm install
 
 lint: ## Run ruff linter (check only)
 	@$(PRINT) "$(YELLOW)Running ruff linter...$(RESET)"
@@ -52,9 +54,11 @@ typecheck: ## Run type checkers (Python and Lua)
 quality: lint typecheck format ## Run all code quality checks
 	@$(PRINT) "$(GREEN)✓ All checks completed$(RESET)"
 
-test: ## Run Python test suite
+test: ## Run Python and site test suites
 	@$(PRINT) "$(YELLOW)Running balatrobench tests...$(RESET)"
 	@pytest
+	@$(PRINT) "$(YELLOW)Running site tests...$(RESET)"
+	@npm test
 
 coverage: ## Run tests with coverage report
 	@$(PRINT) "$(YELLOW)Running tests with coverage...$(RESET)"
