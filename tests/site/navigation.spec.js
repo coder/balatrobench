@@ -1,8 +1,6 @@
 // @ts-check
-const {
-    test,
-    expect
-} = require('@playwright/test');
+const { test, expect } = require('@playwright/test');
+const { ALL_PAGES, DEFAULT_VIEWPORT } = require('./helpers');
 
 /**
  * Navigation and External Link Tests (XL Viewport - 1280x720)
@@ -19,262 +17,152 @@ const {
  * - Footer link presence across all pages
  */
 
-// Default viewport for all tests
-const DEFAULT_VIEWPORT = {
-    width: 1280,
-    height: 720
-};
-
 test.describe('Navigation', () => {
-    test.beforeEach(async ({
-        page
-    }) => {
-        await page.setViewportSize(DEFAULT_VIEWPORT);
-    });
+  test.beforeEach(async ({ page }) => {
+    await page.setViewportSize(DEFAULT_VIEWPORT);
+  });
 
-    /**
-     * Test: Navigation bar exists on all pages
-     * Verifies navigation component is present on index, community, and about pages
-     */
-    test('navigation bar exists on all pages', async ({
-        page
-    }) => {
-        const pages = [{
-            path: '/',
-            name: 'index'
-        }, {
-            path: '/community.html',
-            name: 'community'
-        }, {
-            path: '/about.html',
-            name: 'about'
-        }];
+  /**
+   * Test: Navigation bar exists on all pages
+   * Verifies navigation component is present on index, community, and about pages
+   */
+  test('navigation bar exists on all pages', async ({ page }) => {
+    for (const path of ALL_PAGES) {
+      await page.goto(path);
 
-        for (const {
-                path,
-                name
-            }
-            of pages) {
-            await page.goto(path);
+      const nav = page.locator('nav');
+      await expect(nav).toBeVisible();
 
-            const nav = page.locator('nav');
-            await expect(nav).toBeVisible();
+      // Verify all navigation links are present
+      await expect(nav.getByRole('link', { name: 'BalatroBench' })).toBeVisible();
+      await expect(nav.getByRole('link', { name: 'Community' })).toBeVisible();
+      await expect(nav.getByRole('link', { name: 'About' })).toBeVisible();
+    }
+  });
 
-            // Verify all navigation links are present
-            await expect(nav.getByRole('link', {
-                name: 'BalatroBench'
-            })).toBeVisible();
-            await expect(nav.getByRole('link', {
-                name: 'Community'
-            })).toBeVisible();
-            await expect(nav.getByRole('link', {
-                name: 'About'
-            })).toBeVisible();
-        }
-    });
+  /**
+   * Test: Complete navigation journey
+   * Verifies clicking navigation links works correctly: index → community → about → index
+   */
+  test('can navigate between all pages', async ({ page }) => {
+    // Start at index
+    await page.goto('/');
+    await expect(page).toHaveURL(/\/(index\.html)?$/);
+    await expect(page.getByRole('heading', { name: 'BalatroBench' })).toBeVisible();
 
-    /**
-     * Test: Complete navigation journey
-     * Verifies clicking navigation links works correctly: index → community → about → index
-     */
-    test('can navigate between all pages', async ({
-        page
-    }) => {
-        // Start at index
-        await page.goto('/');
-        await expect(page).toHaveURL(/\/(index\.html)?$/);
-        await expect(page.getByRole('heading', {
-            name: 'BalatroBench'
-        })).toBeVisible();
+    // Navigate to community
+    await page.getByRole('link', { name: 'Community' }).click();
+    await expect(page).toHaveURL(/community\.html/);
+    await expect(page.getByRole('link', { name: 'Contribute Your Strategy' })).toBeVisible();
 
-        // Navigate to community
-        await page.getByRole('link', {
-            name: 'Community'
-        }).click();
-        await expect(page).toHaveURL(/community\.html/);
-        await expect(page.getByRole('link', {
-            name: 'Contribute Your Strategy'
-        })).toBeVisible();
+    // Navigate to about
+    await page.getByRole('link', { name: 'About' }).click();
+    await expect(page).toHaveURL(/about\.html/);
+    await expect(page.getByRole('heading', { name: 'What is BalatroBench?' })).toBeVisible();
 
-        // Navigate to about
-        await page.getByRole('link', {
-            name: 'About'
-        }).click();
-        await expect(page).toHaveURL(/about\.html/);
-        await expect(page.getByRole('heading', {
-            name: 'What is BalatroBench?'
-        })).toBeVisible();
+    // Navigate back to index
+    await page.locator('nav').getByRole('link', { name: 'BalatroBench' }).click();
+    await expect(page).toHaveURL(/\/(index\.html)?$/);
+    await expect(page.getByRole('heading', { name: 'BalatroBench' })).toBeVisible();
+  });
 
-        // Navigate back to index
-        await page.locator('nav').getByRole('link', {
-            name: 'BalatroBench'
-        }).click();
-        await expect(page).toHaveURL(/\/(index\.html)?$/);
-        await expect(page.getByRole('heading', {
-            name: 'BalatroBench'
-        })).toBeVisible();
-    });
-
-    /**
-     * Test: Footer exists on all pages
-     * Verifies footer component is visible on all pages
-     */
-    test('footer exists on all pages', async ({
-        page
-    }) => {
-        const pages = ['/', '/community.html', '/about.html'];
-
-        for (const path of pages) {
-            await page.goto(path);
-            const footer = page.locator('footer');
-            await expect(footer).toBeVisible();
-        }
-    });
+  /**
+   * Test: Footer exists on all pages
+   * Verifies footer component is visible on all pages
+   */
+  test('footer exists on all pages', async ({ page }) => {
+    for (const path of ALL_PAGES) {
+      await page.goto(path);
+      const footer = page.locator('footer');
+      await expect(footer).toBeVisible();
+    }
+  });
 });
 
 test.describe('External Links', () => {
-    test.beforeEach(async ({
-        page
-    }) => {
-        await page.setViewportSize(DEFAULT_VIEWPORT);
-    });
+  test.beforeEach(async ({ page }) => {
+    await page.setViewportSize(DEFAULT_VIEWPORT);
+  });
 
-    /**
-     * Test: All external links have correct URLs
-     * Verifies that all external links exist and point to the correct destinations
-     */
-    test('external links have correct URLs', async ({
-        page
-    }) => {
-        // Test Contribute Your Strategy link (community.html)
-        await page.goto('/community.html');
-        const contributeLink = page.getByRole('link', {
-            name: 'Contribute Your Strategy'
-        });
-        await expect(contributeLink).toBeVisible();
-        await expect(contributeLink).toHaveAttribute('href',
-            'https://coder.github.io/balatrollm/strategies/'
-        );
+  /**
+   * Test: All external links have correct URLs
+   * Verifies that all external links exist and point to the correct destinations
+   */
+  test('external links have correct URLs', async ({ page }) => {
+    // Test Contribute Your Strategy link (community.html)
+    await page.goto('/community.html');
+    const contributeLink = page.getByRole('link', { name: 'Contribute Your Strategy' });
+    await expect(contributeLink).toBeVisible();
+    await expect(contributeLink).toHaveAttribute('href', 'https://coder.github.io/balatrollm/strategies/');
 
-        // Test Discord link (community.html)
-        // Verifies the community Discord server link is present and accessible
-        const discordLink = page.locator('a[href="https://discord.gg/SBaRyVDmFg"]');
-        await expect(discordLink).toBeVisible();
+    // Test Discord link (community.html)
+    const discordLink = page.locator('a[href="https://discord.gg/SBaRyVDmFg"]');
+    await expect(discordLink).toBeVisible();
 
-        // Test Balatro game link (about.html)
-        await page.goto('/about.html');
-        const balatroLink = page.locator('a[href="https://www.playbalatro.com/"]');
-        await expect(balatroLink).toBeVisible();
+    // Test Balatro game link (about.html)
+    await page.goto('/about.html');
+    const balatroLink = page.locator('a[href="https://www.playbalatro.com/"]');
+    await expect(balatroLink).toBeVisible();
 
-        // Test GitHub project links (about.html)
-        const projectLinks = [{
-            name: 'BalatroBot',
-            url: 'https://github.com/coder/balatrobot'
-        }, {
-            name: 'BalatroLLM',
-            url: 'https://github.com/coder/balatrollm'
-        }, {
-            name: 'BalatroBench',
-            url: 'https://github.com/coder/balatrobench'
-        }];
+    // Test GitHub project links (about.html)
+    const projectLinks = [
+      { name: 'BalatroBot', url: 'https://github.com/coder/balatrobot' },
+      { name: 'BalatroLLM', url: 'https://github.com/coder/balatrollm' },
+      { name: 'BalatroBench', url: 'https://github.com/coder/balatrobench' }
+    ];
 
-        for (const {
-                name,
-                url
-            }
-            of projectLinks) {
-            // Find link by href to avoid navigation bar matches
-            const link = page.locator(`a[href="${url}"]`);
-            await expect(link).toBeVisible();
-            await expect(link).toHaveAttribute('href', url);
-        }
+    for (const { url } of projectLinks) {
+      const link = page.locator(`a[href="${url}"]`);
+      await expect(link).toBeVisible();
+      await expect(link).toHaveAttribute('href', url);
+    }
 
-        // Test Coder.com footer link (check on index page)
-        await page.goto('/');
-        const footer = page.locator('footer');
-        const coderLink = footer.locator('a[href="https://coder.com/"]');
-        await expect(coderLink).toBeVisible();
-    });
+    // Test Coder.com footer link (check on index page)
+    await page.goto('/');
+    const footer = page.locator('footer');
+    const coderLink = footer.locator('a[href="https://coder.com/"]');
+    await expect(coderLink).toBeVisible();
+  });
 
-    /**
-     * Test: All external links return 200 OK status
-     * Verifies that all functional external links are accessible and return HTTP 200 status.
-     * This test ensures that external resources referenced by the site are actually reachable.
-     * Uses Playwright's request context for direct HTTP requests without page navigation.
-     *
-     * Note: This test will fail immediately if any external link returns non-200 status,
-     *       providing early detection of broken external resources.
-     */
-    test('all external links return 200 OK status', async ({
-        page,
-        request
-    }) => {
-        // Define all functional external links to validate
-        // This list should be kept in sync with any changes to external links in the HTML
-        const externalLinks = [{
-                url: 'https://discord.gg/SBaRyVDmFg',
-                description: 'Community Discord server'
-            }, {
-                url: 'https://coder.github.io/balatrollm/strategies/',
-                description: 'Community strategy contribution page'
-            }, {
-                url: 'https://www.playbalatro.com/',
-                description: 'Balatro game official website'
-            }, {
-                url: 'https://coder.com/',
-                description: 'Coder company website (footer)'
-            }, {
-                url: 'https://github.com/coder/balatrobot',
-                description: 'BalatroBot GitHub repository'
-            },
-            // Note: The following link is temporarily excluded from 200 OK testing
-            // because it returns 404. The link exists in the HTML and is still
-            // tested for presence, but not for HTTP status until the repository is fixed.
-            // {
-            //   url: 'https://github.com/coder/balatrollm',
-            //   description: 'BalatroLLM GitHub repository'
-            // },
-            // Note: The following GitHub repository links are temporarily excluded from 200 OK testing
-            // because they return 404. These appear to be broken links in the website that need fixing.
-            // The links exist in the HTML and are still tested for presence, but not for HTTP status.
-            // {
-            //   url: 'https://github.com/coder/balatrobench',
-            //   description: 'BalatroBench GitHub repository'
-            // }
-        ];
+  /**
+   * Test: All external links return 200 OK status
+   * Verifies that all functional external links are accessible and return HTTP 200 status.
+   * Uses Playwright's request context for direct HTTP requests without page navigation.
+   *
+   * Note: Some GitHub links are temporarily excluded due to 404 status.
+   */
+  test('all external links return 200 OK status', async ({ request }) => {
+    const externalLinks = [
+      { url: 'https://discord.gg/SBaRyVDmFg', description: 'Community Discord server' },
+      { url: 'https://coder.github.io/balatrollm/strategies/', description: 'Community strategy contribution page' },
+      { url: 'https://www.playbalatro.com/', description: 'Balatro game official website' },
+      { url: 'https://coder.com/', description: 'Coder company website (footer)' },
+      { url: 'https://github.com/coder/balatrobot', description: 'BalatroBot GitHub repository' }
+      // Note: balatrollm and balatrobench GitHub links excluded due to 404 status
+    ];
 
-        // Test each external link for HTTP 200 status
-        for (const link of externalLinks) {
-            const response = await request.get(link.url);
+    for (const link of externalLinks) {
+      const response = await request.get(link.url);
+      expect(response.status(), `${link.description} (${link.url}) returned ${response.status()}`).toBe(200);
 
-            // Verify the link is accessible (HTTP 200)
-            // Include URL in error message for easier debugging
-            expect(response.status(),
-                `${link.description} (${link.url}) returned ${response.status()}`).toBe(200);
+      const contentType = response.headers()['content-type'];
+      expect(contentType, `${link.url} has no content-type header`).toBeTruthy();
+    }
+  });
 
-            // Optional: Verify content type is not empty for additional validation
-            const contentType = response.headers()['content-type'];
-            expect(contentType, `${link.url} has no content-type header`).toBeTruthy();
-        }
-    });
+  /**
+   * Test: Coder.com footer link exists on all pages
+   * Verifies that the footer Coder link is present on every page
+   */
+  test('coder.com footer link exists on all pages', async ({ page }) => {
+    const coderUrl = 'https://coder.com/';
 
-    /**
-     * Test: Coder.com footer link exists on all pages
-     * Verifies that the footer Coder link is present on every page
-     */
-    test('coder.com footer link exists on all pages', async ({
-        page
-    }) => {
-        const pages = ['/', '/community.html', '/about.html'];
-        const coderUrl = 'https://coder.com/';
-
-        for (const path of pages) {
-            await page.goto(path);
-
-            const footer = page.locator('footer');
-            const link = footer.locator(`a[href="${coderUrl}"]`);
-            await expect(link).toBeVisible();
-            await expect(link).toHaveAttribute('href', coderUrl);
-        }
-    });
+    for (const path of ALL_PAGES) {
+      await page.goto(path);
+      const footer = page.locator('footer');
+      const link = footer.locator(`a[href="${coderUrl}"]`);
+      await expect(link).toBeVisible();
+      await expect(link).toHaveAttribute('href', coderUrl);
+    }
+  });
 });
