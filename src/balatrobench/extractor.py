@@ -7,6 +7,9 @@ from typing import Any, Literal
 
 from .models import Request
 
+# Default value for unknown provider
+DEFAULT_PROVIDER = "unknown"
+
 
 def _iter_jsonl(file: Path) -> Iterator[tuple[str, dict[str, Any]]]:
     """Yield (custom_id, data) pairs from a JSONL file.
@@ -133,8 +136,8 @@ def extract_request_metadata(responses_file: Path) -> dict[str, Request]:
         request_ts = int(response.get("request_id", 0))
         time_ms = response_ts - request_ts if response_ts and request_ts else 0
 
-        # Get provider (default to "unknown" if not available)
-        provider = body.get("provider") or "unknown"
+        # Get provider (default to DEFAULT_PROVIDER if not available)
+        provider = body.get("provider") or DEFAULT_PROVIDER
 
         requests_by_id[custom_id] = Request(
             id=custom_id,
