@@ -12,7 +12,7 @@
   <p><em>Benchmark LLMs' strategic performance in Balatro</em></p>
 </div>
 
-______________________________________________________________________
+---
 
 ## Quick Start
 

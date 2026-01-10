@@ -300,3 +300,86 @@ class TestExtractRequestMetadata:
         result = extract_request_metadata(jsonl_file)
 
         assert result["request-with-error"].status == "error"
+
+
+class TestIterJsonlMalformed:
+    """Tests for _iter_jsonl with malformed content."""
+
+    def test_iter_jsonl_malformed_json_raises(self, tmp_path: Path) -> None:
+        """Malformed JSON line raises JSONDecodeError."""
+        jsonl_file = tmp_path / "malformed.jsonl"
+        jsonl_file.write_text("not valid json {{{")
+
+        with pytest.raises(json.JSONDecodeError):
+            list(_iter_jsonl(jsonl_file))
+
+    def test_iter_jsonl_partial_valid(self, tmp_path: Path) -> None:
+        """Valid lines are processed, but malformed line raises."""
+        jsonl_file = tmp_path / "partial.jsonl"
+        lines = [
+            json.dumps({"custom_id": "valid-001", "data": "test1"}),
+            "not valid json",
+        ]
+        jsonl_file.write_text("\n".join(lines))
+
+        # Should raise when hitting the malformed line
+        with pytest.raises(json.JSONDecodeError):
+            list(_iter_jsonl(jsonl_file))
+
+
+class TestExtractRequestContentEdgeCases:
+    """Additional edge cases for extract_request_content."""
+
+    def test_extract_request_content_partial_array(self, tmp_path: Path) -> None:
+        """Handles content array with less than 3 elements."""
+        jsonl_file = tmp_path / "partial_array.jsonl"
+        line = json.dumps(
+            {
+                "custom_id": "request-001",
+                "body": {
+                    "messages": [
+                        {
+                            "role": "user",
+                            "content": [
+                                {"type": "text", "text": "Strategy only"},
+                            ],
+                        }
+                    ]
+                },
+            }
+        )
+        jsonl_file.write_text(line)
+
+        result = extract_request_content(jsonl_file)
+
+        assert "request-001" in result
+        assert result["request-001"]["strategy"] == "Strategy only"
+        assert result["request-001"]["gamestate"] == ""
+        assert result["request-001"]["memory"] == ""
+
+    def test_extract_request_content_two_elements(self, tmp_path: Path) -> None:
+        """Handles content array with exactly 2 elements."""
+        jsonl_file = tmp_path / "two_elements.jsonl"
+        line = json.dumps(
+            {
+                "custom_id": "request-002",
+                "body": {
+                    "messages": [
+                        {
+                            "role": "user",
+                            "content": [
+                                {"type": "text", "text": "Strategy text"},
+                                {"type": "text", "text": "Gamestate text"},
+                            ],
+                        }
+                    ]
+                },
+            }
+        )
+        jsonl_file.write_text(line)
+
+        result = extract_request_content(jsonl_file)
+
+        assert result["request-002"]["strategy"] == "Strategy text"
+        assert result["request-002"]["gamestate"] == "Gamestate text"
+        assert result["request-002"]["memory"] == ""

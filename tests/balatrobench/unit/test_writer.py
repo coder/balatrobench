@@ -10,7 +10,9 @@ from balatrobench.models import (
     Config,
     Model,
     ModelsLeaderboardEntry,
+    Runs,
     Stats,
+    StrategiesLeaderboard,
     Strategy,
 )
 from balatrobench.writer import BenchmarkWriter
@@ -391,3 +393,193 @@ class TestWriteRequestFiles:
 
         # No request directories should be created
         assert not (output_base / run_dir.name).exists()
+
+
+# =============================================================================
+# write_strategies_leaderboard and write_strategy_runs tests
+# =============================================================================
+
+
+class TestWriteStrategiesLeaderboard:
+    """Tests for write_strategies_leaderboard method."""
+
+    @pytest.fixture
+    def sample_strategies_leaderboard(
+        self, sample_model: Model, sample_strategy: Strategy, sample_stats: Stats
+    ) -> "StrategiesLeaderboard":
+        """Create a sample StrategiesLeaderboard for testing."""
+        from balatrobench.models import (
+            StrategiesLeaderboard,
+            StrategiesLeaderboardEntry,
+        )
+
+        entry = StrategiesLeaderboardEntry(
+            run_count=3,
+            run_wins=1,
+            run_completed=2,
+            avg_round=10.5,
+            std_round=2.0,
+            stats=sample_stats,
+            strategy=sample_strategy,
+        )
+        return StrategiesLeaderboard(
+            generated_at=1234567890,
+            model=sample_model,
+            entries=(entry,),
+        )
+
+    def test_write_strategies_leaderboard_creates_file(
+        self, tmp_path: Path, sample_strategies_leaderboard: "StrategiesLeaderboard"
+    ) -> None:
+        """write_strategies_leaderboard creates the leaderboard.json file."""
+        writer = BenchmarkWriter(output_dir=tmp_path)
+
+        result = writer.write_strategies_leaderboard(
+            sample_strategies_leaderboard, "v1.0.0", "openai/gpt-4o"
+        )
+
+        # Should return the path to written file
+        expected_path = tmp_path / "v1.0.0" / "openai/gpt-4o" / "leaderboard.json"
+        assert result == expected_path
+        assert result.exists()
+
+    def test_write_strategies_leaderboard_content(
+        self, tmp_path: Path, sample_strategies_leaderboard: "StrategiesLeaderboard"
+    ) -> None:
+        """write_strategies_leaderboard writes correct JSON content."""
+        writer = BenchmarkWriter(output_dir=tmp_path)
+
+        result = writer.write_strategies_leaderboard(
+            sample_strategies_leaderboard, "v1.0.0", "openai/gpt-4o"
+        )
+
+        content = json.loads(result.read_text())
+
+        # Check structure
+        assert content["generated_at"] == 1234567890
+        assert content["model"]["vendor"] == "openai"
+        assert content["model"]["name"] == "gpt-oss-120b"
+        assert len(content["entries"]) == 1
+        assert content["entries"][0]["strategy"]["name"] == "Default"
+        assert content["entries"][0]["avg_round"] == 10.5
+
+
+class TestWriteStrategyRuns:
+    """Tests for write_strategy_runs method."""
+
+    @pytest.fixture
+    def sample_runs(
+        self, sample_model: Model, sample_strategy: Strategy, sample_stats: Stats
+    ) -> "Runs":
+        """Create a sample Runs object for testing."""
+        from balatrobench.enums import Deck, Stake
+        from balatrobench.models import Config, Run, Runs
+
+        run = Run(
+            id="20260109_165752_472_RED_WHITE_BBBBBBB",
+            model=sample_model,
+            strategy=sample_strategy,
+            config=Config(seed="BBBBBBB", deck=Deck.RED, stake=Stake.WHITE),
+            run_won=False,
+            run_completed=True,
+            final_ante=3,
+            final_round=10,
+            providers=(("OpenAI", 50),),
+            stats=sample_stats,
+        )
+        return Runs(
+            generated_at=1234567890,
+            model=sample_model,
+            strategy=sample_strategy,
+            runs=(run,),
+        )
+
+    def test_write_strategy_runs_creates_file(
+        self, tmp_path: Path, sample_runs: "Runs"
+    ) -> None:
+        """write_strategy_runs creates the runs.json file."""
+        writer = BenchmarkWriter(output_dir=tmp_path)
+
+        result = writer.write_strategy_runs(sample_runs, "v1.0.0", "openai", "gpt-4o")
+
+        # Should return the path to written file
+        expected_path = (
+            tmp_path / "v1.0.0" / "openai" / "gpt-4o" / "Default" / "runs.json"
+        )
+        assert result == expected_path
+        assert result.exists()
+
+    def test_write_strategy_runs_content(
+        self, tmp_path: Path, sample_runs: "Runs"
+    ) -> None:
+        """write_strategy_runs writes correct JSON content."""
+        writer = BenchmarkWriter(output_dir=tmp_path)
+
+        result = writer.write_strategy_runs(sample_runs, "v1.0.0", "openai", "gpt-4o")
+
+        content = json.loads(result.read_text())
+
+        # Check structure
+        assert content["generated_at"] == 1234567890
+        assert content["model"]["vendor"] == "openai"
+        assert content["model"]["name"] == "gpt-oss-120b"
+        assert content["strategy"]["name"] == "Default"
+        assert len(content["runs"]) == 1
+        assert content["runs"][0]["id"] == "20260109_165752_472_RED_WHITE_BBBBBBB"
+        assert content["runs"][0]["final_round"] == 10
+
+
+# =============================================================================
+# convert_pngs_to_webp tests
+# =============================================================================
+
+
+class TestConvertPngsToWebp:
+    """Tests for convert_pngs_to_webp method."""
+
+    def test_convert_pngs_to_webp_empty_directory(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture
+    ) -> None:
+        """convert_pngs_to_webp does nothing for empty directory."""
+        writer = BenchmarkWriter(output_dir=tmp_path)
+
+        # Should not raise and should return early
+        writer.convert_pngs_to_webp(tmp_path)
+
+        # No warnings should be printed
+        captured = capsys.readouterr()
+        assert "Warning" not in captured.out
+
+    def test_convert_pngs_to_webp_nonexistent_directory(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture
+    ) -> None:
+        """convert_pngs_to_webp handles nonexistent directory gracefully."""
+        writer = BenchmarkWriter(output_dir=tmp_path)
+        nonexistent = tmp_path / "does_not_exist"
+
+        # Should not raise (rglob returns empty on nonexistent)
+        writer.convert_pngs_to_webp(nonexistent)
+
+
+class TestStripReasoningEdgeCases:
+    """Additional edge cases for _strip_reasoning_from_tool_calls."""
+
+    def test_strip_reasoning_no_function_key(self) -> None:
+        """Handles tool call without 'function' key."""
+        tool_calls = [{"id": "call_1", "type": "function"}]
+
+        result = BenchmarkWriter._strip_reasoning_from_tool_calls(tool_calls)
+
+        assert len(result) == 1
+        assert result[0] == {"id": "call_1", "type": "function"}
+
+    def test_strip_reasoning_no_arguments_key(self) -> None:
+        """Handles tool call without 'arguments' key in function."""
+        tool_calls = [
+            {"id": "call_1", "type": "function", "function": {"name": "play"}}
+        ]
+
+        result = BenchmarkWriter._strip_reasoning_from_tool_calls(tool_calls)
+
+        assert len(result) == 1
+        assert result[0]["function"]["name"] == "play"
