@@ -18,7 +18,7 @@ help: ## Show this help message
 	@printf "  $(GREEN)%-18s$(RESET) %s\n" "help"      "Show this help message"
 	@printf "  $(GREEN)%-18s$(RESET) %s\n" "install"   "Install balatrobot and all dependencies (including dev)"
 	@printf "  $(GREEN)%-18s$(RESET) %s\n" "lint"      "Run ruff linter (check only)"
-	@printf "  $(GREEN)%-18s$(RESET) %s\n" "format"    "Run formatters (ruff, mdformat, stylua)"
+	@printf "  $(GREEN)%-18s$(RESET) %s\n" "format"    "Run formatters (ruff, mdformat, js-beautify)"
 	@printf "  $(GREEN)%-18s$(RESET) %s\n" "typecheck" "Run type checkers (Python and Lua)"
 	@printf "  $(GREEN)%-18s$(RESET) %s\n" "quality"   "Run all code quality checks"
 	@printf "  $(GREEN)%-18s$(RESET) %s\n" "test"      "Run Python test suite"
@@ -34,12 +34,14 @@ lint: ## Run ruff linter (check only)
 	ruff check --fix --select I .
 	ruff check --fix .
 
-format: ## Run formatters (ruff, mdformat, stylua)
+format: ## Run formatters (ruff, mdformat, js-beautify)
 	@$(PRINT) "$(YELLOW)Running ruff formatter...$(RESET)"
 	ruff check --select I --fix .
 	ruff format .
 	@$(PRINT) "$(YELLOW)Running mdformat formatter...$(RESET)"
 	mdformat README.md CLAUDE.md CONTRIBUTING.md
+	@$(PRINT) "$(YELLOW)Running js-beautify...$(RESET)"
+	@git ls-files --cached --others --exclude-standard | grep -E "\.(js|html)$$" | xargs -r js-beautify -r
 
 typecheck: ## Run type checkers (Python and Lua)
 	@$(PRINT) "$(YELLOW)Running Python type checker...$(RESET)"
