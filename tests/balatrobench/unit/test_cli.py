@@ -2,6 +2,8 @@
 
 from pathlib import Path
 
+import pytest
+
 from balatrobench.cli import (
     VERSION_PARTS_PATTERN,
     VERSION_PATTERN,
@@ -186,3 +188,155 @@ class TestCreateParser:
         assert args.output_dir == Path("/custom/output")
         assert args.version == "v2.0.0"
         assert args.webp is True
+
+
+# =============================================================================
+# main() tests
+# =============================================================================
+
+
+class TestMain:
+    """Tests for main() entry point."""
+
+    def test_main_requires_input_dir(
+        self,
+        tmp_path: Path,
+        monkeypatch: pytest.MonkeyPatch,
+        capsys: pytest.CaptureFixture,
+    ) -> None:
+        """main() exits with error when --input-dir is missing."""
+        import sys
+
+        from balatrobench.cli import main
+
+        monkeypatch.setattr(sys, "argv", ["balatrobench"])
+
+        with pytest.raises(SystemExit) as exc_info:
+            main()
+
+        assert exc_info.value.code == 1
+        captured = capsys.readouterr()
+        assert "Error: --input-dir is required" in captured.out
+
+    def test_main_exits_when_input_dir_not_found(
+        self,
+        tmp_path: Path,
+        monkeypatch: pytest.MonkeyPatch,
+        capsys: pytest.CaptureFixture,
+    ) -> None:
+        """main() exits with error when input directory doesn't exist."""
+        import sys
+
+        from balatrobench.cli import main
+
+        nonexistent = tmp_path / "does_not_exist"
+        monkeypatch.setattr(
+            sys, "argv", ["balatrobench", "--input-dir", str(nonexistent)]
+        )
+
+        with pytest.raises(SystemExit) as exc_info:
+            main()
+
+        assert exc_info.value.code == 1
+        captured = capsys.readouterr()
+        assert "Error: Input directory not found" in captured.out
+
+    def test_main_creates_output_directory(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """main() creates output directory structure."""
+        import sys
+
+        from balatrobench.cli import main
+
+        # Create minimal input structure: runs/v1.0.0/strategy/vendor/model/
+        input_dir = tmp_path / "runs" / "v1.0.0"
+        input_dir.mkdir(parents=True)
+
+        output_dir = tmp_path / "output"
+        monkeypatch.setattr(
+            sys,
+            "argv",
+            [
+                "balatrobench",
+                "--input-dir",
+                str(input_dir),
+                "--output-dir",
+                str(output_dir),
+            ],
+        )
+
+        # Should not raise - handles empty input gracefully
+        main()
+
+        # Output directory should exist (models and strategies subdirs)
+        assert output_dir.exists()
+        assert (output_dir / "models").exists()
+        assert (output_dir / "strategies").exists()
+
+    def test_main_version_normalization(
+        self,
+        tmp_path: Path,
+        monkeypatch: pytest.MonkeyPatch,
+        capsys: pytest.CaptureFixture,
+    ) -> None:
+        """main() normalizes version by adding 'v' prefix if missing."""
+        import sys
+
+        from balatrobench.cli import main
+
+        input_dir = tmp_path / "runs" / "1.0.0"  # No 'v' prefix
+        input_dir.mkdir(parents=True)
+
+        output_dir = tmp_path / "output"
+        monkeypatch.setattr(
+            sys,
+            "argv",
+            [
+                "balatrobench",
+                "--input-dir",
+                str(input_dir),
+                "--output-dir",
+                str(output_dir),
+                "--version",
+                "1.2.3",  # No 'v' prefix
+            ],
+        )
+
+        main()
+
+        captured = capsys.readouterr()
+        # Version should be normalized to v1.2.3
+        assert "Version: v1.2.3" in captured.out
+
+    def test_main_infers_version_from_path(
+        self,
+        tmp_path: Path,
+        monkeypatch: pytest.MonkeyPatch,
+        capsys: pytest.CaptureFixture,
+    ) -> None:
+        """main() infers version from input-dir path when not specified."""
+        import sys
+
+        from balatrobench.cli import main
+
+        input_dir = tmp_path / "runs" / "v2.5.0"
+        input_dir.mkdir(parents=True)
+
+        output_dir = tmp_path / "output"
+        monkeypatch.setattr(
+            sys,
+            "argv",
+            [
+                "balatrobench",
+                "--input-dir",
+                str(input_dir),
+                "--output-dir",
+                str(output_dir),
+            ],
+        )
+
+        main()
+
+        captured = capsys.readouterr()
+        assert "Version: v2.5.0" in captured.out
