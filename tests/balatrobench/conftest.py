@@ -79,3 +79,12 @@ def temp_output_dir(tmp_path: Path) -> Path:
 def version_dir(fixtures_dir: Path) -> Path:
     """Path to the version directory containing runs."""
     return fixtures_dir / "runs" / "v1.0.0"
+
+
+def pytest_collection_modifyitems(items):
+    """Auto-assign unit/integration markers based on test path."""
+    for item in items:
+        if "/unit/" in item.nodeid:
+            item.add_marker(pytest.mark.unit)
+        elif "/integration/" in item.nodeid:
+            item.add_marker(pytest.mark.integration)

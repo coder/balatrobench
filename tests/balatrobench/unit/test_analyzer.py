@@ -116,7 +116,6 @@ def make_run(
 # =============================================================================
 
 
-@pytest.mark.unit
 def test_subdirs_helper(tmp_path: Path) -> None:
     """_subdirs correctly lists only directories, not files."""
     # Create some directories
@@ -137,14 +136,12 @@ def test_subdirs_helper(tmp_path: Path) -> None:
     assert result_names == {"dir1", "dir2", "dir3"}
 
 
-@pytest.mark.unit
 def test_subdirs_empty_directory(tmp_path: Path) -> None:
     """_subdirs returns empty iterator for empty directory."""
     result = list(_subdirs(tmp_path))
     assert result == []
 
 
-@pytest.mark.unit
 def test_subdirs_only_files(tmp_path: Path) -> None:
     """_subdirs returns empty iterator when only files exist."""
     (tmp_path / "file1.txt").touch()
@@ -159,7 +156,6 @@ def test_subdirs_only_files(tmp_path: Path) -> None:
 # =============================================================================
 
 
-@pytest.mark.unit
 def test_pooled_std_dev_single_run(
     analyzer: BenchmarkAnalyzer,
     sample_model_a: Model,
@@ -182,7 +178,6 @@ def test_pooled_std_dev_single_run(
     assert result == 0.0
 
 
-@pytest.mark.unit
 def test_pooled_std_dev_zero_total_n(
     analyzer: BenchmarkAnalyzer,
     sample_model_a: Model,
@@ -204,7 +199,6 @@ def test_pooled_std_dev_zero_total_n(
     assert result == 0.0
 
 
-@pytest.mark.unit
 def test_pooled_std_dev_multiple_runs(
     analyzer: BenchmarkAnalyzer,
     sample_model_a: Model,
@@ -255,7 +249,6 @@ def test_pooled_std_dev_multiple_runs(
 # =============================================================================
 
 
-@pytest.mark.unit
 def test_compute_leaderboard_entry_single_run(
     analyzer: BenchmarkAnalyzer,
     sample_model_a: Model,
@@ -281,7 +274,6 @@ def test_compute_leaderboard_entry_single_run(
     assert entry.std_round == 0.0  # Single run = no variance
 
 
-@pytest.mark.unit
 def test_compute_leaderboard_entry_aggregates(
     analyzer: BenchmarkAnalyzer,
     sample_model_a: Model,
@@ -370,7 +362,6 @@ def test_compute_leaderboard_entry_aggregates(
     assert entry.stats.cost_avg == 0.01  # 1.5 / 150
 
 
-@pytest.mark.unit
 def test_compute_leaderboard_entry_zero_calls(
     analyzer: BenchmarkAnalyzer,
     sample_model_a: Model,
@@ -406,7 +397,6 @@ def test_compute_leaderboard_entry_zero_calls(
 # =============================================================================
 
 
-@pytest.mark.unit
 def test_leaderboard_sorting(
     analyzer: BenchmarkAnalyzer,
     sample_strategy: Strategy,
@@ -450,7 +440,6 @@ def test_leaderboard_sorting(
     assert leaderboard.generated_at == 1234567890
 
 
-@pytest.mark.unit
 def test_create_models_leaderboard_empty_list(
     analyzer: BenchmarkAnalyzer,
     sample_strategy: Strategy,
@@ -463,7 +452,6 @@ def test_create_models_leaderboard_empty_list(
     assert leaderboard.strategy == sample_strategy
 
 
-@pytest.mark.unit
 def test_create_models_leaderboard_ties(
     analyzer: BenchmarkAnalyzer,
     sample_strategy: Strategy,

@@ -27,7 +27,7 @@ lint.extend-select = ["I"]
 lint.task-tags = ["FIX", "TODO", "HACK", "WARN", "PERF", "NOTE", "TEST"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["tests/balatrobench"]
 addopts = "--tb=short"
 markers = [
   "unit: Unit tests (fast, isolated)",

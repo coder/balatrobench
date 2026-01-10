@@ -2,8 +2,6 @@
 
 from pathlib import Path
 
-import pytest
-
 from balatrobench.cli import (
     VERSION_PARTS_PATTERN,
     VERSION_PATTERN,
@@ -17,7 +15,6 @@ from balatrobench.cli import (
 class TestVersionPattern:
     """Tests for VERSION_PATTERN regex."""
 
-    @pytest.mark.unit
     def test_version_pattern_matches(self) -> None:
         """VERSION_PATTERN matches valid semantic version strings."""
         valid_versions = [
@@ -30,7 +27,6 @@ class TestVersionPattern:
         for version in valid_versions:
             assert VERSION_PATTERN.match(version) is not None, f"{version} should match"
 
-    @pytest.mark.unit
     def test_version_pattern_rejects(self) -> None:
         """VERSION_PATTERN rejects malformed version strings."""
         invalid_versions = [
@@ -53,7 +49,6 @@ class TestVersionPattern:
 class TestVersionPartsPattern:
     """Tests for VERSION_PARTS_PATTERN regex."""
 
-    @pytest.mark.unit
     def test_version_parts_pattern_extracts_groups(self) -> None:
         """VERSION_PARTS_PATTERN extracts major, minor, patch groups."""
         match = VERSION_PARTS_PATTERN.match("v1.2.3")
@@ -62,7 +57,6 @@ class TestVersionPartsPattern:
         assert match.group(2) == "2"
         assert match.group(3) == "3"
 
-    @pytest.mark.unit
     def test_version_parts_pattern_multi_digit(self) -> None:
         """VERSION_PARTS_PATTERN handles multi-digit version numbers."""
         match = VERSION_PARTS_PATTERN.match("v10.200.3000")
@@ -75,13 +69,11 @@ class TestVersionPartsPattern:
 class TestInferVersion:
     """Tests for infer_version function."""
 
-    @pytest.mark.unit
     def test_infer_version_valid(self) -> None:
         """Extracts version from path ending with version directory."""
         path = Path("/path/to/v1.0.0")
         assert infer_version(path) == "v1.0.0"
 
-    @pytest.mark.unit
     def test_infer_version_nested(self, tmp_path: Path) -> None:
         """Returns default when path has version in parent but not leaf."""
         # Path like /path/to/v1.0.0/subdir - the leaf is "subdir" not the version
@@ -89,7 +81,6 @@ class TestInferVersion:
         # Since the function only checks .name (the leaf), this returns default
         assert infer_version(path) == "v1.0.0"  # Default fallback
 
-    @pytest.mark.unit
     def test_infer_version_invalid(self) -> None:
         """Returns default for non-versioned paths."""
         invalid_paths = [
@@ -105,21 +96,18 @@ class TestInferVersion:
 class TestVersionSortKey:
     """Tests for _version_sort_key function."""
 
-    @pytest.mark.unit
     def test_version_sort_key(self) -> None:
         """Converts 'v1.2.3' to (1, 2, 3) tuple."""
         assert _version_sort_key("v1.2.3") == (1, 2, 3)
         assert _version_sort_key("v0.0.0") == (0, 0, 0)
         assert _version_sort_key("v10.20.30") == (10, 20, 30)
 
-    @pytest.mark.unit
     def test_version_sort_key_invalid_returns_zeros(self) -> None:
         """Invalid version strings return (0, 0, 0)."""
         assert _version_sort_key("invalid") == (0, 0, 0)
         assert _version_sort_key("1.0.0") == (0, 0, 0)  # Missing 'v'
         assert _version_sort_key("") == (0, 0, 0)
 
-    @pytest.mark.unit
     def test_version_sort_key_enables_sorting(self) -> None:
         """Version sort key enables correct version ordering."""
         versions = ["v1.0.0", "v2.0.0", "v1.10.0", "v1.2.0", "v10.0.0"]
@@ -130,18 +118,15 @@ class TestVersionSortKey:
 class TestFindVersions:
     """Tests for _find_versions function."""
 
-    @pytest.mark.unit
     def test_find_versions_empty_dir(self, tmp_path: Path) -> None:
         """Returns empty list for directory with no version subdirs."""
         assert _find_versions(tmp_path) == []
 
-    @pytest.mark.unit
     def test_find_versions_nonexistent_dir(self, tmp_path: Path) -> None:
         """Returns empty list for nonexistent directory."""
         nonexistent = tmp_path / "does_not_exist"
         assert _find_versions(nonexistent) == []
 
-    @pytest.mark.unit
     def test_find_versions_finds_version_dirs(self, tmp_path: Path) -> None:
         """Finds version directories matching pattern."""
         # Create version directories
@@ -155,7 +140,6 @@ class TestFindVersions:
         versions = _find_versions(tmp_path)
         assert set(versions) == {"v1.0.0", "v2.0.0", "v1.5.3"}
 
-    @pytest.mark.unit
     def test_find_versions_ignores_files(self, tmp_path: Path) -> None:
         """Only finds directories, not files matching pattern."""
         (tmp_path / "v1.0.0").mkdir()
@@ -168,7 +152,6 @@ class TestFindVersions:
 class TestCreateParser:
     """Tests for create_parser function."""
 
-    @pytest.mark.unit
     def test_create_parser(self) -> None:
         """Parser has expected arguments."""
         parser = create_parser()
@@ -183,7 +166,6 @@ class TestCreateParser:
         assert args.version is None
         assert args.webp is False
 
-    @pytest.mark.unit
     def test_create_parser_with_arguments(self) -> None:
         """Parser correctly parses all arguments."""
         parser = create_parser()

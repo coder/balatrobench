@@ -33,10 +33,10 @@ Available make targets:
 
 1. **Only run make commands when explicitly asked.** Do not proactively run `make quality`, `make lint`, etc.
 2. **Never run bare linting/formatting/typechecking tools.** Always use make targets instead:
-    - Use `make lint` instead of `ruff check`
-    - Use `make format` instead of `ruff format`
-    - Use `make typecheck` instead of `ty check`
-    - Use `make quality` for all checks combined
+   - Use `make lint` instead of `ruff check`
+   - Use `make format` instead of `ruff format`
+   - Use `make typecheck` instead of `ty check`
+   - Use `make quality` for all checks combined
 
 ## Architecture
 
