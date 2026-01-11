@@ -26,8 +26,8 @@ module.exports = defineConfig({
     // Single worker for speed (static site, no backend contention)
     workers: 10,
 
-    // Reporter to use - list gives detailed output
-    reporter: 'list',
+    // Reporter to use - dot gives concise output
+    reporter: 'dot',
 
     use: {
         // Base URL for tests - all page navigations will be relative to this
@@ -61,5 +61,8 @@ module.exports = defineConfig({
         reuseExistingServer: !process.env.CI,
         // Give the server time to start
         timeout: 5000,
+        // Suppress server logs for cleaner test output
+        stdout: 'ignore',
+        stderr: 'ignore',
     },
 });
