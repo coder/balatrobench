@@ -1,7 +1,7 @@
 {
   "permissions": {
     "allow": [
-      "Read(benchmarks/**)",
+      "Read(runs/**)",
       "mcp__context7__resolve-library-id",
       "mcp__context7__get-library-docs",
       "Bash(find:*)",
@@ -16,7 +16,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "make quality",
+            "command": "make quality"
           }
         ]
       }
