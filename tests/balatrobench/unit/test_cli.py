@@ -4,6 +4,7 @@ from pathlib import Path
 
 import pytest
 
+from balatrobench import __version__
 from balatrobench.cli import (
     VERSION_PARTS_PATTERN,
     VERSION_PATTERN,
@@ -81,7 +82,7 @@ class TestInferVersion:
         # Path like /path/to/v1.0.0/subdir - the leaf is "subdir" not the version
         path = tmp_path / "v1.0.0" / "subdir"
         # Since the function only checks .name (the leaf), this returns default
-        assert infer_version(path) == "v1.0.0"  # Default fallback
+        assert infer_version(path) == f"v{__version__}"  # Default fallback
 
     def test_infer_version_invalid(self) -> None:
         """Returns default for non-versioned paths."""
@@ -92,7 +93,9 @@ class TestInferVersion:
             Path("1.0.0"),  # No 'v' prefix
         ]
         for path in invalid_paths:
-            assert infer_version(path) == "v1.0.0", f"{path} should return default"
+            assert infer_version(path) == f"v{__version__}", (
+                f"{path} should return default"
+            )
 
 
 class TestVersionSortKey:
