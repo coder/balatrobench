@@ -261,7 +261,10 @@ const ChartConfig = {
     return {
       ticks: {
         color: themePalette.axis,
-        font: { size: fontSize, family: this.fontFamily }
+        font: {
+          size: fontSize,
+          family: this.fontFamily
+        }
       },
       grid: {
         color: themePalette.grid,
@@ -287,7 +290,10 @@ const ChartConfig = {
       labels: {
         boxWidth: 10,
         color: themePalette.axis,
-        font: { size: 12, family: this.fontFamily }
+        font: {
+          size: 12,
+          family: this.fontFamily
+        }
       }
     };
   },
@@ -299,8 +305,14 @@ const ChartConfig = {
    */
   getTooltipFonts(fontSize = 12) {
     return {
-      titleFont: { size: fontSize, family: this.fontFamily },
-      bodyFont: { size: fontSize, family: this.fontFamily }
+      titleFont: {
+        size: fontSize,
+        family: this.fontFamily
+      },
+      bodyFont: {
+        size: fontSize,
+        family: this.fontFamily
+      }
     };
   },
 
@@ -509,21 +521,36 @@ function createRoundHistogram(runs, canvasId) {
 
   new Chart(ctx, {
     type: 'bar',
-    data: { labels: bins, datasets: datasets },
+    data: {
+      labels: bins,
+      datasets: datasets
+    },
     options: {
       ...ChartConfig.getBaseOptions(),
-      interaction: { intersect: false, mode: 'index' },
+      interaction: {
+        intersect: false,
+        mode: 'index'
+      },
       plugins: {
         legend: ChartConfig.getLegendOptions(themeColors),
-        title: { display: false }
+        title: {
+          display: false
+        }
       },
       scales: {
-        x: { stacked: true, ...axisOptions },
+        x: {
+          stacked: true,
+          ...axisOptions
+        },
         y: {
           stacked: true,
           beginAtZero: true,
           ...axisOptions,
-          ticks: { ...axisOptions.ticks, precision: 0, stepSize: 1 }
+          ticks: {
+            ...axisOptions.ticks,
+            precision: 0,
+            stepSize: 1
+          }
         }
       }
     }
@@ -580,26 +607,44 @@ function createPerformanceBarChart(entries) {
         backgroundColor: fillColors,
         borderColor: strokeColors,
         borderWidth: 0,
-        errorBars: { 'Average Final Round': { plus: stdDevs, minus: stdDevs } }
+        errorBars: {
+          'Average Final Round': {
+            plus: stdDevs,
+            minus: stdDevs
+          }
+        }
       }]
     },
     options: {
       ...ChartConfig.getBaseOptions(),
       plugins: {
-        legend: { display: false },
-        title: { display: false },
+        legend: {
+          display: false
+        },
+        title: {
+          display: false
+        },
         tooltip: {
           ...ChartConfig.getTooltipFonts(),
           callbacks: {
-            label: (context) => `${context.parsed.y.toFixed(1)} ± ${stdDevs[context.dataIndex].toFixed(1)}`
+            label: (context) =>
+              `${context.parsed.y.toFixed(1)} ± ${stdDevs[context.dataIndex].toFixed(1)}`
           }
         }
       },
       scales: {
         x: axisOptions,
-        y: { beginAtZero: true, max: yAxisMax, ...axisOptions }
+        y: {
+          beginAtZero: true,
+          max: yAxisMax,
+          ...axisOptions
+        }
       },
-      elements: { bar: { borderRadius: 10 } }
+      elements: {
+        bar: {
+          borderRadius: 10
+        }
+      }
     },
     plugins: [{
       id: 'errorBars',
@@ -670,13 +715,18 @@ function createProviderPieChart(providers, canvasId) {
     type: 'doughnut',
     data: {
       labels: providerNames,
-      datasets: [{ data: counts, borderWidth: 1 }]
+      datasets: [{
+        data: counts,
+        borderWidth: 1
+      }]
     },
     options: {
       ...ChartConfig.getBaseOptions(),
       plugins: {
         legend: ChartConfig.getLegendOptions(themeColors),
-        title: { display: false }
+        title: {
+          display: false
+        }
       }
     }
   });
@@ -1087,7 +1137,7 @@ async function loadLeaderboard(leaderboardPath, detailBasePath, displayMode = 'm
       const failureRate = ((entry.stats.calls_failed / entry.stats.calls_total) * 100)
         .toFixed(0);
       const errorRate = ((entry.stats.calls_error / entry.stats.calls_total) * 100).toFixed(
-      0);
+        0);
 
       // Format averages with standard deviation - New schema: avg_round/std_round and stats.*
       const avgRound = `${entry.avg_round.toFixed(1)}`;
