@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := help
-.PHONY: help install lint format typecheck quality test coverage all
+.PHONY: help install serve lint format typecheck quality test coverage all
 
 # Colors (ANSI)
 YELLOW := \033[33m
@@ -17,6 +17,7 @@ help: ## Show this help message
 	@$(PRINT) "$(YELLOW)Available targets:$(RESET)"
 	@printf "  $(GREEN)%-18s$(RESET) %s\n" "help"      "Show this help message"
 	@printf "  $(GREEN)%-18s$(RESET) %s\n" "install"   "Install balatrobench and all dependencies (Python + npm)"
+	@printf "  $(GREEN)%-18s$(RESET) %s\n" "serve"     "Serve the site locally on port 8000"
 	@printf "  $(GREEN)%-18s$(RESET) %s\n" "lint"      "Run ruff linter (check only)"
 	@printf "  $(GREEN)%-18s$(RESET) %s\n" "format"    "Run formatters (ruff, mdformat, js-beautify)"
 	@printf "  $(GREEN)%-18s$(RESET) %s\n" "typecheck" "Run type checkers (Python and Lua)"
@@ -30,6 +31,11 @@ install: ## Install balatrobench and all dependencies (Python + npm)
 	uv sync --group dev --group test
 	@$(PRINT) "$(YELLOW)Installing npm dependencies...$(RESET)"
 	npm install
+
+serve: ## Serve the site locally on port 8000
+	@$(PRINT) "$(YELLOW)Starting local server at http://localhost:8000...$(RESET)"
+	@(sleep 1 && (open http://localhost:8000 2>/dev/null || xdg-open http://localhost:8000 2>/dev/null)) & \
+	python3 -m http.server 8000 --directory site
 
 lint: ## Run ruff linter (check only)
 	@$(PRINT) "$(YELLOW)Running ruff linter...$(RESET)"

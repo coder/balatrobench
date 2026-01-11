@@ -60,12 +60,10 @@ uv run balatrobench --webp
 Serve the site locally:
 
 ```bash
-npm run serve
-# or
-python3 -m http.server 8000 --directory site
+make serve
 ```
 
-Then visit [http://localhost:8000](http://localhost:8000)
+This will start a local server at [http://localhost:8000](http://localhost:8000) and automatically open it in your browser.
 
 To use local benchmark data, set `environment: 'development'` in `site/config.js`.
 
