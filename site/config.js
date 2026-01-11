@@ -4,9 +4,20 @@
  */
 
 const CONFIG = {
-  // Current active environment - change this to switch environments
-  environment: 'development',
-  // environment: 'production',
+  // Auto-detect environment based on hostname
+  // Override with query param: ?env=development or ?env=production
+  environment: (() => {
+    const params = new URLSearchParams(window.location.search);
+    const envOverride = params.get('env');
+    if (envOverride === 'development' || envOverride === 'production') {
+      return envOverride;
+    }
+    const host = window.location.hostname;
+    if (host === 'localhost' || host === '127.0.0.1' || host === '') {
+      return 'development';
+    }
+    return 'production';
+  })(),
 
   // Environment configurations
   environments: {
