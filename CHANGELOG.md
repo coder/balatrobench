@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.1.0](https://github.com/coder/balatrobench/compare/v1.0.0...v1.1.0) (2026-01-11)
+
+
+### Features
+
+* add serve target to Makefile ([14b34d5](https://github.com/coder/balatrobench/commit/14b34d51d13f08ab754dacd8522fb3f9322d4fef))
+
+
+### Bug Fixes
+
+* claude settings.json ([a72c778](https://github.com/coder/balatrobench/commit/a72c77854a43205143fd2ffdb2fe4688963f99db))
+* test for dynamic version ([99ab125](https://github.com/coder/balatrobench/commit/99ab1254217a3f6eaf93b925a575efcfeb343bce))
+
 ## 1.0.0 (2026-01-10)
 
 
