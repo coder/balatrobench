@@ -1,0 +1,12 @@
+{
+  "packages": {
+    ".": {
+      "release-type": "python",
+      "package-name": "balatrobench",
+      "changelog-path": "CHANGELOG.md",
+      "extra-files": [
+        "package.json"
+      ]
+    }
+  }
+}

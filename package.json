@@ -1,6 +1,6 @@
 {
   "name": "balatrobench",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Performance leaderboards for LLMs playing Balatro",
   "scripts": {
     "test": "playwright test",
