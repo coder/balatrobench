@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.0](https://github.com/coder/balatrobench/compare/v1.1.0...v1.2.0) (2026-01-11)
+
+
+### Features
+
+* **site:** auto-detect environment from hostname ([337c160](https://github.com/coder/balatrobench/commit/337c160fac0aca8d6e27023829107d064cc1eb96))
+* **site:** update favicon to use balatrobench logo ([6849d96](https://github.com/coder/balatrobench/commit/6849d9641bd8ab868966002c6e3bf6c5cffaaded))
+
 ## [1.1.0](https://github.com/coder/balatrobench/compare/v1.0.0...v1.1.0) (2026-01-11)
 
 
