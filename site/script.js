@@ -643,7 +643,14 @@ function createPerformanceBarChart(entries) {
         }
       },
       scales: {
-        x: axisOptions,
+        x: {
+          ...axisOptions,
+          ticks: {
+            ...axisOptions.ticks,
+            maxRotation: 90,
+            minRotation: 25
+          }
+        },
         y: {
           beginAtZero: true,
           max: yAxisMax,
