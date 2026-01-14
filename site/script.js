@@ -6,7 +6,12 @@ const colors = {
       google: 'hsla(134, 51%, 42%, .8)', // Google green
       anthropic: 'hsla(15, 52%, 58%, .8)', // Anthropic orange
       'x-ai': 'hsla(270, 70%, 50%, .8)', // X-AI purple
-      deepseek: 'hsla(214, 61%, 44%, .8)' // DeepSeek blue
+      deepseek: 'hsla(214, 61%, 44%, .8)', // DeepSeek blue
+      mistralai: 'hsla(26, 100%, 50%, .8)', // Mistral orange
+      qwen: 'hsla(23, 82%, 31%, .8)', // Qwen brown
+      'z-ai': 'hsla(213, 79%, 31%, .8)', // Z-AI blue
+      minimax: 'hsla(343, 63%, 32%, .8)', // Minimax pink
+      moonshotai: 'hsla(212, 97%, 29%, .8)' // Moonshot blue
     },
     grid: 'hsla(240, 5%, 89%, 1)', // zinc-200-ish
     axis: 'hsla(240, 5%, 26%, 1)', // zinc-700-ish
@@ -18,7 +23,12 @@ const colors = {
       google: 'hsla(134, 65%, 60%, .8)', // brighter Google green for dark mode
       anthropic: 'hsla(15, 64%, 70%, .8)', // more saturated Anthropic orange
       'x-ai': 'hsla(270, 80%, 70%, .8)', // brighter X-AI purple for dark mode
-      deepseek: 'hsla(214, 75%, 65%, .8)' // brighter DeepSeek blue for dark mode
+      deepseek: 'hsla(214, 75%, 65%, .8)', // brighter DeepSeek blue for dark mode
+      mistralai: 'hsla(26, 100%, 68%, .8)', // brighter Mistral orange for dark mode
+      qwen: 'hsla(23, 94%, 49%, .8)', // brighter Qwen brown for dark mode
+      'z-ai': 'hsla(213, 91%, 49%, .8)', // brighter Z-AI blue for dark mode
+      minimax: 'hsla(343, 75%, 50%, .8)', // brighter Minimax pink for dark mode
+      moonshotai: 'hsla(212, 100%, 47%, .8)' // brighter Moonshot blue for dark mode
     },
     grid: 'hsla(240, 5%, 26%, 1)', // zinc-700-ish
     axis: 'hsla(240, 6%, 90%, 1)', // near-white text
