@@ -20,9 +20,9 @@ MAX_CONCURRENT = 100
 
 def get_files():
     files = []
-    for f in Path("benchmarks").rglob("*"):
+    for f in Path("site/benchmarks").rglob("*"):
         if f.is_file() and not f.name.startswith("."):
-            rel_path = str(f.relative_to("benchmarks")).replace("\\", "/")
+            rel_path = str(f.relative_to("site/benchmarks")).replace("\\", "/")
             files.append((f, rel_path))
     return files
 
