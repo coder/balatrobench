@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.3.0](https://github.com/coder/balatrobench/compare/v1.2.0...v1.3.0) (2026-01-21)
+
+
+### Features
+
+* **site:** add mistralai, qwen, z-ai, minimax, moonshotai colors ([9d3dad5](https://github.com/coder/balatrobench/commit/9d3dad581716b60300271f26474f18f8f4237277))
+* **site:** make the main plot twice as tall ([e9370c1](https://github.com/coder/balatrobench/commit/e9370c16c2ac5bf108b07f664b1d091b2499eb67))
+* **site:** set min and max rotation for x axis ([0d75476](https://github.com/coder/balatrobench/commit/0d75476af94b5d4d900da5ab778d6c7f14dc0f79))
+
+
+### Bug Fixes
+
+* **site:** update CDN url ([e0c6672](https://github.com/coder/balatrobench/commit/e0c667237f36292b64c9ce228974d375c2ff273e))
+* **upload:** update the benchmarks path ([13b3ee2](https://github.com/coder/balatrobench/commit/13b3ee2d84be6a0cbe549614a83e515bf9f868a4))
+
 ## [1.2.0](https://github.com/coder/balatrobench/compare/v1.1.0...v1.2.0) (2026-01-11)
 
 
