@@ -27,7 +27,7 @@ const CONFIG = {
     },
     production: {
       name: 'Production',
-      data: 'https://balatrobench.b-cdn.net' // CDN data
+      data: 'https://balatrobench-prod.b-cdn.net' // CDN data
     }
   },
 
