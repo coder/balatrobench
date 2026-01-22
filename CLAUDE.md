@@ -49,14 +49,14 @@ The package is structured as a pipeline: CLI → Analyzer → Writer.
 Entry point for the `balatrobench` command. Parses input/output directories, infers version from path. Orchestrates analysis for both models and strategies views, generates manifests.
 
 ```bash
-# Default: reads from ../balatrollm/runs/v1.0.0, writes to site/benchmarks
-balatrobench
+# Analyze runs from a specific directory
+balatrobench --input-dir /path/to/runs/v1.0.0
 
-# Custom paths
+# Custom output directory
 balatrobench --input-dir /path/to/runs/v1.0.0 --output-dir /path/to/output
 
 # Enable WebP conversion
-balatrobench --webp
+balatrobench --input-dir /path/to/runs/v1.0.0 --webp
 ```
 
 #### Analyzer (`analyzer.py`)
