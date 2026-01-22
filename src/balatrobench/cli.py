@@ -25,6 +25,7 @@ def create_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--input-dir",
         type=Path,
+        required=True,
         help="Input directory with run data (e.g., runs/v1.0.0)",
     )
     parser.add_argument(
@@ -65,10 +66,6 @@ def main() -> None:
     args = parser.parse_args()
 
     # Determine input directory
-    if not args.input_dir:
-        print("Error: --input-dir is required")
-        sys.exit(1)
-
     input_dir = args.input_dir.resolve()
 
     if not input_dir.exists():

@@ -164,9 +164,9 @@ class TestCreateParser:
         # Check parser metadata
         assert parser.prog == "balatrobench"
 
-        # Parse with no arguments to check defaults
-        args = parser.parse_args([])
-        assert args.input_dir is None
+        # Parse with required argument to check defaults
+        args = parser.parse_args(["--input-dir", "/some/path"])
+        assert args.input_dir == Path("/some/path")
         assert args.output_dir == Path("site/benchmarks")
         assert args.version is None
         assert args.webp is False
@@ -217,9 +217,9 @@ class TestMain:
         with pytest.raises(SystemExit) as exc_info:
             main()
 
-        assert exc_info.value.code == 1
+        assert exc_info.value.code == 2
         captured = capsys.readouterr()
-        assert "Error: --input-dir is required" in captured.out
+        assert "required" in captured.err
 
     def test_main_exits_when_input_dir_not_found(
         self,
