@@ -20,39 +20,88 @@ BalatroBench is a benchmark analysis tool and leaderboard for [BalatroLLM](https
 
 ### Requirements
 
-- [uv](https://docs.astral.sh/uv/) - Python package manager
-- [npm](https://www.npmjs.com/) - Node.js package manager
+- [uv](https://docs.astral.sh/uv/) - Python package manager (installation steps below)
+- [Node.js](https://nodejs.org/) - JavaScript runtime (includes npm) required just for Playwright tests
 
 ### Installation
 
-Install Python and npm dependencies:
+Follow these steps to set up BalatroBench:
 
-```bash
-make install
-source .venv/bin/activate
-```
+1. **Install uv**
 
-This runs `uv sync` for Python packages and `npm install` for Playwright tests.
+    Install the [uv](https://docs.astral.sh/uv/) Python package manager:
 
-For browser binaries (first time only):
+    ```bash
+    # macOS/Linux
+    curl -LsSf https://astral.sh/uv/install.sh | sh
 
-```bash
-npx playwright install
-```
+    # Windows
+    powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+    ```
+
+    See the [uv installation docs](https://docs.astral.sh/uv/getting-started/installation/) for more options.
+
+2. **Clone the repository**
+
+    ```bash
+    git clone https://github.com/coder/balatrobench.git
+    cd balatrobench
+    ```
+
+3. **Configure environment variables**
+
+    Copy the example environment file and fill in your values:
+
+    ```bash
+    cp .envrc.example .envrc
+    ```
+
+    Edit `.envrc` and set the following variables (required for uploading benchmarks to CDN):
+
+    - `BUNNY_BASE_URL` - BunnyCDN base URL
+    - `BUNNY_STORAGE_ZONE` - Storage zone name
+    - `BUNNY_API_KEY` - API key for authentication
+
+4. **Install dependencies**
+
+    ```bash
+    make install
+    ```
+
+    This runs `uv sync` for Python packages and `npm install` for Playwright tests.
+
+5. **Activate the environment**
+
+    ```bash
+    source .envrc
+    ```
+
+    Alternatively, use [direnv](https://direnv.net/) to automatically load the environment:
+
+    ```bash
+    # Install direnv, then allow the directory
+    direnv allow
+    ```
+
+6. **Install browser binaries (first time only)**
+
+    ```bash
+    npx playwright install chromium
+    ```
 
 ### Generating Benchmarks
 
 Generate benchmark data from BalatroLLM runs:
 
 ```bash
-# Default: reads from ../balatrollm/runs/v1.0.0, writes to site/benchmarks
-uv run balatrobench
+# Analyze runs from a specific directory
+balatrobench --input-dir /path/to/runs/v1.0.0
 
-# Custom paths
-uv run balatrobench --input-dir /path/to/runs/v1.0.0 --output-dir /path/to/output
+# Custom output directory
+balatrobench --input-dir /path/to/runs/v1.0.0 --output-dir /path/to/output
 
 # Enable WebP conversion for screenshots
-uv run balatrobench --webp
+balatrobench --input-dir /path/to/runs/v1.0.0 --webp
 ```
 
 ### Starting the Website
@@ -65,27 +114,24 @@ make serve
 
 This will start a local server at [http://localhost:8000](http://localhost:8000) and automatically open it in your browser.
 
-To use local benchmark data, set `environment: 'development'` in `site/config.js`.
+The environment is automatically detected (localhost = development, otherwise = production).
+To override, use the query parameter: `?env=development` or `?env=production`.
 
 ### Running Tests
 
-End-to-end tests use Playwright:
+End-to-end tests use Playwright and `balatrobench` tests:
 
 ```bash
-# Run tests headless (default)
-npm test
-
-# Run tests with interactive UI
-npm run test:ui
-
-# Run tests with browser visible
-npm run test:headed
-
-# Run tests in debug mode
-npm run test:debug
+make test
 ```
 
-The test server is automatically started by Playwright (see `playwright.config.js`).
+> [!NOTE]
+> Although `playwright.config.js` includes webServer configuration, the server may not auto-start reliably. If tests fail to connect, manually start the server first:
+
+```bash
+make serve  # In a separate terminal
+make test   # Run tests
+```
 
 ## 🚀 Related Projects
 
