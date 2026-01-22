@@ -1,0 +1,5 @@
+source .venv/bin/activate
+
+export BUNNY_BASE_URL="<your-bunny-base-url>"
+export BUNNY_STORAGE_ZONE="<your-storage-zone>"
+export BUNNY_API_KEY="<your-api-key>"
