@@ -11,8 +11,9 @@ import os
 from pathlib import Path
 
 import httpx
-from tqdm.asyncio import tqdm as async_tqdm
+from tqdm.asyncio import tqdm_asyncio
 
+BUNNY_BASE_URL = os.getenv("BUNNY_BASE_URL")
 STORAGE_ZONE = os.getenv("BUNNY_STORAGE_ZONE")
 ACCESS_KEY = os.getenv("BUNNY_API_KEY")
 MAX_CONCURRENT = 100
@@ -29,7 +30,7 @@ def get_files():
 
 async def upload_file(client, sem, local_path, remote_path):
     async with sem:
-        url = f"https://storage.bunnycdn.com/{STORAGE_ZONE}/benchmarks/{remote_path}"
+        url = f"https://{BUNNY_BASE_URL}/{STORAGE_ZONE}/benchmarks/{remote_path}"
         headers = {"AccessKey": ACCESS_KEY, "Content-Type": "application/octet-stream"}
 
         with open(local_path, "rb") as f:
@@ -41,17 +42,20 @@ async def upload_file(client, sem, local_path, remote_path):
 
 async def main():
     files = get_files()
-    total = len(files)
-    print(f"Uploading {total} files...")
 
-    sem = asyncio.Semaphore(MAX_CONCURRENT)
+    if not files:
+        print("No files to upload")
+        return
+
+    print(f"Uploading {len(files)} files...")
 
     async with httpx.AsyncClient(timeout=60.0) as client:
+        sem = asyncio.Semaphore(MAX_CONCURRENT)
         tasks = [upload_file(client, sem, local, remote) for local, remote in files]
-        results = await async_tqdm.gather(*tasks, desc="Uploading", unit="file")
+        results = await tqdm_asyncio.gather(*tasks, desc="Uploading", unit="file")
 
     success = sum(results)
-    print(f"Done: {success}/{total} uploaded")
+    print(f"Done: {success}/{len(files)} uploaded")
 
 
 if __name__ == "__main__":
