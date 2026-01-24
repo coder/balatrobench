@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.4.0](https://github.com/coder/balatrobench/compare/v1.3.0...v1.4.0) (2026-01-24)
+
+
+### Features
+
+* **site:** add twitch stream embed ([4b09e47](https://github.com/coder/balatrobench/commit/4b09e474f93adc8b2e18b3fa54c701000c4a58a1))
+
+
+### Bug Fixes
+
+* **upload:** add BUNNY_BASE_URL env var ([46ab419](https://github.com/coder/balatrobench/commit/46ab419924e27def6d9260728dfe12fbca41757f))
+
+
+### Code Refactoring
+
+* **cli:** add required input-dir argument ([958b442](https://github.com/coder/balatrobench/commit/958b4423965292ada16f46d19db4fbb534dbffa9))
+
 ## [1.3.0](https://github.com/coder/balatrobench/compare/v1.2.0...v1.3.0) (2026-01-21)
 
 
