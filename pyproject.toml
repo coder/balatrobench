@@ -15,7 +15,7 @@ classifiers = [
 balatrobench = "balatrobench.cli:main"
 
 [project.urls]
-Homepage = "https://coder.github.io/balatrobench/"
+Homepage = "https://balatrobench.com/"
 Repository = "https://github.com/coder/balatrobench"
 
 [build-system]
