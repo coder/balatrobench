@@ -17,7 +17,7 @@
 BalatroBench is a benchmark analysis tool and leaderboard for [BalatroLLM](https://github.com/coder/balatrollm) runs. It processes game data and generates interactive leaderboards comparing LLM models and strategies playing [Balatro](https://www.playbalatro.com/).
 
 > [!NOTE]
-> You can download all the data for `runs` and `benchmarks` from the [kaggle](www.kaggle.com/datasets/s1m0n38/balatrobench).
+> You can download all the data for `runs` and `benchmarks` from the [kaggle](https://www.kaggle.com/datasets/s1m0n38/balatrobench).
 
 ## 📚 Documentation
 
