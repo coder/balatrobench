@@ -1262,6 +1262,38 @@ async function fetchJsonSafe(url) {
   }
 }
 
+// ===== LRU Cache for Request Content =====
+class RequestCache {
+  constructor(maxSize = 20) {
+    this.maxSize = maxSize;
+    this.cache = new Map();
+  }
+
+  get(key) {
+    if (!this.cache.has(key)) return null;
+    const value = this.cache.get(key);
+    this.cache.delete(key);
+    this.cache.set(key, value); // Move to end (most recently used)
+    return value;
+  }
+
+  set(key, value) {
+    if (this.cache.has(key)) {
+      this.cache.delete(key);
+    } else if (this.cache.size >= this.maxSize) {
+      const firstKey = this.cache.keys().next().value;
+      this.cache.delete(firstKey);
+    }
+    this.cache.set(key, value);
+  }
+
+  has(key) {
+    return this.cache.has(key);
+  }
+}
+
+const requestContentCache = new RequestCache(20);
+
 function openRunViewer({
   basePath,
   vendor,
@@ -1355,7 +1387,7 @@ async function discoverTotalRequests(state) {
   return maxFound;
 }
 
-async function loadAndRenderRequest(state) {
+async function loadAndRenderRequest(state, prefetch = false) {
   const {
     basePath,
     vendor,
@@ -1367,15 +1399,45 @@ async function loadAndRenderRequest(state) {
   } = state;
   const reqId = formatRequestId(index);
   const runBase = buildRequestBasePath(basePath, vendor, model, runId, reqId, strategy);
+  const cacheKey = `${runId}:${index}`;
 
-  const [reasoning, toolcall, strategyMd, gamestateMd, memoryMd, metadata] = await Promise.all([
-    fetchTextSafe(`${runBase}/reasoning.md`),
-    fetchJsonSafe(`${runBase}/tool_call.json`),
-    fetchTextSafe(`${runBase}/strategy.md`),
-    fetchTextSafe(`${runBase}/gamestate.md`),
-    fetchTextSafe(`${runBase}/memory.md`),
-    fetchJsonSafe(`${runBase}/metadata.json`)
-  ]);
+  let content;
+  const cached = requestContentCache.get(cacheKey);
+
+  if (cached) {
+    content = cached;
+  } else {
+    const [reasoning, toolcall, strategyMd, gamestateMd, memoryMd, metadata] = await Promise.all([
+      fetchTextSafe(`${runBase}/reasoning.md`),
+      fetchJsonSafe(`${runBase}/tool_call.json`),
+      fetchTextSafe(`${runBase}/strategy.md`),
+      fetchTextSafe(`${runBase}/gamestate.md`),
+      fetchTextSafe(`${runBase}/memory.md`),
+      fetchJsonSafe(`${runBase}/metadata.json`)
+    ]);
+    content = {
+      reasoning,
+      toolcall,
+      strategyMd,
+      gamestateMd,
+      memoryMd,
+      metadata,
+      runBase
+    };
+    requestContentCache.set(cacheKey, content);
+  }
+
+  // If prefetching, just cache - don't render
+  if (prefetch) return;
+
+  const {
+    reasoning,
+    toolcall,
+    strategyMd,
+    gamestateMd,
+    memoryMd,
+    metadata
+  } = content;
 
   // Discover total requests for this run if not cached
   if (!state.totalRequests[runId]) {
@@ -1416,26 +1478,30 @@ async function loadAndRenderRequest(state) {
   overlay.querySelector('#run-title').innerHTML = title;
 
   const imgEl = overlay.querySelector('#run-screenshot');
-  // Try formats in order: webp -> png -> avif
+
+  // Parallel format detection using HEAD requests
   const formats = ['webp', 'png', 'avif'];
-  let formatIndex = 0;
-
-  const tryNextFormat = () => {
-    if (formatIndex < formats.length) {
-      imgEl.src = `${runBase}/screenshot.${formats[formatIndex]}`;
-      formatIndex++;
+  const formatProbes = formats.map(async (format) => {
+    const url = `${content.runBase}/screenshot.${format}`;
+    try {
+      const response = await fetch(url, {
+        method: 'HEAD'
+      });
+      if (response.ok) return url;
+    } catch {
+      /* format unavailable */
     }
-  };
+    return null;
+  });
 
-  imgEl.onerror = () => {
-    if (formatIndex < formats.length) {
-      tryNextFormat();
+  Promise.all(formatProbes).then(results => {
+    const availableUrl = results.find(r => r !== null);
+    if (availableUrl) {
+      imgEl.src = availableUrl;
     } else {
-      imgEl.onerror = null;
+      imgEl.alt = 'Screenshot not available';
     }
-  };
-
-  tryNextFormat();
+  });
 
   overlay.querySelector('#run-strategy').textContent = strategyMd || '(No strategy.md)';
   overlay.querySelector('#run-gamestate').textContent = gamestateMd || '(No gamestate.md)';
@@ -1481,6 +1547,31 @@ async function loadAndRenderRequest(state) {
     toolCallDiv.textContent = `${name}(${argsString})`;
   }
 
+  // Prefetch adjacent requests in background
+  prefetchAdjacentRequests(state);
+}
+
+function prefetchAdjacentRequests(state) {
+  const {
+    runId,
+    index
+  } = state;
+
+  // Prefetch previous
+  if (index > 1 && !requestContentCache.has(`${runId}:${index - 1}`)) {
+    loadAndRenderRequest({
+      ...state,
+      index: index - 1
+    }, true).catch(() => {});
+  }
+
+  // Prefetch next
+  if (!requestContentCache.has(`${runId}:${index + 1}`)) {
+    loadAndRenderRequest({
+      ...state,
+      index: index + 1
+    }, true).catch(() => {});
+  }
 }
 
 async function navigateRun(state, delta) {
