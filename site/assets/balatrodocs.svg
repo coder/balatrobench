@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 90">
+  <defs>
+    <mask id="doc-mask" maskContentUnits="userSpaceOnUse">
+      <!-- 1. White base (Reveal everything) -->
+      <rect x="-1000" y="-1000" width="3000" height="3000" fill="white" />
+
+      <!-- 2. Black shapes (Hide/Cutout) -->
+      <g fill="none" stroke="black" stroke-width="28" stroke-linecap="round" stroke-linejoin="round">
+        <!-- Document Outline -->
+        <path d="M 230 280 L 230 600 L 390 600 L 490 500 L 490 280 Z" />
+        <!-- Fold (triangle) -->
+        <path d="M 390 600 L 390 500 L 490 500" />
+        <!-- Text Lines -->
+        <line x1="280" y1="430" x2="440" y2="430" />
+        <line x1="280" y1="360" x2="440" y2="360" />
+      </g>
+    </mask>
+  </defs>
+
+  <style>
+    /* Light mode - dark cards */
+    .cards {
+      fill: #27272a;
+    }
+
+    /* Dark mode - light cards */
+    @media (prefers-color-scheme: dark) {
+      .cards {
+        fill: #fafafa;
+      }
+    }
+  </style>
+
+  <g class="cards" transform="translate(0, 90) scale(0.1, -0.1)">
+    <!-- Front card with masked document symbol -->
+    <path d="M110 790 c-19 -19 -20 -33 -20 -340 0 -307 1 -321 20 -340 19 -19 33 -20 250 -20 217 0 231 1 250 20 19 19 20 33 20 340 0 307 -1 321 -20 340 -19 19 -33 20 -250 20 -217 0 -231 -1 -250 -20z" mask="url(#doc-mask)"/>
+
+    <!-- Back card (offset) -->
+    <path d="M688 459 c2 -281 0 -336 -13 -361 -19 -39 -19 -38 9 -38 50 0 59 28 110 359 47 300 48 312 31 331 -10 11 -34 22 -54 25 -20 4 -47 8 -61 11 l-25 5 3 -332z"/>
+  </g>
+</svg>
