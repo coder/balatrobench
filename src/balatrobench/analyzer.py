@@ -125,11 +125,14 @@ class BenchmarkAnalyzer:
 
             # Load strategy (once)
             if strategy_obj is None:
+                strategy_key = source_task["strategy"]
+
                 if strategy_file.exists():
                     with strategy_file.open() as f:
                         source_strategy: SourceStrategy = json.load(f)
                     strategy_obj = Strategy(
                         name=source_strategy["name"],
+                        key=strategy_key,
                         description=source_strategy["description"],
                         author=source_strategy["author"],
                         version=source_strategy["version"],
@@ -138,6 +141,7 @@ class BenchmarkAnalyzer:
                 else:
                     strategy_obj = Strategy(
                         name=source_task["strategy"],
+                        key=strategy_key,
                         description="",
                         author="",
                         version="",

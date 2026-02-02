@@ -108,6 +108,8 @@ class BenchmarkWriter:
     ) -> Path:
         """Write runs.json for a strategy (when analyzing strategies per model).
 
+        Output: {version}/{vendor}/{model}/{strategy_key}/runs.json
+
         Returns the path to the written file.
         """
         output_path = (
@@ -115,10 +117,28 @@ class BenchmarkWriter:
             / version
             / vendor
             / model_name
-            / runs.strategy.name
+            / runs.strategy.key
             / "runs.json"
         )
         return self._write_json(output_path, runs)
+
+    def write_strategy_request_files(
+        self,
+        run_dir: Path,
+        version: str,
+        vendor: str,
+        model_name: str,
+        strategy_key: str,
+        run_id: str,
+    ) -> None:
+        """Extract and write per-request files for a strategy run.
+
+        Output: {version}/{vendor}/{model}/{strategy_key}/{run_id}/{request_id}/
+        Each containing: reasoning.md, tool_call.json, strategy.md, gamestate.md,
+        memory.md, metadata.json, and screenshot.png (if available).
+        """
+        output_base = self.output_dir / version / vendor / model_name / strategy_key
+        self._write_request_files_impl(run_dir, output_base)
 
     def write_request_files(
         self,
@@ -130,6 +150,19 @@ class BenchmarkWriter:
         Creates directories like: {output_base}/{run_id}/{request_id}/
         Each containing: reasoning.md, tool_call.json, strategy.md, gamestate.md,
         memory.md, metadata.json, and screenshot.webp (if available).
+        """
+        self._write_request_files_impl(run_dir, output_base)
+
+    def _write_request_files_impl(
+        self,
+        run_dir: Path,
+        output_base: Path,
+    ) -> None:
+        """Internal implementation for writing per-request files.
+
+        Creates directories like: {output_base}/{run_id}/{request_id}/
+        Each containing: reasoning.md, tool_call.json, strategy.md, gamestate.md,
+        memory.md, metadata.json, and screenshot.png (if available).
         """
         run_id = run_dir.name
         requests_file = run_dir / "requests.jsonl"

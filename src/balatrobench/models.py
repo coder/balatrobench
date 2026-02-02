@@ -84,6 +84,7 @@ class Strategy:
     """Strategy metadata."""
 
     name: str
+    key: str
     description: str
     author: str
     version: str

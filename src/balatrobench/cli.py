@@ -100,14 +100,15 @@ def main() -> None:
 
             # Get strategy from first Runs
             strategy = runs_list[0].strategy
+            strategy_key = strategy.key
 
             # Write leaderboard
             leaderboard = analyzer.create_models_leaderboard(strategy, runs_list)
-            models_writer.write_models_leaderboard(leaderboard, version, strategy_name)
+            models_writer.write_models_leaderboard(leaderboard, version, strategy_key)
 
             # Write model runs and request files
             for runs in runs_list:
-                models_writer.write_runs(runs, version, strategy_name)
+                models_writer.write_runs(runs, version, strategy_key)
 
                 # Write per-request files for each run
                 for run in runs.runs:
@@ -122,7 +123,7 @@ def main() -> None:
                         output_base = (
                             models_output_dir
                             / version
-                            / strategy_name
+                            / strategy_key
                             / runs.model.vendor
                             / runs.model.name
                         )
@@ -150,9 +151,19 @@ def main() -> None:
                 leaderboard, version, model_key
             )
 
-            # Write strategy runs
+            # Write strategy runs and request files
             for runs in runs_list:
                 strategies_writer.write_strategy_runs(runs, version, vendor, model_name)
+
+                # Write per-request files for each run
+                strategy_key = runs.strategy.key
+                for run in runs.runs:
+                    # Find run directory in input
+                    run_dir = input_dir / strategy_key / vendor / model_name / run.id
+                    if run_dir.exists():
+                        strategies_writer.write_strategy_request_files(
+                            run_dir, version, vendor, model_name, strategy_key, run.id
+                        )
 
         # Convert PNGs to WebP if enabled
         if args.webp:
