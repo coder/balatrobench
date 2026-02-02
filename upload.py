@@ -6,6 +6,7 @@
 # ]
 # ///
 
+import argparse
 import asyncio
 import os
 from pathlib import Path
@@ -19,11 +20,14 @@ ACCESS_KEY = os.getenv("BUNNY_API_KEY")
 MAX_CONCURRENT = 100
 
 
-def get_files():
+def get_files(subdir: str | None = None):
+    base_path = Path("site/benchmarks")
+    search_path = base_path / subdir if subdir else base_path
+
     files = []
-    for f in Path("site/benchmarks").rglob("*"):
+    for f in search_path.rglob("*"):
         if f.is_file() and not f.name.startswith("."):
-            rel_path = str(f.relative_to("site/benchmarks")).replace("\\", "/")
+            rel_path = str(f.relative_to(base_path)).replace("\\", "/")
             files.append((f, rel_path))
     return files
 
@@ -41,7 +45,14 @@ async def upload_file(client, sem, local_path, remote_path):
 
 
 async def main():
-    files = get_files()
+    parser = argparse.ArgumentParser(description="Upload benchmark files to Bunny CDN")
+    parser.add_argument(
+        "--subdir",
+        help="Subdirectory within site/benchmarks/ to upload (e.g., 'strategies')",
+    )
+    args = parser.parse_args()
+
+    files = get_files(args.subdir)
 
     if not files:
         print("No files to upload")
