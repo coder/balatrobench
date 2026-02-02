@@ -435,9 +435,7 @@ function buildRequestBasePath(basePath, vendor, model, runId, requestId, strateg
 }
 
 // Get data paths based on page type and version
-// TODO: Community page should discover available models dynamically from manifest
-// For now, using google/gemini-3-flash-preview as default model for strategies view
-function getDataPaths(version, vendor = 'google', model = 'gemini-3-flash-preview') {
+function getDataPaths(version, vendor = 'openai', model = 'gpt-oss-20b') {
   if (PAGE_TYPE === 'community') {
     return {
       manifestPath: `${DATA_BASE_URL}/benchmarks/strategies/manifest.json`,
