@@ -32,6 +32,7 @@ def simple_strategy() -> Strategy:
     """Simple Strategy for local tests (distinct from conftest.sample_strategy)."""
     return Strategy(
         name="Default",
+        key="default",
         description="Test strategy",
         author="Test",
         version="1.0.0",

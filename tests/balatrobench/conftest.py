@@ -33,6 +33,7 @@ def sample_strategy() -> Strategy:
     """Sample Strategy instance."""
     return Strategy(
         name="Default",
+        key="default",
         description="The default BalatroLLM strategy",
         author="BalatroLLM",
         version="1.0.0",

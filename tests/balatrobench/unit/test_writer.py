@@ -502,9 +502,9 @@ class TestWriteStrategyRuns:
 
         result = writer.write_strategy_runs(sample_runs, "v1.0.0", "openai", "gpt-4o")
 
-        # Should return the path to written file
+        # Should return the path to written file (uses strategy.key for path)
         expected_path = (
-            tmp_path / "v1.0.0" / "openai" / "gpt-4o" / "Default" / "runs.json"
+            tmp_path / "v1.0.0" / "openai" / "gpt-4o" / "default" / "runs.json"
         )
         assert result == expected_path
         assert result.exists()
