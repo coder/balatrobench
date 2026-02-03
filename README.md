@@ -27,6 +27,9 @@ BalatroBench is a benchmark analysis tool and leaderboard for [BalatroLLM](https
 
 ## 📚 Documentation
 
+> [!IMPORTANT]
+> This is the documentation for analyzing `runs` artifacts produced by [BalatroLLM](https://github.com/coder/balatrollm). This project parses the data and displays it as a website.
+
 ### Requirements
 
 - [uv](https://docs.astral.sh/uv/) - Python package manager (installation steps below)
