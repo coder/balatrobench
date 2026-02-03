@@ -22,6 +22,7 @@
   <link rel="preconnect" href="https://balatrobench.b-cdn.net" crossorigin>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
+  <link rel="preconnect" href="https://player.twitch.tv" crossorigin>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="config.js"></script>
@@ -37,21 +38,68 @@
   <nav
     class="w-full bg-white dark:bg-zinc-800 border-b border-zinc-200 dark:border-zinc-600 shadow-sm dark:shadow-md dark:ring-1 dark:ring-white/5 mb-8">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-      <div class="flex items-center justify-center space-x-2 sm:space-x-4 md:space-x-6 lg:space-x-8 py-4">
-        <a href="index.html" aria-current="page"
-          class="inline-flex items-center justify-center h-10 w-28 sm:w-32 md:w-36 lg:w-40 px-3 sm:px-4 md:px-5 lg:px-6 bg-zinc-100 text-zinc-700 dark:bg-zinc-700 dark:text-white rounded-lg font-medium text-sm transition-all border-2 border-zinc-300 dark:border-zinc-600">BalatroBench</a>
-        <a href="community.html"
-          class="inline-flex items-center justify-center h-10 w-28 sm:w-32 md:w-36 lg:w-40 px-3 sm:px-4 md:px-5 lg:px-6 text-zinc-500 hover:text-zinc-700 hover:bg-zinc-50 dark:text-zinc-400 hover:dark:text-zinc-200 hover:dark:bg-zinc-700/50 rounded-lg font-medium text-sm transition-all border border-zinc-300 dark:border-zinc-600">Community</a>
-        <a href="about.html"
-          class="inline-flex items-center justify-center h-10 w-28 sm:w-32 md:w-36 lg:w-40 px-3 sm:px-4 md:px-5 lg:px-6 text-zinc-500 hover:text-zinc-700 hover:bg-zinc-50 dark:text-zinc-400 hover:dark:text-zinc-200 hover:dark:bg-zinc-700/50 rounded-lg font-medium text-sm transition-all border border-zinc-300 dark:border-zinc-600">About</a>
+      <div class="flex flex-col lg:flex-row items-center lg:justify-between py-3 gap-4 lg:gap-0">
+        <!-- Nav links -->
+        <div class="flex items-center justify-center space-x-2 sm:space-x-4 md:space-x-6 lg:space-x-8">
+          <a href="index.html" aria-current="page"
+            class="relative inline-flex items-center justify-center h-9 px-3 sm:px-4 text-zinc-500 dark:text-zinc-400 font-medium text-base after:absolute after:bottom-0 after:left-2 after:right-2 after:h-0.5 after:bg-zinc-500 dark:after:bg-zinc-400 after:rounded-full">BalatroBench</a>
+          <a href="community.html"
+            class="relative inline-flex items-center justify-center h-9 px-3 sm:px-4 text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-white font-medium text-base transition-colors after:absolute after:bottom-0 after:left-2 after:right-2 after:h-0.5 after:bg-zinc-500 dark:after:bg-zinc-400 after:rounded-full after:scale-x-0 hover:after:scale-x-100 after:origin-center after:transition-transform after:duration-200">Community</a>
+          <a href="about.html"
+            class="relative inline-flex items-center justify-center h-9 px-3 sm:px-4 text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-white font-medium text-base transition-colors after:absolute after:bottom-0 after:left-2 after:right-2 after:h-0.5 after:bg-zinc-500 dark:after:bg-zinc-400 after:rounded-full after:scale-x-0 hover:after:scale-x-100 after:origin-center after:transition-transform after:duration-200">About</a>
+        </div>
+        <!-- Social icons -->
+        <div class="flex items-center space-x-4">
+          <a href="https://github.com/coder/balatrobench" target="_blank" rel="noopener"
+            class="p-2 rounded-md text-zinc-500 hover:text-zinc-700 hover:bg-zinc-200 dark:text-zinc-400 dark:hover:text-white dark:hover:bg-zinc-700 transition-colors">
+            <svg fill="currentColor" class="w-6 h-6"><use href="icons.svg#icon-github"></use></svg>
+          </a>
+          <a href="https://www.twitch.tv/S1M0N38" target="_blank" rel="noopener"
+            class="p-2 rounded-md text-zinc-500 hover:text-zinc-700 hover:bg-zinc-200 dark:text-zinc-400 dark:hover:text-white dark:hover:bg-zinc-700 transition-colors">
+            <svg fill="currentColor" class="w-6 h-6"><use href="icons.svg#icon-twitch"></use></svg>
+          </a>
+          <a href="https://discord.gg/SBaRyVDmFg" target="_blank" rel="noopener"
+            class="p-2 rounded-md text-zinc-500 hover:text-zinc-700 hover:bg-zinc-200 dark:text-zinc-400 dark:hover:text-white dark:hover:bg-zinc-700 transition-colors">
+            <svg fill="currentColor" class="w-6 h-6"><use href="icons.svg#icon-discord"></use></svg>
+          </a>
+        </div>
       </div>
     </div>
   </nav>
-  <div id="main" class="container mx-auto px-4" role="main">
+  <!-- Live Stream Section -->
+  <div class="container mx-auto px-4 mt-8">
+    <div class="max-w-4xl mx-auto">
+      <div class="relative w-full overflow-hidden rounded-lg shadow-lg dark:shadow-2xl dark:ring-1 dark:ring-white/5"
+        style="padding-bottom: 56.25%">
+        <iframe src="https://player.twitch.tv/?channel=S1M0N38&parent=balatrobench.com&parent=localhost"
+          title="S1M0N38 Twitch Stream" class="absolute top-0 left-0 w-full h-full" allow="fullscreen" allowfullscreen>
+        </iframe>
+      </div>
+      <!-- GitHub Repositories -->
+      <div class="flex items-center justify-center gap-6 mt-6">
+        <a href="https://github.com/coder/balatrobench" target="_blank" rel="noopener"
+          class="flex items-center gap-2 text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-white transition-colors">
+          <svg fill="currentColor" class="w-5 h-5"><use href="icons.svg#icon-github"></use></svg>
+          <span class="text-sm font-medium">coder/balatrobench</span>
+        </a>
+        <a href="https://github.com/coder/balatrollm" target="_blank" rel="noopener"
+          class="flex items-center gap-2 text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-white transition-colors">
+          <svg fill="currentColor" class="w-5 h-5"><use href="icons.svg#icon-github"></use></svg>
+          <span class="text-sm font-medium">coder/balatrollm</span>
+        </a>
+        <a href="https://github.com/coder/balatrobot" target="_blank" rel="noopener"
+          class="flex items-center gap-2 text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-white transition-colors">
+          <svg fill="currentColor" class="w-5 h-5"><use href="icons.svg#icon-github"></use></svg>
+          <span class="text-sm font-medium">coder/balatrobot</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div id="main" class="container mx-auto px-4 mt-8" role="main">
     <!-- Performance Bar Chart -->
     <div
       class="bg-white dark:bg-zinc-800 rounded-lg shadow-lg dark:shadow-2xl dark:ring-1 dark:ring-white/5 mb-8 p-6 hidden lg:block">
-      <h2 class="text-3xl font-semibold text-zinc-800 dark:text-zinc-100 mb-4 text-center">BalatroBench</h2>
       <div class="relative w-full" style="height: 500px;">
         <canvas id="performance-chart" class="w-full h-full"></canvas>
       </div>

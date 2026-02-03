@@ -175,9 +175,9 @@ const RunViewerTemplates = {
     <div class="relative w-full h-full max-w-[2400px] max-h-[90vh] bg-white dark:bg-zinc-800 rounded-lg shadow-2xl ring-1 ring-white/10 overflow-hidden flex flex-col lg:max-w-[2300px] 2xl:max-w-[2200px]">
       <div class="flex items-center justify-between px-4 py-2 border-b border-zinc-200 dark:border-zinc-600">
         <div class="text-sm text-zinc-600 dark:text-zinc-300 font-mono truncate" id="run-title"></div>
-        <div class="flex items-center gap-2">
-          <button id="run-help" class="p-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300" aria-label="Help">?</button>
-          <button id="run-close" class="p-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300" aria-label="Close">✕</button>
+        <div class="flex items-center gap-4">
+          <span class="text-sm font-mono text-emerald-600 dark:text-emerald-400">Nav: <b>←</b> / <b>→</b> / <b>↑</b> / <b>↓</b> / <b>?</b></span>
+          <button id="run-close" class="p-1 rounded hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400" aria-label="Close">✕</button>
         </div>
       </div>
       ${this.helpPopup}
@@ -783,7 +783,7 @@ function createDetailRow(stats, modelName, data, vendor, model, basePath, strate
 
     // New schema: run.config.seed (instead of stat.seed) and run.final_round
     detailTableRows += `
-      <tr class="hover:bg-zinc-100 hover:dark:bg-zinc-700 text-xs">
+      <tr class="hover:bg-zinc-200 hover:dark:bg-zinc-700 text-xs">
         <td class="px-2 py-2 text-center text-zinc-700 dark:text-zinc-300 font-mono">${run.config?.seed || 'Unknown'}</td>
         <td class="px-2 py-2 text-center text-zinc-700 dark:text-zinc-300 font-mono">${run.final_round}</td>
         <td class="px-2 py-2 text-center text-green-600 dark:text-green-400 font-mono">${successRate}%</td>
@@ -1091,7 +1091,7 @@ async function loadLeaderboard(leaderboardPath, detailBasePath, displayMode = 'm
     data.entries.forEach((entry, index) => {
       const row = document.createElement('tr');
       row.className =
-        'hover:bg-zinc-50 hover:dark:bg-zinc-700 transition-colors duration-150 lg:cursor-pointer';
+        'hover:bg-zinc-200 hover:dark:bg-zinc-700 transition-colors duration-150 lg:cursor-pointer';
 
       // Parse data based on display mode
       let primaryValue, secondaryValue, vendor, model;
@@ -1332,7 +1332,6 @@ function openRunViewer({
   };
 
   overlay.querySelector('#run-close').addEventListener('click', () => closeRunViewer(state));
-  overlay.querySelector('#run-help').addEventListener('click', toggleHelp);
   overlay.addEventListener('click', (e) => {
     if (e.target === overlay) closeRunViewer(state);
   });
