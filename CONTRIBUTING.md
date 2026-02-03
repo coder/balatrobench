@@ -12,7 +12,7 @@ Welcome to the BalatroBench community! We're excited to see your custom strategi
 
 ### Step 1: Develop Your Strategy
 
-Create your strategy using the [`balatrollm`](https://github.com/S1M0N38/balatrollm) framework:
+Create your strategy using the [`balatrollm`](https://github.com/coder/balatrollm) framework:
 
 ```bash
 # Test your strategy locally
