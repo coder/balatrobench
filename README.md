@@ -19,6 +19,12 @@ BalatroBench is a benchmark analysis tool and leaderboard for [BalatroLLM](https
 > [!NOTE]
 > You can download all the data for `runs` and `benchmarks` from the [kaggle](https://www.kaggle.com/datasets/s1m0n38/balatrobench).
 
+## 🚀 Related Projects
+
+- [**BalatroBot**](https://github.com/coder/balatrobot): API for developing Balatro bots
+- [**BalatroLLM**](https://github.com/coder/balatrollm): Play Balatro with LLMs
+- [**BalatroBench**](https://github.com/coder/balatrobench): Benchmark LLMs playing Balatro
+
 ## 📚 Documentation
 
 ### Requirements
@@ -135,9 +141,3 @@ make test
 make serve  # In a separate terminal
 make test   # Run tests
 ```
-
-## 🚀 Related Projects
-
-- [**BalatroBot**](https://github.com/coder/balatrobot): API for developing Balatro bots
-- [**BalatroLLM**](https://github.com/coder/balatrollm): Play Balatro with LLMs
-- [**BalatroBench**](https://github.com/coder/balatrobench): Benchmark LLMs playing Balatro
