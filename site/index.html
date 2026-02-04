@@ -75,14 +75,8 @@
   <!-- Live Stream Section -->
   <div class="container mx-auto px-4 mt-8">
     <div class="max-w-4xl mx-auto">
-      <div class="relative w-full overflow-hidden rounded-lg shadow-lg dark:shadow-2xl dark:ring-1 dark:ring-white/5"
-        style="padding-bottom: 56.25%">
-        <iframe src="https://player.twitch.tv/?channel=S1M0N38&parent=balatrobench.com&parent=localhost"
-          title="S1M0N38 Twitch Stream" class="absolute top-0 left-0 w-full h-full" allow="fullscreen" allowfullscreen>
-        </iframe>
-      </div>
       <!-- GitHub Repositories -->
-      <div class="flex items-center justify-center gap-6 mt-6">
+      <div class="flex items-center justify-center gap-6 mb-6">
         <a href="https://github.com/coder/balatrobench" target="_blank" rel="noopener"
           class="flex items-center gap-2 text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-white transition-colors">
           <svg fill="currentColor" class="w-5 h-5">
@@ -104,6 +98,19 @@
           </svg>
           <span class="text-sm font-medium">coder/balatrobot</span>
         </a>
+      </div>
+      <div class="relative w-full overflow-hidden rounded-lg shadow-lg dark:shadow-2xl dark:ring-1 dark:ring-white/5"
+        style="padding-bottom: 56.25%">
+        <iframe src="https://player.twitch.tv/?channel=S1M0N38&parent=balatrobench.com&parent=localhost"
+          title="S1M0N38 Twitch Stream" class="absolute top-0 left-0 w-full h-full" allow="fullscreen" allowfullscreen>
+        </iframe>
+      </div>
+      <!-- Quotes Section -->
+      <div id="quote-container" class="mt-8 text-center transition-opacity duration-1000 ease-in-out min-h-12">
+        <p class="text-base leading-normal text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
+          <span id="quote-text" class="italic cursor-pointer"></span>
+          <span id="quote-author" class="text-zinc-500 dark:text-zinc-500 whitespace-nowrap"></span>
+        </p>
       </div>
     </div>
   </div>

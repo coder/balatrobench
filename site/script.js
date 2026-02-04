@@ -1233,7 +1233,88 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize version selector for both pages
   initBenchmarkVersionSelector();
+
+  // Initialize quotes rotation (if on a page with quotes)
+  initQuotesRotation();
 });
+
+// ============================================================================
+// Quotes Rotation
+// ============================================================================
+
+const QUOTE_ROTATION_INTERVAL_MS = 10000; // 10 seconds between quotes
+
+async function initQuotesRotation() {
+  const container = document.getElementById('quote-container');
+  const textEl = document.getElementById('quote-text');
+  const authorEl = document.getElementById('quote-author');
+
+  if (!container || !textEl || !authorEl) return; // Not on a page with quotes
+
+  try {
+    const response = await fetch('assets/quotes.json');
+    if (!response.ok) return;
+    const data = await response.json();
+    const quotes = data.quotes;
+
+    if (!quotes || quotes.length === 0) return;
+
+    let currentIndex = Math.floor(Math.random() * quotes.length);
+    let isTransitioning = false;
+    let autoRotateTimer = null;
+
+    function displayQuote(index) {
+      const quote = quotes[index];
+      textEl.textContent = `"${quote.text}"`;
+      authorEl.textContent = ` — ${quote.vendor} / ${quote.model}`;
+    }
+
+    function getRandomIndex() {
+      // Pick a random index different from current
+      if (quotes.length <= 1) return 0;
+      let newIndex;
+      do {
+        newIndex = Math.floor(Math.random() * quotes.length);
+      } while (newIndex === currentIndex);
+      return newIndex;
+    }
+
+    function transitionToNext() {
+      if (isTransitioning) return;
+      isTransitioning = true;
+
+      currentIndex = getRandomIndex();
+      // Fade out container
+      container.style.opacity = '0';
+      // After fade out (1s), update and fade in
+      setTimeout(() => {
+        displayQuote(currentIndex);
+        container.style.opacity = '1';
+        isTransitioning = false;
+      }, 1000);
+    }
+
+    function resetAutoRotate() {
+      if (autoRotateTimer) clearInterval(autoRotateTimer);
+      autoRotateTimer = setInterval(transitionToNext, QUOTE_ROTATION_INTERVAL_MS);
+    }
+
+    // Display first quote immediately
+    displayQuote(currentIndex);
+
+    // Click on quote text to cycle to next quote
+    textEl.addEventListener('click', () => {
+      transitionToNext();
+      resetAutoRotate(); // Reset timer on manual click
+    });
+
+    // Start auto-rotation
+    resetAutoRotate();
+
+  } catch (e) {
+    console.error('Failed to load quotes:', e);
+  }
+}
 
 // ===== Run Viewer (modal) =====
 function formatRequestId(n) {
