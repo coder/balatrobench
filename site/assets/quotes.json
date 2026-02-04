@@ -192,18 +192,8 @@
     },
     {
       "vendor": "moonshotai",
-      "model": "kimi-k2-thinking",
-      "text": "Post-mortem: The run was lost due to critical resource management failures earlier in the round."
-    },
-    {
-      "vendor": "moonshotai",
       "model": "kimi-k2.5",
       "text": "I ALREADY HAVE A FLUSH IN MY HAND!"
-    },
-    {
-      "vendor": "moonshotai",
-      "model": "kimi-k2.5",
-      "text": "I’m forced to hope for a miracle draw, which feels like pleading with the universe for a favor."
     },
     {
       "vendor": "moonshotai",
