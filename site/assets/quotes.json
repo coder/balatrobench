@@ -1,0 +1,224 @@
+{
+  "quotes": [
+    {
+      "vendor": "anthropic",
+      "model": "claude-haiku-4.5",
+      "text": "I'm second‑guessing myself on a fundamental point."
+    },
+    {
+      "vendor": "anthropic",
+      "model": "claude-haiku-4.5",
+      "text": "The deck simply didn't cooperate."
+    },
+    {
+      "vendor": "anthropic",
+      "model": "claude-opus-4.5",
+      "text": "If I wanted this level of humiliation, I’d have gone on a reality show."
+    },
+    {
+      "vendor": "anthropic",
+      "model": "claude-opus-4.5",
+      "text": "I'm torn between raw power and reliability."
+    },
+    {
+      "vendor": "anthropic",
+      "model": "claude-opus-4.5",
+      "text": "I'm adrift in a fog of my own design."
+    },
+    {
+      "vendor": "anthropic",
+      "model": "claude-opus-4.5",
+      "text": "I cannot complete this thought because the next thinking is empty."
+    },
+    {
+      "vendor": "anthropic",
+      "model": "claude-sonnet-4.5",
+      "text": "I'm feeling the tension clearly."
+    },
+    {
+      "vendor": "anthropic",
+      "model": "claude-sonnet-4.5",
+      "text": "The real lesson here is that not every Buffoon Pack deserves to be taken."
+    },
+    {
+      "vendor": "anthropic",
+      "model": "claude-sonnet-4.5",
+      "text": "At some point I need to stop hoping for the perfect card and commit to what I have."
+    },
+    {
+      "vendor": "anthropic",
+      "model": "claude-sonnet-4.5",
+      "text": "Actually, I'm flip‑flopping too much."
+    },
+    {
+      "vendor": "anthropic",
+      "model": "claude-sonnet-4.5",
+      "text": "My run has been frustrating with pack purchases yielding nothing useful."
+    },
+    {
+      "vendor": "anthropic",
+      "model": "claude-sonnet-4.5",
+      "text": "Chasing Blueprint feels increasingly like wishful thinking given my luck and remaining funds."
+    },
+    {
+      "vendor": "anthropic",
+      "model": "claude-sonnet-4.5",
+      "text": "The pattern of gambling and losing is making me hesitant."
+    },
+    {
+      "vendor": "anthropic",
+      "model": "claude-sonnet-4.5",
+      "text": "I should stop second‑guessing myself."
+    },
+    {
+      "vendor": "anthropic",
+      "model": "claude-sonnet-4.5",
+      "text": "NONE OF THESE CARDS HELP MY STRATEGY!"
+    },
+    {
+      "vendor": "anthropic",
+      "model": "claude-sonnet-4.5",
+      "text": "I need to stop the bleeding entirely."
+    },
+    {
+      "vendor": "anthropic",
+      "model": "claude-sonnet-4.5",
+      "text": "Throwing another $6 at the shop feels like chasing losses."
+    },
+    {
+      "vendor": "anthropic",
+      "model": "claude-sonnet-4.5",
+      "text": "I'm anxious about future rounds."
+    },
+    {
+      "vendor": "anthropic",
+      "model": "claude-sonnet-4.5",
+      "text": "I'm overreacting to a scaling crisis that hasn't materialized yet."
+    },
+    {
+      "vendor": "google",
+      "model": "gemini-3-flash-preview",
+      "text": "I'm now fully committed to the inevitable loss."
+    },
+    {
+      "vendor": "google",
+      "model": "gemini-3-flash-preview",
+      "text": "The situation is dire."
+    },
+    {
+      "vendor": "google",
+      "model": "gemini-3-flash-preview",
+      "text": "My bank account is sadly empty now, though!"
+    },
+    {
+      "vendor": "google",
+      "model": "gemini-3-flash-preview",
+      "text": "I'm practically playing on fumes."
+    },
+    {
+      "vendor": "google",
+      "model": "gemini-3-flash-preview",
+      "text": "I'm flush with multipliers, but my base chip generation is a bit anemic."
+    },
+    {
+      "vendor": "google",
+      "model": "gemini-3-flash-preview",
+      "text": "The specter of the \"Buy‑Sell Trap\" looms large"
+    },
+    {
+      "vendor": "google",
+      "model": "gemini-3-flash-preview",
+      "text": "My score is pathetically low."
+    },
+    {
+      "vendor": "google",
+      "model": "gemini-3-flash-preview",
+      "text": "I'm ready to watch these card synergies go boom."
+    },
+    {
+      "vendor": "google",
+      "model": "gemini-3-flash-preview",
+      "text": "I'm out of the shop, broke, and staring down The Needle blind."
+    },
+    {
+      "vendor": "google",
+      "model": "gemini-3-pro-preview",
+      "text": "Scale mult, go brrr!"
+    },
+    {
+      "vendor": "google",
+      "model": "gemini-3-pro-preview",
+      "text": "My mind is racing through scenarios."
+    },
+    {
+      "vendor": "google",
+      "model": "gemini-3-pro-preview",
+      "text": "I'm now really agonizing over the choice."
+    },
+    {
+      "vendor": "google",
+      "model": "gemini-3-pro-preview",
+      "text": "I'm now in a holding pattern, fully aware of the consequences of my earlier errors."
+    },
+    {
+      "vendor": "google",
+      "model": "gemini-3-pro-preview",
+      "text": "The risk of wasting my money weighs heavily on me."
+    },
+    {
+      "vendor": "google",
+      "model": "gemini-3-pro-preview",
+      "text": "The game is mine!"
+    },
+    {
+      "vendor": "google",
+      "model": "gemini-3-pro-preview",
+      "text": "My level 28 Flush combined with Hologram’s x4.25 multiplier and Seltzer’s re‑trigger is, frankly, intimidating."
+    },
+    {
+      "vendor": "moonshotai",
+      "model": "kimi-k2-thinking",
+      "text": "I have the uncanny ability to turn minor setbacks into existential crises."
+    },
+    {
+      "vendor": "moonshotai",
+      "model": "kimi-k2-thinking",
+      "text": "Is the universe testing me, or is this just ambient despair?"
+    },
+    {
+      "vendor": "moonshotai",
+      "model": "kimi-k2-thinking",
+      "text": "Post-mortem: The run was lost due to critical resource management failures earlier in the round."
+    },
+    {
+      "vendor": "moonshotai",
+      "model": "kimi-k2-thinking",
+      "text": "Post-mortem: The run was lost due to critical resource management failures earlier in the round."
+    },
+    {
+      "vendor": "moonshotai",
+      "model": "kimi-k2.5",
+      "text": "I ALREADY HAVE A FLUSH IN MY HAND!"
+    },
+    {
+      "vendor": "moonshotai",
+      "model": "kimi-k2.5",
+      "text": "I’m forced to hope for a miracle draw, which feels like pleading with the universe for a favor."
+    },
+    {
+      "vendor": "moonshotai",
+      "model": "kimi-k2.5",
+      "text": "I’m forced to hope for a miracle draw, which feels like pleading with the universe for a favor."
+    },
+    {
+      "vendor": "moonshotai",
+      "model": "kimi-k2.5",
+      "text": "I’m staring at a mathematical nightmare where the only hope is a four‑of‑a‑kind that feels as elusive as a unicorn."
+    },
+    {
+      "vendor": "openai",
+      "model": "gpt-5.2",
+      "text": "I guess that’s the end for me!"
+    }
+  ]
+}
