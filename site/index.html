@@ -146,8 +146,7 @@
               Round</th>
             <!-- Tool Calls Section -->
             <th scope="col" aria-label="Valid tool calls executable in state"
-              title="Responses with valid tool calls that can be executed in the current game state."
-              class="px-3 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden sm:table-cell border-l-2 border-zinc-300 dark:border-zinc-600">
+              class="group relative cursor-help px-3 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden sm:table-cell border-l-2 border-zinc-300 dark:border-zinc-600">
               <div class="flex items-center justify-center space-x-1">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
                   class="w-4 h-4 text-green-600 dark:text-green-400">
@@ -163,10 +162,12 @@
                     d="M11.5 9.5c.313 0 .62-.029.917-.084l1.962 1.962a2.121 2.121 0 0 1-3 3l-2.81-2.81 1.35-1.734c.05-.064.158-.158.426-.233.278-.078.639-.11 1.062-.102l.093.001ZM5 4l1.446 1.445a2.256 2.256 0 0 1-.047.21c-.075.268-.169.377-.233.427l-.61.474L4 5H2.655a.25.25 0 0 1-.224-.139l-1.35-2.7a.25.25 0 0 1 .047-.289l.745-.745a.25.25 0 0 1 .289-.047l2.7 1.35A.25.25 0 0 1 5 2.654V4Z" />
                 </svg>
               </div>
+              <span class="pointer-events-none absolute right-full top-1/2 z-[9999] mr-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-3 py-2 text-xs font-normal text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
+                Responses with valid tool calls that can be executed in the current game state.
+              </span>
             </th>
             <th scope="col" aria-label="Valid tool calls not executable in state"
-              title="Responses with valid tool calls that cannot be executed in the current game state."
-              class="px-3 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden sm:table-cell">
+              class="group relative cursor-help px-3 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden sm:table-cell">
               <div class="flex items-center justify-center space-x-1">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
                   class="w-4 h-4 text-yellow-500 dark:text-yellow-400">
@@ -182,10 +183,12 @@
                     d="M11.5 9.5c.313 0 .62-.029.917-.084l1.962 1.962a2.121 2.121 0 0 1-3 3l-2.81-2.81 1.35-1.734c.05-.064.158-.158.426-.233.278-.078.639-.11 1.062-.102l.093.001ZM5 4l1.446 1.445a2.256 2.256 0 0 1-.047.21c-.075.268-.169.377-.233.427l-.61.474L4 5H2.655a.25.25 0 0 1-.224-.139l-1.35-2.7a.25.25 0 0 1 .047-.289l.745-.745a.25.25 0 0 1 .289-.047l2.7 1.35A.25.25 0 0 1 5 2.654V4Z" />
                 </svg>
               </div>
+              <span class="pointer-events-none absolute right-full top-1/2 z-[9999] mr-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-3 py-2 text-xs font-normal text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
+                Responses with valid tool calls that cannot be executed in the current game state.
+              </span>
             </th>
             <th scope="col" aria-label="Responses without valid tool calls"
-              title="Responses without valid tool calls."
-              class="px-3 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden sm:table-cell">
+              class="group relative cursor-help px-3 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden sm:table-cell">
               <div class="flex items-center justify-center space-x-1">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
                   class="w-4 h-4 text-red-600 dark:text-red-400">
@@ -201,11 +204,13 @@
                     d="M11.5 9.5c.313 0 .62-.029.917-.084l1.962 1.962a2.121 2.121 0 0 1-3 3l-2.81-2.81 1.35-1.734c.05-.064.158-.158.426-.233.278-.078.639-.11 1.062-.102l.093.001ZM5 4l1.446 1.445a2.256 2.256 0 0 1-.047.21c-.075.268-.169.377-.233.427l-.61.474L4 5H2.655a.25.25 0 0 1-.224-.139l-1.35-2.7a.25.25 0 0 1 .047-.289l.745-.745a.25.25 0 0 1 .289-.047l2.7 1.35A.25.25 0 0 1 5 2.654V4Z" />
                 </svg>
               </div>
+              <span class="pointer-events-none absolute right-full top-1/2 z-[9999] mr-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-3 py-2 text-xs font-normal text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
+                Responses without valid tool calls.
+              </span>
             </th>
             <!-- Tokens Section -->
             <th scope="col" aria-label="Average input tokens"
-              title="Average input tokens per tool call."
-              class="px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden lg:table-cell border-l-2 border-zinc-300 dark:border-zinc-600">
+              class="group relative cursor-help px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden lg:table-cell border-l-2 border-zinc-300 dark:border-zinc-600">
               <div class="flex items-center justify-center space-x-1">
                 <span>In</span>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
@@ -224,10 +229,12 @@
                     d="M11.5 9.5c.313 0 .62-.029.917-.084l1.962 1.962a2.121 2.121 0 0 1-3 3l-2.81-2.81 1.35-1.734c.05-.064.158-.158.426-.233.278-.078.639-.11 1.062-.102l.093.001ZM5 4l1.446 1.445a2.256 2.256 0 0 1-.047.21c-.075.268-.169.377-.233.427l-.61.474L4 5H2.655a.25.25 0 0 1-.224-.139l-1.35-2.7a.25.25 0 0 1 .047-.289l.745-.745a.25.25 0 0 1 .289-.047l2.7 1.35A.25.25 0 0 1 5 2.654V4Z" />
                 </svg>
               </div>
+              <span class="pointer-events-none absolute right-full top-1/2 z-[9999] mr-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-3 py-2 text-xs font-normal text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
+                Average input tokens per tool call.
+              </span>
             </th>
             <th scope="col" aria-label="Average output tokens"
-              title="Average output tokens per tool call (including reasoning tokens)."
-              class="px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden lg:table-cell">
+              class="group relative cursor-help px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden lg:table-cell">
               <div class="flex items-center justify-center space-x-1">
                 <span>Out</span>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
@@ -246,11 +253,13 @@
                     d="M11.5 9.5c.313 0 .62-.029.917-.084l1.962 1.962a2.121 2.121 0 0 1-3 3l-2.81-2.81 1.35-1.734c.05-.064.158-.158.426-.233.278-.078.639-.11 1.062-.102l.093.001ZM5 4l1.446 1.445a2.256 2.256 0 0 1-.047.21c-.075.268-.169.377-.233.427l-.61.474L4 5H2.655a.25.25 0 0 1-.224-.139l-1.35-2.7a.25.25 0 0 1 .047-.289l.745-.745a.25.25 0 0 1 .289-.047l2.7 1.35A.25.25 0 0 1 5 2.654V4Z" />
                 </svg>
               </div>
+              <span class="pointer-events-none absolute right-full top-1/2 z-[9999] mr-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-3 py-2 text-xs font-normal text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
+                Average output tokens per tool call (including reasoning tokens).
+              </span>
             </th>
             <!-- Performance Section -->
             <th scope="col" aria-label="Average time per tool call"
-              title="Average time per tool call in seconds."
-              class="px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden md:table-cell border-l-2 border-zinc-300 dark:border-zinc-600">
+              class="group relative cursor-help px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden md:table-cell border-l-2 border-zinc-300 dark:border-zinc-600">
               <div class="flex items-center justify-center space-x-1">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
                   <path fill-rule="evenodd"
@@ -267,10 +276,12 @@
                 </svg>
                 <span class="text-xs">[s]</span>
               </div>
+              <span class="pointer-events-none absolute right-full top-1/2 z-[9999] mr-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-3 py-2 text-xs font-normal text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
+                Average time per tool call in seconds.
+              </span>
             </th>
             <th scope="col" aria-label="Average cost per tool call"
-              title="Average cost per tool call in milli-dollars."
-              class="px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden md:table-cell">
+              class="group relative cursor-help px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden md:table-cell">
               <div class="flex items-center justify-center space-x-1">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
                   <path
@@ -289,6 +300,9 @@
                 </svg>
                 <span class="text-xs">[m$]</span>
               </div>
+              <span class="pointer-events-none absolute right-full top-1/2 z-[9999] mr-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-3 py-2 text-xs font-normal text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
+                Average cost per tool call in milli-dollars.
+              </span>
             </th>
           </tr>
         </thead>

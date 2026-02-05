@@ -159,10 +159,15 @@ const RunViewerTemplates = {
   /**
    * Context file panel (strategy/gamestate/memory)
    */
-  contextPanel(id, title) {
+  contextPanel(id, title, tooltip) {
     return `
       <div class="flex flex-col min-h-0">
-        <h3 class="text-xs font-semibold text-zinc-600 dark:text-zinc-400 mb-2 px-2 text-center">${title}</h3>
+        <div class="group relative flex justify-center mb-2">
+          <h3 class="text-xs font-semibold text-zinc-600 dark:text-zinc-400 px-2 text-center cursor-help">${title}</h3>
+          <span class="pointer-events-none absolute top-full left-1/2 z-[9999] mt-1 -translate-x-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-3 py-2 text-xs font-normal text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
+            ${tooltip}
+          </span>
+        </div>
         <pre id="${id}" class="flex-1 min-h-0 bg-zinc-50 dark:bg-zinc-900 rounded-md p-3 text-xs text-zinc-800 dark:text-zinc-200 whitespace-pre-wrap overflow-auto"></pre>
       </div>`;
   },
@@ -184,9 +189,9 @@ const RunViewerTemplates = {
       <div class="p-4 flex-1 flex flex-col overflow-hidden">
         <!-- Row 1: Context Files (3 columns) - Dynamic height -->
         <div class="grid grid-cols-3 gap-4 flex-1 mb-4 min-h-0">
-          ${this.contextPanel('run-strategy', 'STRATEGY.md')}
-          ${this.contextPanel('run-gamestate', 'GAMESTATE.md')}
-          ${this.contextPanel('run-memory', 'MEMORY.md')}
+          ${this.contextPanel('run-strategy', 'STRATEGY.md', 'Strategy philosophy and decision-making approach for the LLM')}
+          ${this.contextPanel('run-gamestate', 'GAMESTATE.md', 'Current game state formatted for LLM comprehension')}
+          ${this.contextPanel('run-memory', 'MEMORY.md', 'Response history: last 10 actions and error messages')}
         </div>
 
         <!-- Separator -->
