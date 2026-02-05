@@ -146,6 +146,7 @@
               Round</th>
             <!-- Tool Calls Section -->
             <th scope="col" aria-label="Valid tool calls executable in state"
+              title="Responses with valid tool calls that can be executed in the current game state."
               class="px-3 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden sm:table-cell border-l-2 border-zinc-300 dark:border-zinc-600">
               <div class="flex items-center justify-center space-x-1">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
@@ -164,6 +165,7 @@
               </div>
             </th>
             <th scope="col" aria-label="Valid tool calls not executable in state"
+              title="Responses with valid tool calls that cannot be executed in the current game state."
               class="px-3 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden sm:table-cell">
               <div class="flex items-center justify-center space-x-1">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
@@ -182,6 +184,7 @@
               </div>
             </th>
             <th scope="col" aria-label="Responses without valid tool calls"
+              title="Responses without valid tool calls."
               class="px-3 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden sm:table-cell">
               <div class="flex items-center justify-center space-x-1">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
@@ -201,6 +204,7 @@
             </th>
             <!-- Tokens Section -->
             <th scope="col" aria-label="Average input tokens"
+              title="Average input tokens per tool call."
               class="px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden lg:table-cell border-l-2 border-zinc-300 dark:border-zinc-600">
               <div class="flex items-center justify-center space-x-1">
                 <span>In</span>
@@ -222,6 +226,7 @@
               </div>
             </th>
             <th scope="col" aria-label="Average output tokens"
+              title="Average output tokens per tool call (including reasoning tokens)."
               class="px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden lg:table-cell">
               <div class="flex items-center justify-center space-x-1">
                 <span>Out</span>
@@ -244,6 +249,7 @@
             </th>
             <!-- Performance Section -->
             <th scope="col" aria-label="Average time per tool call"
+              title="Average time per tool call in seconds."
               class="px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden md:table-cell border-l-2 border-zinc-300 dark:border-zinc-600">
               <div class="flex items-center justify-center space-x-1">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
@@ -263,6 +269,7 @@
               </div>
             </th>
             <th scope="col" aria-label="Average cost per tool call"
+              title="Average cost per tool call in milli-dollars."
               class="px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden md:table-cell">
               <div class="flex items-center justify-center space-x-1">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
