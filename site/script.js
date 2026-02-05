@@ -553,7 +553,13 @@ function createRoundHistogram(runs, canvasId) {
       scales: {
         x: {
           stacked: true,
-          ...axisOptions
+          ...axisOptions,
+          title: {
+            display: true,
+            text: 'Round reached',
+            color: themeColors.text,
+            font: { size: 12 }
+          }
         },
         y: {
           stacked: true,
@@ -563,6 +569,12 @@ function createRoundHistogram(runs, canvasId) {
             ...axisOptions.ticks,
             precision: 0,
             stepSize: 1
+          },
+          title: {
+            display: true,
+            text: 'Count',
+            color: themeColors.text,
+            font: { size: 12 }
           }
         }
       }
@@ -657,7 +669,14 @@ function createPerformanceBarChart(entries) {
         y: {
           beginAtZero: true,
           max: yAxisMax,
-          ...axisOptions
+          ...axisOptions,
+          title: {
+            display: true,
+            text: 'Average round',
+            color: themePalette.text,
+            font: { size: 14 },
+            padding: { bottom: 10 }
+          }
         }
       },
       elements: {
@@ -1232,6 +1251,33 @@ async function loadLeaderboard(leaderboardPath, detailBasePath, displayMode = 'm
 }
 
 // Load data when page loads
+
+// ============================================================================
+// Twitch Stream - Show only when live
+// ============================================================================
+
+function initTwitchPlayer() {
+  const container = document.getElementById('twitch-stream-container');
+  if (!container || typeof Twitch === 'undefined') return;
+
+  const player = new Twitch.Player('twitch-player', {
+    channel: 'S1M0N38',
+    width: '100%',
+    height: '100%',
+    parent: ['balatrobench.com', 'localhost'],
+    muted: true,
+    autoplay: true,
+  });
+
+  player.addEventListener(Twitch.Player.ONLINE, () => {
+    container.classList.remove('hidden');
+  });
+
+  player.addEventListener(Twitch.Player.OFFLINE, () => {
+    container.classList.add('hidden');
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   // Detect page type
   PAGE_TYPE = detectPageType();
@@ -1241,6 +1287,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize quotes rotation (if on a page with quotes)
   initQuotesRotation();
+
+  // Initialize Twitch player (show only when live)
+  initTwitchPlayer();
 });
 
 // ============================================================================

@@ -23,6 +23,7 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
   <link rel="preconnect" href="https://player.twitch.tv" crossorigin>
+  <script src="https://player.twitch.tv/js/embed/v1.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="config.js"></script>
@@ -85,11 +86,10 @@
           <span class="text-sm font-medium">coder/balatrollm</span>
         </a>
       </div>
-      <div class="relative w-full overflow-hidden rounded-lg shadow-lg dark:shadow-2xl dark:ring-1 dark:ring-white/5"
+      <div id="twitch-stream-container"
+        class="relative w-full overflow-hidden rounded-lg shadow-lg dark:shadow-2xl dark:ring-1 dark:ring-white/5 hidden"
         style="padding-bottom: 56.25%">
-        <iframe src="https://player.twitch.tv/?channel=S1M0N38&parent=balatrobench.com&parent=localhost"
-          title="S1M0N38 Twitch Stream" class="absolute top-0 left-0 w-full h-full" allow="fullscreen" allowfullscreen>
-        </iframe>
+        <div id="twitch-player" class="absolute top-0 left-0 w-full h-full"></div>
       </div>
       <!-- Quotes Section -->
       <div id="quote-container" class="mt-8 text-center transition-opacity duration-1000 ease-in-out min-h-12">
@@ -112,6 +112,16 @@
 
     <div
       class="overflow-x-auto bg-white dark:bg-zinc-800 rounded-lg shadow-lg dark:shadow-2xl dark:ring-1 dark:ring-white/5">
+      <!-- Hint for clickable rows -->
+      <p class="text-center text-sm text-zinc-500 dark:text-zinc-400 py-3 px-4 border-b border-zinc-200 dark:border-zinc-700">
+        <span class="inline-flex items-center gap-1.5">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
+            <path fill-rule="evenodd" d="M2 8a.75.75 0 0 1 .75-.75h8.69L8.22 4.03a.75.75 0 0 1 1.06-1.06l4.5 4.5a.75.75 0 0 1 0 1.06l-4.5 4.5a.75.75 0 0 1-1.06-1.06l3.22-3.22H2.75A.75.75 0 0 1 2 8Z" clip-rule="evenodd" />
+          </svg>
+          Click on a row to explore individual model runs
+        </span>
+      </p>
+
       <table id="leaderboard" class="w-full table-auto">
         <caption class="sr-only">Model leaderboard with rounds, tool-call reliability, tokens, time, and cost</caption>
         <thead class="bg-zinc-100 dark:bg-zinc-700">
