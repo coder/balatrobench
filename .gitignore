@@ -243,10 +243,11 @@ dist-ssr
 *.sln
 *.sw?
 .playwright-mcp
-benchmarks
+benchmarks*
 test-results
 .envrc
 BENCHMARKS_DATA.md
 benchmarks-old
 runs
 !tests/fixtures/runs/
+scripts
