@@ -582,6 +582,28 @@ function createRoundHistogram(runs, canvasId) {
   });
 }
 
+// Two-tailed 95% CI critical values: t(0.025, df)
+// df = n - 1, where n = run_count
+const T_CRIT_95 = {
+  1: 12.706, 2: 4.303, 3: 3.182, 4: 2.776, 5: 2.571,
+  6: 2.447,  7: 2.365, 8: 2.306, 9: 2.262, 10: 2.228,
+  11: 2.201, 12: 2.179, 13: 2.160, 14: 2.145, 15: 2.131,
+  16: 2.120, 17: 2.110, 18: 2.101, 19: 2.093, 20: 2.086,
+  25: 2.060, 30: 2.042, 40: 2.021, 60: 2.000, 120: 1.980
+};
+
+function tCritical(n) {
+  const df = n - 1;
+  if (df <= 0) return 0;
+  if (T_CRIT_95[df]) return T_CRIT_95[df];
+  // For intermediate df, find closest lower key
+  const keys = Object.keys(T_CRIT_95).map(Number).sort((a, b) => a - b);
+  for (let i = keys.length - 1; i >= 0; i--) {
+    if (keys[i] <= df) return T_CRIT_95[keys[i]];
+  }
+  return 1.96; // z-value fallback for large n
+}
+
 // Create performance bar chart with error bars
 function createPerformanceBarChart(entries) {
   const ctx = document.getElementById('performance-chart').getContext('2d');
@@ -612,8 +634,15 @@ function createPerformanceBarChart(entries) {
     fillColors.push(base);
   });
 
+  // Compute 95% CI half-widths: t(0.025, n-1) × SD / √n
+  const ciHalfWidths = entries.map((entry, i) => {
+    const n = entry.run_count;
+    const t = tCritical(n);
+    return t * stdDevs[i] / Math.sqrt(n);
+  });
+
   // Calculate Y-axis max to include error bars
-  const maxWithError = Math.max(...avgRounds.map((avg, i) => avg + stdDevs[i]));
+  const maxWithError = Math.max(...avgRounds.map((avg, i) => avg + ciHalfWidths[i]));
   // Add 0.5 padding above highest error bar, then round up to next integer for clean axis labels
   const yAxisMax = Math.ceil(maxWithError + 0.5);
 
@@ -634,8 +663,8 @@ function createPerformanceBarChart(entries) {
         borderWidth: 0,
         errorBars: {
           'Average Final Round': {
-            plus: stdDevs,
-            minus: stdDevs
+            plus: ciHalfWidths,
+            minus: ciHalfWidths
           }
         }
       }]
@@ -652,8 +681,11 @@ function createPerformanceBarChart(entries) {
         tooltip: {
           ...ChartConfig.getTooltipFonts(),
           callbacks: {
-            label: (context) =>
-              `${context.parsed.y.toFixed(1)} ± ${stdDevs[context.dataIndex].toFixed(1)}`
+            label: (context) => {
+              const ci = ciHalfWidths[context.dataIndex];
+              const avg = context.parsed.y;
+              return `${avg.toFixed(1)} ± ${ci.toFixed(1)} (95% CI)`;
+            }
           }
         }
       },
@@ -695,7 +727,7 @@ function createPerformanceBarChart(entries) {
             const x = bar.x;
             const y = bar.y;
             const value = dataset.data[index];
-            const stdDev = stdDevs[index];
+            const stdDev = ciHalfWidths[index];
             const scale = chart.scales.y;
 
             // Calculate error bar positions

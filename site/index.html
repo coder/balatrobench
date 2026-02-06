@@ -148,8 +148,12 @@
               Vendor</th>
             <!-- Stats Section -->
             <th scope="col" aria-label="Average final round"
-              class="px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 border-l-2 border-zinc-300 dark:border-zinc-600">
-              Round</th>
+              class="group relative cursor-help px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 border-l-2 border-zinc-300 dark:border-zinc-600">
+              Round
+              <span class="pointer-events-none absolute right-full top-1/2 z-[9999] mr-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-3 py-2 text-xs font-normal text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
+                Average final round reached across all runs (± std. dev.).
+              </span>
+            </th>
             <!-- Tool Calls Section -->
             <th scope="col" aria-label="Valid tool calls executable in state"
               class="group relative cursor-help px-3 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 hidden sm:table-cell border-l-2 border-zinc-300 dark:border-zinc-600">
@@ -236,7 +240,7 @@
                 </svg>
               </div>
               <span class="pointer-events-none absolute right-full top-1/2 z-[9999] mr-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-3 py-2 text-xs font-normal text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
-                Average input tokens per tool call.
+                Average input tokens per tool call (± std. dev.).
               </span>
             </th>
             <th scope="col" aria-label="Average output tokens"
@@ -260,7 +264,7 @@
                 </svg>
               </div>
               <span class="pointer-events-none absolute right-full top-1/2 z-[9999] mr-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-3 py-2 text-xs font-normal text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
-                Average output tokens per tool call (including reasoning tokens).
+                Average output tokens per tool call (± std. dev., including reasoning tokens).
               </span>
             </th>
             <!-- Performance Section -->
@@ -283,7 +287,7 @@
                 <span class="text-xs">[s]</span>
               </div>
               <span class="pointer-events-none absolute right-full top-1/2 z-[9999] mr-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-3 py-2 text-xs font-normal text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
-                Average time per tool call in seconds.
+                Average time per tool call in seconds (± std. dev.).
               </span>
             </th>
             <th scope="col" aria-label="Average cost per tool call"
@@ -307,7 +311,7 @@
                 <span class="text-xs">[m$]</span>
               </div>
               <span class="pointer-events-none absolute right-full top-1/2 z-[9999] mr-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-3 py-2 text-xs font-normal text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
-                Average cost per tool call in milli-dollars.
+                Average cost per tool call in milli-dollars (± std. dev.).
               </span>
             </th>
           </tr>
