@@ -558,7 +558,9 @@ function createRoundHistogram(runs, canvasId) {
             display: true,
             text: 'Round reached',
             color: themeColors.text,
-            font: { size: 12 }
+            font: {
+              size: 12
+            }
           }
         },
         y: {
@@ -574,7 +576,9 @@ function createRoundHistogram(runs, canvasId) {
             display: true,
             text: 'Count',
             color: themeColors.text,
-            font: { size: 12 }
+            font: {
+              size: 12
+            }
           }
         }
       }
@@ -585,11 +589,31 @@ function createRoundHistogram(runs, canvasId) {
 // Two-tailed 95% CI critical values: t(0.025, df)
 // df = n - 1, where n = run_count
 const T_CRIT_95 = {
-  1: 12.706, 2: 4.303, 3: 3.182, 4: 2.776, 5: 2.571,
-  6: 2.447,  7: 2.365, 8: 2.306, 9: 2.262, 10: 2.228,
-  11: 2.201, 12: 2.179, 13: 2.160, 14: 2.145, 15: 2.131,
-  16: 2.120, 17: 2.110, 18: 2.101, 19: 2.093, 20: 2.086,
-  25: 2.060, 30: 2.042, 40: 2.021, 60: 2.000, 120: 1.980
+  1: 12.706,
+  2: 4.303,
+  3: 3.182,
+  4: 2.776,
+  5: 2.571,
+  6: 2.447,
+  7: 2.365,
+  8: 2.306,
+  9: 2.262,
+  10: 2.228,
+  11: 2.201,
+  12: 2.179,
+  13: 2.160,
+  14: 2.145,
+  15: 2.131,
+  16: 2.120,
+  17: 2.110,
+  18: 2.101,
+  19: 2.093,
+  20: 2.086,
+  25: 2.060,
+  30: 2.042,
+  40: 2.021,
+  60: 2.000,
+  120: 1.980
 };
 
 function tCritical(n) {
@@ -706,8 +730,12 @@ function createPerformanceBarChart(entries) {
             display: true,
             text: 'Average round',
             color: themePalette.text,
-            font: { size: 14 },
-            padding: { bottom: 10 }
+            font: {
+              size: 14
+            },
+            padding: {
+              bottom: 10
+            }
           }
         }
       },
@@ -1388,11 +1416,7 @@ async function initQuotesRotation() {
     // Display first quote immediately
     displayQuote(currentIndex);
 
-    // Click on quote text to cycle to next quote
-    textEl.addEventListener('click', () => {
-      transitionToNext();
-      resetAutoRotate(); // Reset timer on manual click
-    });
+    // Click on quote link opens Kaggle notebook (handled by <a> in HTML)
 
     // Start auto-rotation
     resetAutoRotate();

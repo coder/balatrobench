@@ -93,9 +93,16 @@
       </div>
       <!-- Quotes Section -->
       <div id="quote-container" class="mt-8 text-center transition-opacity duration-1000 ease-in-out min-h-12">
-        <p class="text-base leading-normal text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
-          <span id="quote-text" class="italic cursor-pointer"></span>
-          <span id="quote-author" class="text-zinc-500 dark:text-zinc-500 whitespace-nowrap"></span>
+        <p class="group relative text-base leading-normal text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
+          <a id="quote-link" href="https://www.kaggle.com/code/s1m0n38/balatrobench-quotes" target="_blank"
+            rel="noopener" class="cursor-pointer">
+            <span id="quote-text" class="italic"></span>
+            <span id="quote-author" class="text-zinc-500 dark:text-zinc-500 whitespace-nowrap"></span>
+          </a>
+          <span
+            class="pointer-events-none absolute bottom-full left-1/2 z-[9999] mb-2 -translate-x-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-3 py-2 text-xs font-normal text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
+            Click to learn how quotes are extracted from LLM responses
+          </span>
         </p>
       </div>
     </div>
@@ -113,20 +120,26 @@
     <div
       class="overflow-x-auto bg-white dark:bg-zinc-800 rounded-lg shadow-lg dark:shadow-2xl dark:ring-1 dark:ring-white/5">
       <!-- Hint for clickable rows (lg+ screens) -->
-      <p class="hidden lg:block text-center text-sm text-zinc-500 dark:text-zinc-400 py-3 px-4 border-b border-zinc-200 dark:border-zinc-700">
+      <p
+        class="hidden lg:block text-center text-sm text-zinc-500 dark:text-zinc-400 py-3 px-4 border-b border-zinc-200 dark:border-zinc-700">
         <span class="inline-flex items-center gap-1.5">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
-            <path fill-rule="evenodd" d="M2 8a.75.75 0 0 1 .75-.75h8.69L8.22 4.03a.75.75 0 0 1 1.06-1.06l4.5 4.5a.75.75 0 0 1 0 1.06l-4.5 4.5a.75.75 0 0 1-1.06-1.06l3.22-3.22H2.75A.75.75 0 0 1 2 8Z" clip-rule="evenodd" />
+            <path fill-rule="evenodd"
+              d="M2 8a.75.75 0 0 1 .75-.75h8.69L8.22 4.03a.75.75 0 0 1 1.06-1.06l4.5 4.5a.75.75 0 0 1 0 1.06l-4.5 4.5a.75.75 0 0 1-1.06-1.06l3.22-3.22H2.75A.75.75 0 0 1 2 8Z"
+              clip-rule="evenodd" />
           </svg>
           Click on a row to explore individual model runs
         </span>
       </p>
       <!-- Hint for smaller screens -->
-      <p class="lg:hidden text-center text-sm text-zinc-500 dark:text-zinc-400 py-3 px-4 border-b border-zinc-200 dark:border-zinc-700">
+      <p
+        class="lg:hidden text-center text-sm text-zinc-500 dark:text-zinc-400 py-3 px-4 border-b border-zinc-200 dark:border-zinc-700">
         <span class="inline-flex items-center gap-1.5">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
-            <path d="M14 7.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0ZM2.5 6a.75.75 0 0 0 0 1.5h8.5a.75.75 0 0 0 0-1.5H2.5Z" />
-            <path d="M1 3.25A2.25 2.25 0 0 1 3.25 1h9.5A2.25 2.25 0 0 1 15 3.25v9.5A2.25 2.25 0 0 1 12.75 15h-9.5A2.25 2.25 0 0 1 1 12.75v-9.5ZM3.25 2.5a.75.75 0 0 0-.75.75v9.5c0 .414.336.75.75.75h9.5a.75.75 0 0 0 .75-.75v-9.5a.75.75 0 0 0-.75-.75h-9.5Z" />
+            <path
+              d="M14 7.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0ZM2.5 6a.75.75 0 0 0 0 1.5h8.5a.75.75 0 0 0 0-1.5H2.5Z" />
+            <path
+              d="M1 3.25A2.25 2.25 0 0 1 3.25 1h9.5A2.25 2.25 0 0 1 15 3.25v9.5A2.25 2.25 0 0 1 12.75 15h-9.5A2.25 2.25 0 0 1 1 12.75v-9.5ZM3.25 2.5a.75.75 0 0 0-.75.75v9.5c0 .414.336.75.75.75h9.5a.75.75 0 0 0 .75-.75v-9.5a.75.75 0 0 0-.75-.75h-9.5Z" />
           </svg>
           Visit on a desktop for the full interactive experience
         </span>
@@ -150,7 +163,8 @@
             <th scope="col" aria-label="Average final round"
               class="group relative cursor-help px-4 py-3 text-center text-sm font-semibold text-zinc-700 dark:text-zinc-300 border-l-2 border-zinc-300 dark:border-zinc-600">
               Round
-              <span class="pointer-events-none absolute right-full top-1/2 z-[9999] mr-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-3 py-2 text-xs font-normal text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
+              <span
+                class="pointer-events-none absolute right-full top-1/2 z-[9999] mr-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-3 py-2 text-xs font-normal text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
                 Average final round reached across all runs (± std. dev.).
               </span>
             </th>
@@ -172,7 +186,8 @@
                     d="M11.5 9.5c.313 0 .62-.029.917-.084l1.962 1.962a2.121 2.121 0 0 1-3 3l-2.81-2.81 1.35-1.734c.05-.064.158-.158.426-.233.278-.078.639-.11 1.062-.102l.093.001ZM5 4l1.446 1.445a2.256 2.256 0 0 1-.047.21c-.075.268-.169.377-.233.427l-.61.474L4 5H2.655a.25.25 0 0 1-.224-.139l-1.35-2.7a.25.25 0 0 1 .047-.289l.745-.745a.25.25 0 0 1 .289-.047l2.7 1.35A.25.25 0 0 1 5 2.654V4Z" />
                 </svg>
               </div>
-              <span class="pointer-events-none absolute right-full top-1/2 z-[9999] mr-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-3 py-2 text-xs font-normal text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
+              <span
+                class="pointer-events-none absolute right-full top-1/2 z-[9999] mr-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-3 py-2 text-xs font-normal text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
                 Responses with valid tool calls that can be executed in the current game state.
               </span>
             </th>
@@ -193,7 +208,8 @@
                     d="M11.5 9.5c.313 0 .62-.029.917-.084l1.962 1.962a2.121 2.121 0 0 1-3 3l-2.81-2.81 1.35-1.734c.05-.064.158-.158.426-.233.278-.078.639-.11 1.062-.102l.093.001ZM5 4l1.446 1.445a2.256 2.256 0 0 1-.047.21c-.075.268-.169.377-.233.427l-.61.474L4 5H2.655a.25.25 0 0 1-.224-.139l-1.35-2.7a.25.25 0 0 1 .047-.289l.745-.745a.25.25 0 0 1 .289-.047l2.7 1.35A.25.25 0 0 1 5 2.654V4Z" />
                 </svg>
               </div>
-              <span class="pointer-events-none absolute right-full top-1/2 z-[9999] mr-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-3 py-2 text-xs font-normal text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
+              <span
+                class="pointer-events-none absolute right-full top-1/2 z-[9999] mr-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-3 py-2 text-xs font-normal text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
                 Responses with valid tool calls that cannot be executed in the current game state.
               </span>
             </th>
@@ -214,7 +230,8 @@
                     d="M11.5 9.5c.313 0 .62-.029.917-.084l1.962 1.962a2.121 2.121 0 0 1-3 3l-2.81-2.81 1.35-1.734c.05-.064.158-.158.426-.233.278-.078.639-.11 1.062-.102l.093.001ZM5 4l1.446 1.445a2.256 2.256 0 0 1-.047.21c-.075.268-.169.377-.233.427l-.61.474L4 5H2.655a.25.25 0 0 1-.224-.139l-1.35-2.7a.25.25 0 0 1 .047-.289l.745-.745a.25.25 0 0 1 .289-.047l2.7 1.35A.25.25 0 0 1 5 2.654V4Z" />
                 </svg>
               </div>
-              <span class="pointer-events-none absolute right-full top-1/2 z-[9999] mr-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-3 py-2 text-xs font-normal text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
+              <span
+                class="pointer-events-none absolute right-full top-1/2 z-[9999] mr-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-3 py-2 text-xs font-normal text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
                 Responses without valid tool calls.
               </span>
             </th>
@@ -239,7 +256,8 @@
                     d="M11.5 9.5c.313 0 .62-.029.917-.084l1.962 1.962a2.121 2.121 0 0 1-3 3l-2.81-2.81 1.35-1.734c.05-.064.158-.158.426-.233.278-.078.639-.11 1.062-.102l.093.001ZM5 4l1.446 1.445a2.256 2.256 0 0 1-.047.21c-.075.268-.169.377-.233.427l-.61.474L4 5H2.655a.25.25 0 0 1-.224-.139l-1.35-2.7a.25.25 0 0 1 .047-.289l.745-.745a.25.25 0 0 1 .289-.047l2.7 1.35A.25.25 0 0 1 5 2.654V4Z" />
                 </svg>
               </div>
-              <span class="pointer-events-none absolute right-full top-1/2 z-[9999] mr-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-3 py-2 text-xs font-normal text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
+              <span
+                class="pointer-events-none absolute right-full top-1/2 z-[9999] mr-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-3 py-2 text-xs font-normal text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
                 Average input tokens per tool call (± std. dev.).
               </span>
             </th>
@@ -263,7 +281,8 @@
                     d="M11.5 9.5c.313 0 .62-.029.917-.084l1.962 1.962a2.121 2.121 0 0 1-3 3l-2.81-2.81 1.35-1.734c.05-.064.158-.158.426-.233.278-.078.639-.11 1.062-.102l.093.001ZM5 4l1.446 1.445a2.256 2.256 0 0 1-.047.21c-.075.268-.169.377-.233.427l-.61.474L4 5H2.655a.25.25 0 0 1-.224-.139l-1.35-2.7a.25.25 0 0 1 .047-.289l.745-.745a.25.25 0 0 1 .289-.047l2.7 1.35A.25.25 0 0 1 5 2.654V4Z" />
                 </svg>
               </div>
-              <span class="pointer-events-none absolute right-full top-1/2 z-[9999] mr-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-3 py-2 text-xs font-normal text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
+              <span
+                class="pointer-events-none absolute right-full top-1/2 z-[9999] mr-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-3 py-2 text-xs font-normal text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
                 Average output tokens per tool call (± std. dev., including reasoning tokens).
               </span>
             </th>
@@ -286,7 +305,8 @@
                 </svg>
                 <span class="text-xs">[s]</span>
               </div>
-              <span class="pointer-events-none absolute right-full top-1/2 z-[9999] mr-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-3 py-2 text-xs font-normal text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
+              <span
+                class="pointer-events-none absolute right-full top-1/2 z-[9999] mr-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-3 py-2 text-xs font-normal text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
                 Average time per tool call in seconds (± std. dev.).
               </span>
             </th>
@@ -310,7 +330,8 @@
                 </svg>
                 <span class="text-xs">[m$]</span>
               </div>
-              <span class="pointer-events-none absolute right-full top-1/2 z-[9999] mr-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-3 py-2 text-xs font-normal text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
+              <span
+                class="pointer-events-none absolute right-full top-1/2 z-[9999] mr-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-3 py-2 text-xs font-normal text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
                 Average cost per tool call in milli-dollars (± std. dev.).
               </span>
             </th>
