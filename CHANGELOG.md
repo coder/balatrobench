@@ -1,5 +1,40 @@
 # Changelog
 
+## [1.5.0](https://github.com/coder/balatrobench/compare/v1.4.0...v1.5.0) (2026-02-13)
+
+
+### Features
+
+* **balatrobench:** update strategies to match model format ([bdc9551](https://github.com/coder/balatrobench/commit/bdc955195184dd532ad5c2f8b564253203fc1802))
+* **site:** add balatolive logo to assets ([3ff5183](https://github.com/coder/balatrobench/commit/3ff518356f0f69f0bb5f73a012ecfabe7f9e13ee))
+* **site:** add balatrodocs logo to assets ([9757092](https://github.com/coder/balatrobench/commit/9757092a646dce43e906c9b2ca5471e432707054))
+* **site:** add improved tooltips ([443ad5c](https://github.com/coder/balatrobench/commit/443ad5cb14e8fa472e5441868e265456477d3004)), closes [#20](https://github.com/coder/balatrobench/issues/20)
+* **site:** add labels to x-axis and y-axis ([01b85af](https://github.com/coder/balatrobench/commit/01b85afa958e1a0112b2ecb54c48907590f85cf8))
+* **site:** add link to kaggle notebook and formatting ([31128d1](https://github.com/coder/balatrobench/commit/31128d1283e990d0e89de1173dd5250817862e3c))
+* **site:** add quotes to site/assets ([4e2256b](https://github.com/coder/balatrobench/commit/4e2256b1c375324cb9076bdc2b847c191285824c))
+* **site:** add random quotes extracted from reasoning traces ([e1ad005](https://github.com/coder/balatrobench/commit/e1ad005c15c53932c8149c55fb34c0b00f0aa0f1))
+* **site:** add recommendations section to community page ([154bf6c](https://github.com/coder/balatrobench/commit/154bf6c0fedee84329bb99ffb4e0d9cd8352639f))
+* **site:** add tooltips to the table headers ([f7a992e](https://github.com/coder/balatrobench/commit/f7a992e7bcfd404313089a1c67b29621e01d385c))
+* **site:** redesign of the site improving UI/UX ([2b9a98f](https://github.com/coder/balatrobench/commit/2b9a98f17170919ec825ce47625c4a164ebf65d6)), closes [#19](https://github.com/coder/balatrobench/issues/19)
+* **site:** remove the siblings project in the main page ([9730011](https://github.com/coder/balatrobench/commit/9730011b95bc84f282bbe54e376048631ff092f8))
+* **site:** show desktop hint on small screens instead of click prompt ([dacebcb](https://github.com/coder/balatrobench/commit/dacebcb5e61f47e0d77dc53230adfcedaecccde1))
+* **site:** use CI for error bars in the main plot ([23958c6](https://github.com/coder/balatrobench/commit/23958c67d481f9ee300150cc1f876b195c77211b))
+* **site:** use openai/gpt-oss-20b model for community leaderboard ([a022722](https://github.com/coder/balatrobench/commit/a0227225be5e74d214293b4d0e83970d577041a8))
+* **upload:** add subdirectory option to upload.py ([8076cfb](https://github.com/coder/balatrobench/commit/8076cfb6c213b2ed808b3c6a91e4e27b1e277387))
+
+
+### Bug Fixes
+
+* **site:** fix round values in a community page rules ([008ffda](https://github.com/coder/balatrobench/commit/008ffdad33ec954267cf28fc502fbc46c163f6b1))
+* **site:** remove duplicate quotes ([4092060](https://github.com/coder/balatrobench/commit/4092060af7c884a0ffaa5cc4c2225d90cb2637e0))
+* **site:** remove hallucinated quotes and add new ones ([ce13c08](https://github.com/coder/balatrobench/commit/ce13c08c590faf84dfd64188fe2504db3161e963))
+* **site:** update the url to balatrobench.com ([8b02b2a](https://github.com/coder/balatrobench/commit/8b02b2a94b47c59bb5273da3ffe6f17573cd1670))
+
+
+### Performance Improvements
+
+* **site:** add LRU caches for request content ([769d17d](https://github.com/coder/balatrobench/commit/769d17dab0652abd4c6c548cee810496f7b15873))
+
 ## [1.4.0](https://github.com/coder/balatrobench/compare/v1.3.0...v1.4.0) (2026-01-24)
 
 
