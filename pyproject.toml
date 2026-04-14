@@ -35,7 +35,7 @@ markers = [
 ]
 
 [dependency-groups]
-test = ["pytest>=9.0.2", "pytest-cov>=6.0.0"]
+test = ["pytest>=9.0.3", "pytest-cov>=6.0.0"]
 dev = [
   "commitizen>=4.11.0",
   "jsbeautifier>=1.15.4",
